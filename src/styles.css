@@ -218,11 +218,14 @@ body {
 .home-fact-slot[data-side="left"] { right: calc(50% + 156px); text-align: right; }
 .home-fact-slot[data-side="right"] { left: calc(50% + 156px); text-align: left; }
 .home-fact-btn {
-  display: block;
+  display: flex;
+  align-items: center;
   width: max-content;
   max-width: 100%;
-  margin: 0;
-  padding: 2px 0;
+  /* The extra padding is the tap. The negative margin keeps the words where they were. */
+  margin: -10px -4px;
+  padding: 12px 4px;
+  min-height: 44px;
   background: none;
   border: none;
   color: inherit;
@@ -351,6 +354,8 @@ body {
     width: 100%;
     max-width: none;
     min-height: 44px;
+    margin: 0;
+    padding: 2px 8px;
     display: flex;
     align-items: center;
     justify-content: center;
