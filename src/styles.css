@@ -182,41 +182,12 @@ body {
   line-height: 1.45;
 }
 
-/* The current post, one quiet line under the headline. Years match the resume. */
-.home-post {
-  display: inline-flex;
-  align-items: baseline;
-  justify-content: center;
-  flex-wrap: wrap;
-  column-gap: 0.5em;
-  row-gap: 2px;
-  max-width: min(460px, 100%);
-  margin-top: 5px;
-  color: var(--text-2);
-  font-size: 13px;
-  font-weight: 650;
-  letter-spacing: -0.01em;
-  line-height: 1.4;
-  text-align: center;
-  text-decoration: none;
-}
-.home-post-when {
-  font-family: var(--mono);
-  font-size: 11.5px;
-  font-weight: 500;
-  letter-spacing: 0;
-  color: var(--text-muted);
-  unicode-bidi: isolate;
-}
-.home-post:hover { color: var(--text); }
-.home-post:hover .home-post-when { color: var(--text-2); }
 #experience { scroll-margin-top: 14px; }
 
 /* A finger never sees the hover underline, so the quiet lines stay marked as links. */
 @media (hover: none) {
   .home-index-list a,
-  .home-tools a,
-  .home-post {
+  .home-tools a {
     text-decoration: underline;
     text-underline-offset: 3px;
     text-decoration-color: var(--text-muted);
@@ -611,14 +582,12 @@ a { color: inherit; }
   .home-tools a { font-size: 13px; }
   /* Quiet text, with a thumb-sized tap. Desktop keeps the tighter line. */
   .home-index-list a,
-  .home-tools a,
-  .home-post {
+  .home-tools a {
     min-height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .home-post { width: min(460px, 100%); }
   /* The quiet rows stay looking like text. The extra height is the tap. */
   .contact-row { min-height: 44px; }
   .read-more { min-height: 44px; }

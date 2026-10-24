@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import profile from '../../content/profile.js';
-import resume from '../../content/resume.js';
 import questions from '../../content/questions.js';
 import { tx } from '../../shared/text.js';
 import { Pet, PetStage } from './Pet.jsx';
@@ -15,33 +14,6 @@ import { loadMarkdown } from '../lib/loadMarkdown.js';
 
 function firstName(lang) {
   return tx(profile.name, lang).split(' ')[0] || 'Ori';
-}
-
-/** Stay in the app for an ordinary click. A new tab still follows the href. */
-function openInApp(href, event) {
-  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
-  event.preventDefault();
-  window.history.pushState({}, '', href);
-  window.dispatchEvent(new PopStateEvent('popstate'));
-}
-
-/** The current job, as published: company and years. The role stays in the link's name. */
-function currentPost(lang, present) {
-  const job = (resume.experience || [])[0];
-  if (!job) return null;
-  const company = tx(job.company, lang);
-  const role = tx(job.role, lang);
-  if (!company && !role) return null;
-  const start = job.start ? String(job.start) : '';
-  const end = job.end ? String(job.end) : '';
-  const when = start ? `${start} – ${end || present}` : '';
-  return {
-    company,
-    when,
-    start,
-    end,
-    label: [role, company, when].filter(Boolean).join(', '),
-  };
 }
 
 function questionBefore(messages, index) {
@@ -154,7 +126,6 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
   const fieldRef = useRef(null);
   const dir = lang === 'he' ? 'rtl' : 'ltr';
   const first = firstName(lang);
-  const post = currentPost(lang, t.present);
   const firstPerson = profile.voice === 'first-person';
   const offline = status.chat === 'unavailable';
   const { messages, pending, streamingId, error } = chat;
@@ -252,22 +223,6 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         <svg className="hero-rule hero-rise" viewBox="0 0 88 8" width="88" height="8" aria-hidden="true" style={{ animationDelay: '0.22s' }}>
           <path className="arch-line hero-draw" d="M4 4 H84" pathLength="1" />
         </svg>
-        {post && (post.company || post.when) && (
-          <a className="home-post hero-rise" href="/resume#experience" dir={dir}
-            aria-label={post.label} style={{ animationDelay: '0.3s' }}
-            onClick={(e) => openInApp('/resume#experience', e)}>
-            {post.company && <span>{post.company}</span>}
-            {post.when && (
-              <span className="home-post-when" dir="ltr">
-                {post.start && /^\d{4}$/.test(post.start) ? <time dateTime={post.start}>{post.start}</time> : post.start}
-                {post.start && ' – '}
-                {post.end
-                  ? (/^\d{4}$/.test(post.end) ? <time dateTime={post.end}>{post.end}</time> : post.end)
-                  : t.present}
-              </span>
-            )}
-          </a>
-        )}
         <div className="hero-rise" dir={dir} style={{
           animationDelay: '0.34s',
           fontSize: 13.5, color: 'var(--text-2)', textAlign: 'center',
