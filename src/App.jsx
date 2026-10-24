@@ -62,6 +62,13 @@ export default function App() {
   // /admin, once signed in, is the settings screen — keep the address honest.
   useEffect(() => { if (path === '/admin' && admin) go('/admin/settings'); }, [path, admin]);
   useEffect(() => { setMoreOpen(false); }, [path]);
+  // A new page starts at the top. The shell keeps one scroller, so the previous page's position would otherwise stick.
+  useEffect(() => {
+    const main = document.getElementById('main');
+    if (!main) return;
+    main.scrollTop = 0;
+    main.querySelector('[data-scroller]')?.scrollTo(0, 0);
+  }, [page]);
 
   function ask(text) {
     go('/');
@@ -142,7 +149,7 @@ export default function App() {
           </>
         )} />
         {page === 'chat' ? home(false) : (
-          <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', position: 'relative' }}>
+          <div data-scroller style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', position: 'relative' }}>
             <PetWatermark size={560} style={{ bottom: -70, right: -40 }} />
             <div style={{ maxWidth: 1180, margin: '0 auto', width: '100%', padding: '30px 34px 80px', position: 'relative' }}>
               {view(false)}
