@@ -42,7 +42,7 @@ const rand = ([a, b]) => a + Math.random() * (b - a);
  * size   height for 'full', side for 'head'
  * glitch { rgb, slices } — red/cyan split in px, and bands of the figure torn sideways
  */
-export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size = 200, onClick, title, style, glitch }) {
+export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size = 200, onClick, title, label, style, glitch }) {
   const reduced = useReducedMotion();
   const base = mode === 'working' || mode === 'talking' ? mode : 'idle';
   const [override, setOverride] = useState(null);
@@ -158,8 +158,19 @@ export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size 
   const slices = (glitch && glitch.slices) || [];
   const sprite = { backgroundImage: `url(${SHEET})`, backgroundRepeat: 'no-repeat', backgroundSize: box.backgroundSize, backgroundPosition: box.backgroundPosition };
 
+  const interactive = typeof onClick === 'function';
+  const onKeyDown = interactive
+    ? (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        onClick(e);
+      }
+    : undefined;
+
   return (
-    <div ref={ref} role="img" aria-label={title || 'Ori'} title={title} onClick={onClick}
+    <div ref={ref} role={interactive ? 'button' : 'img'} tabIndex={interactive ? 0 : undefined}
+      aria-label={interactive ? (label || title || 'Ori') : (title || 'Ori')} title={title || undefined}
+      onClick={onClick} onKeyDown={onKeyDown}
       style={{
         ...box,
         ...sprite,
@@ -254,7 +265,7 @@ function useVoiceGlitch(voice, reduced) {
  * soft light halo, standing on a faint shadow. Clicking it makes it jump.
  * `voice` (from useIntroVoice) makes it speak along with the recording.
  */
-export function PetStage({ size = 220, mode, pulse, busy, voice, children }) {
+export function PetStage({ size = 220, mode, pulse, busy, voice, label, children }) {
   const reduced = useReducedMotion();
   const { fx, playing } = useVoiceGlitch(voice, reduced);
   // The parent's reactions and the click share one counter, so the latest wins.
@@ -293,7 +304,7 @@ export function PetStage({ size = 220, mode, pulse, busy, voice, children }) {
         position: 'relative', display: 'flex', transformOrigin: '50% 100%',
         transform: fx.bounce ? `translateY(${-fx.bounce * 7}px) scaleY(${1 + fx.bounce * 0.03})` : undefined,
       }}>
-        <Pet size={size} mode={playing ? 'talking' : mode} pulse={own} follow={!playing}
+        <Pet size={size} mode={playing ? 'talking' : mode} pulse={own} follow={!playing} label={label}
           glitch={fx.rgb || fx.slices.length ? fx : undefined}
           onClick={() => setOwn((p) => ({ name: 'jumping', n: p.n + 1 }))} />
       </div>
