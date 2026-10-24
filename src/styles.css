@@ -592,6 +592,12 @@ a { color: inherit; }
   /* An open keyboard does not shrink 100dvh on iOS, so the shell is sized to
      the visual viewport, which useViewportHeight keeps in --app-h. */
   .m-app { height: 100vh; height: 100dvh; height: var(--app-h, 100dvh); }
+  /* viewport-fit: cover draws under the status area. The bar keeps a 56px row below it. */
+  .m-top {
+    box-sizing: border-box;
+    height: calc(56px + env(safe-area-inset-top));
+    padding: env(safe-area-inset-top) 12px 0;
+  }
   .m-nav, .m-sheet { padding-bottom: env(safe-area-inset-bottom); }
   /* iOS zooms the whole page into any field under 16px, and leaves it zoomed:
      the layout ends up cut off on the right. !important beats the inline

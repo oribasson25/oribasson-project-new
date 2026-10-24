@@ -6,7 +6,7 @@ import { BrandMark, ContactCard, ContactActions, LangSwitch, RecentList, ClearHi
 
 export function MobileTopBar({ t, lang, setLang, go, home }) {
   return (
-    <div className="screen-only" style={{ height: 56, display: 'flex', alignItems: 'center', gap: 8, padding: '0 12px', flexShrink: 0, borderBottom: '1px solid var(--border)', background: 'var(--bg-sidebar)' }}>
+    <div className="screen-only m-top" style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0, borderBottom: '1px solid var(--border)', background: 'var(--bg-sidebar)' }}>
       <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
         <BrandMark lang={lang} mark={30} text={17} onClick={() => go('/')} />
       </div>
