@@ -11,7 +11,7 @@ function firstName(lang) {
   return tx(profile.name, lang).split(' ')[0] || 'Ori';
 }
 
-export function Composer({ value, onChange, onSend, disabled, placeholder, dir, width = 720, fieldRef, autoFocus }) {
+export function Composer({ value, onChange, onSend, disabled, placeholder, dir, width = 720, fieldRef, autoFocus, sendLabel = 'Send' }) {
   const [focus, setFocus] = useState(false);
   const own = useRef(null);
   const ref = fieldRef || own;
@@ -52,7 +52,7 @@ export function Composer({ value, onChange, onSend, disabled, placeholder, dir, 
           boxShadow: 'none', fontSize: 14.5, lineHeight: 1.6, padding: '13px 12px', maxHeight: 150,
         }}
       />
-      <button type="button" onClick={onSend} disabled={disabled || empty} title="Send" aria-label="Send"
+      <button type="button" onClick={onSend} disabled={disabled || empty} title={sendLabel} aria-label={sendLabel}
         style={{
           width: 40, height: 40, borderRadius: '50%', flexShrink: 0, marginBottom: 4,
           background: 'var(--primary)', color: 'var(--primary-ink)', fontSize: 17, fontWeight: 800,
@@ -203,7 +203,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         <div style={{ width: '100%', marginTop: stacked ? 20 : 24 }}>
           {offlineNote}
           <Composer value={input} onChange={setInput} onSend={() => submit()} fieldRef={fieldRef}
-            disabled={pending || offline} dir={dir}
+            disabled={pending || offline} dir={dir} sendLabel={t.send}
             placeholder={stacked ? t.placeholderShort : t.placeholder} />
         </div>
 
