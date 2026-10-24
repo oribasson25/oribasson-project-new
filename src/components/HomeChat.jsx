@@ -214,21 +214,13 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
           <HomeFacts lang={lang} t={t} hold={voice.state === 'playing'}
             avoidRight={voice.available && (!voice.heard || voice.state === 'playing')} />
         </div>
-        <h1 className="hero-rise" dir={dir} style={{
-          animationDelay: '0.14s',
-          margin: 0, marginTop: 6, fontSize: stacked ? 25 : 30, fontWeight: 800, letterSpacing: '-0.035em',
-          lineHeight: 'normal', textAlign: 'center',
-        }}>{t.hello(first)}</h1>
-        <svg className="hero-rule hero-rise" viewBox="0 0 88 8" width="88" height="8" aria-hidden="true" style={{ animationDelay: '0.22s' }}>
-          <path className="arch-line hero-draw" d="M4 4 H84" pathLength="1" />
+        <h1 className="hero-title hero-rise" dir={dir} style={{ animationDelay: '0.14s' }}>{t.hello(first)}</h1>
+        <svg className="hero-rule hero-rise" viewBox="0 0 72 8" width="72" height="8" aria-hidden="true" style={{ animationDelay: '0.22s' }}>
+          <path className="arch-line hero-draw" d="M2 4 H70" pathLength="1" />
         </svg>
-        <div className="hero-rise" dir={dir} style={{
-          animationDelay: '0.34s',
-          fontSize: 13.5, color: 'var(--text-2)', textAlign: 'center',
-          marginTop: stacked ? 6 : 9, lineHeight: 1.65, maxWidth: 520,
-        }}>{stacked ? t.helloSubShort(firstPerson) : t.helloSub(first, firstPerson)}</div>
+        <div className="hero-sub hero-rise" dir={dir} style={{ animationDelay: '0.3s' }}>{stacked ? t.helloSubShort(firstPerson) : t.helloSub(first, firstPerson)}</div>
 
-        <div className="hero-rise" style={{ animationDelay: '0.42s', width: '100%', marginTop: stacked ? 20 : 24 }}>
+        <div className="hero-rise" style={{ animationDelay: '0.4s', width: '100%', marginTop: stacked ? 22 : 28 }}>
           {offlineNote}
           <Composer value={input} onChange={setInput} onSend={() => submit()} fieldRef={fieldRef}
             onFieldFocus={loadMarkdown}
@@ -238,17 +230,9 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
 
         <QuestionChips items={chips} onPick={submit} disabled={pending || offline} dir={dir} grid={stacked} label={t.suggestions}
           className="hero-rise"
-          style={{ animationDelay: '0.52s', marginTop: stacked ? 14 : 18, width: stacked ? '100%' : 'min(760px, 100%)' }} />
+          style={{ animationDelay: '0.48s', marginTop: stacked ? 16 : 20, width: stacked ? '100%' : 'min(720px, 100%)' }} />
 
-        <div className="hero-rise" dir={dir} style={{
-          animationDelay: '0.7s',
-          marginTop: stacked ? 16 : 26,
-          maxWidth: 420,
-          fontSize: 11.5,
-          lineHeight: 1.5,
-          color: 'var(--text-2)',
-          textAlign: 'center',
-        }}>{t.foot(first)}</div>
+        <div className="hero-foot hero-rise" dir={dir} style={{ animationDelay: '0.62s' }}>{t.foot(first)}</div>
       </div>
     );
   }
