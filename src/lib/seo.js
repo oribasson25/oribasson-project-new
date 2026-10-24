@@ -163,6 +163,7 @@ export function useSeo(page, lang) {
     setMeta('name', 'twitter:description', desc);
     setMeta('name', 'twitter:url', abs(path));
     setMeta('name', 'twitter:image:alt', `${tx(profile.name, 'en')} — AI Solutions Engineer`);
+    setMeta('property', 'og:image:type', 'image/png');
     setMeta('property', 'og:locale', lang === 'he' ? 'he_IL' : 'en_US');
     setMeta('name', 'robots', admin ? 'noindex, nofollow' : 'index, follow');
     setMeta('name', 'theme-color', '#f2f4f8');
