@@ -140,6 +140,22 @@ function crumbs(page) {
   };
 }
 
+function pageNode(page) {
+  const path = PATHS[page] || '/';
+  const home = page === 'chat';
+  return {
+    '@type': home ? 'ProfilePage' : 'WebPage',
+    '@id': home ? `${ORIGIN}/#profile` : `${abs(path)}#page`,
+    url: abs(path),
+    name: pageTitle(page),
+    description: DESC.en[page] || DESC.en.home,
+    inLanguage: ['en', 'he'],
+    isPartOf: { '@id': `${ORIGIN}/#website` },
+    about: { '@id': `${ORIGIN}/#person` },
+    mainEntity: home ? { '@id': `${ORIGIN}/#person` } : undefined,
+  };
+}
+
 export function jsonLd(page) {
   const graph = [
     {
@@ -152,6 +168,7 @@ export function jsonLd(page) {
       publisher: { '@id': `${ORIGIN}/#person` },
     },
     personNode(),
+    pageNode(page),
   ];
   if (page === 'chat' || page === 'resume') {
     const list = projectList();
@@ -206,7 +223,7 @@ export function useSeo(page, lang) {
     setMeta('name', 'twitter:image:alt', `${tx(profile.name, 'en')} — AI Solutions Engineer`);
     setMeta('property', 'og:image:type', 'image/png');
     setMeta('property', 'og:locale', lang === 'he' ? 'he_IL' : 'en_US');
-    setMeta('name', 'robots', admin || missing ? 'noindex, nofollow' : 'index, follow');
+    setMeta('name', 'robots', admin || missing ? 'noindex, nofollow' : 'index, follow, max-image-preview:large');
     setMeta('name', 'theme-color', '#f2f4f8');
     setMeta('name', 'color-scheme', 'light');
     // A missing address is not the homepage. A canonical pointing there would
