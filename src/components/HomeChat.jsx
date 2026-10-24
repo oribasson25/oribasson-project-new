@@ -252,7 +252,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
           maxWidth: 420,
           fontSize: 11.5,
           lineHeight: 1.5,
-          color: 'var(--text-muted)',
+          color: 'var(--text-2)',
           textAlign: 'center',
         }}>{t.foot(first)}</div>
       </div>

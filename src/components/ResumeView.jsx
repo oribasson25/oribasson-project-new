@@ -149,7 +149,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
                 {languages.map((l, i) => (
                   <div key={i} style={{ display: 'flex', justifyContent: 'space-between', gap: 10, fontSize: 13, padding: '4px 0' }}>
                     <span dir="auto" style={{ fontWeight: 600 }}>{tx(l.name, lang)}</span>
-                    <span dir="auto" style={{ color: 'var(--text-muted)' }}>{tx(l.level, lang)}</span>
+                    <span dir="auto" style={{ color: 'var(--text-2)' }}>{tx(l.level, lang)}</span>
                   </div>
                 ))}
               </Section>
