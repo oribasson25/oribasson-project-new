@@ -66,13 +66,9 @@ body {
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes haloBreathe { 0%, 100% { transform: scale(0.94); opacity: 0.75; } 50% { transform: scale(1.06); opacity: 1; } }
 @keyframes caret { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
 .fade-in { animation: fadeIn 0.25s ease both; }
-
-.pet-halo { animation: haloBreathe 4.2s ease-in-out infinite; }
-.pet-halo.busy { animation-duration: 1.4s; }
 
 input, textarea, select {
   background: var(--bg-input);
