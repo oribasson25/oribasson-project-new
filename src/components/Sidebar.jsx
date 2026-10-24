@@ -30,7 +30,7 @@ export function BrandMark({ lang, mark = 34, text = 19, onClick }) {
 
 function NavButton({ active, icon, label, onClick }) {
   return (
-    <button type="button" onClick={onClick}
+    <button type="button" onClick={onClick} aria-current={active ? 'page' : undefined}
       style={{
         display: 'flex', alignItems: 'center', gap: 11, height: 40, padding: '0 13px',
         borderRadius: 11, flexShrink: 0, width: '100%',
@@ -205,11 +205,11 @@ export function Sidebar({ t, lang, page, go, recents, activeChatId, onPickRecent
       <div style={{ padding: '26px 20px 10px' }}>
         <Eyebrow>{t.portfolio}</Eyebrow>
       </div>
-      <div style={{ padding: '0 12px', display: 'flex', flexDirection: 'column', gap: 3, flexShrink: 0 }}>
+      <nav aria-label={t.mainNav} style={{ padding: '0 12px', display: 'flex', flexDirection: 'column', gap: 3, flexShrink: 0 }}>
         {items.map((it) => (
           <NavButton key={it.id} active={page === it.id} icon={it.icon} label={t.nav[it.id]} onClick={() => go(it.path)} />
         ))}
-      </div>
+      </nav>
 
       {admin && (
         <>

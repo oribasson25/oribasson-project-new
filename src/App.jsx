@@ -118,14 +118,15 @@ export default function App() {
     const navSpace = typing ? '0px' : NAV_SPACE;
     return (
       <div className="m-root m-app" style={{ position: 'relative', display: 'flex', flexDirection: 'column', background: welcome ? '#07080d' : 'var(--bg-app)', overflow: 'hidden' }}>
+        <a href="#main" className="skip-link">{t.skip}</a>
         <MobileTopBar t={t} lang={lang} setLang={setLang} go={go} home={page === 'chat'} onDark={welcome} />
         {page === 'chat' ? (
-          <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', paddingBottom: navSpace, background: welcome ? '#07080d' : 'transparent' }}>{home(true)}</div>
+          <main id="main" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', paddingBottom: navSpace, background: welcome ? '#07080d' : 'transparent' }}>{home(true)}</main>
         ) : (
-          <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `18px 14px calc(28px + ${navSpace})` }}>
+          <main id="main" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `18px 14px calc(28px + ${navSpace})` }}>
             {title && page !== 'projects' && page !== 'resume' && <div dir="auto" style={{ fontSize: 26, fontWeight: 800, letterSpacing: '-0.03em', marginBottom: 14 }}>{title}</div>}
             {view(true)}
-          </div>
+          </main>
         )}
         {/* While the keyboard is up the bottom bar would only take room from the conversation. */}
         {!typing && <MobileBottomNav t={t} page={page} go={go} onMore={() => setMoreOpen(true)} moreOpen={moreOpen} />}
@@ -138,12 +139,13 @@ export default function App() {
 
   const section = ADMIN_PAGES.has(page) ? t.adminEyebrow : t.portfolio;
   return (
-    <div style={{ display: 'flex', height: 'calc(100vh / var(--ui-zoom))', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', height: 'calc(100vh / var(--ui-zoom))', overflow: 'hidden', position: 'relative' }}>
+      <a href="#main" className="skip-link">{t.skip}</a>
       <Sidebar t={t} lang={lang} page={page} go={go} recents={recents}
         activeChatId={chat.messages.length ? chat.chatId : null}
         onPickRecent={pickRecent} onNewChat={newChat} onClearHistory={clearHistory}
         admin={admin} onSignOut={signOut} />
-      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', background: welcome ? '#07080d' : 'var(--bg-app)' }}>
+      <main id="main" style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', background: welcome ? '#07080d' : 'var(--bg-app)' }}>
         {!welcome && <Crumbs trail={[section, t.nav[page]]} right={(
           <>
             {page === 'chat' && <ContactActions t={t} />}
@@ -158,7 +160,7 @@ export default function App() {
             </div>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }

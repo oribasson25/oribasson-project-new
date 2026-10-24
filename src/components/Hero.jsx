@@ -98,7 +98,7 @@ export function Hero({
       <div className="hero-ask">
         {notice}
         <Composer value={input} onChange={onChange} onSend={onSend} disabled={disabled} dir={dir}
-          placeholder={stacked ? t.placeholderShort : t.placeholder} width={820} />
+          placeholder={stacked ? t.placeholderShort : t.placeholder} width={820} sendLabel={t.send} />
         <QuestionChips items={chips} onPick={onSend} disabled={disabled} dir={dir} variant="glass" grid={stacked}
           style={{ marginTop: stacked ? 12 : 14, width: stacked ? '100%' : 'min(820px, 100%)', marginInline: 'auto' }} />
         {!stacked && <p className="hero-foot">{t.foot(first)}</p>}

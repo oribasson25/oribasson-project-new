@@ -187,7 +187,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed, too
       <div style={{ flexShrink: 0, padding: stacked ? '6px 16px 14px' : '6px 30px 20px' }}>
         {offlineNote}
         <Composer value={input} onChange={setInput} onSend={() => submit()} dir={dir}
-          disabled={pending || offline} placeholder={t.answer} autoFocus={!stacked} />
+          disabled={pending || offline} placeholder={t.answer} autoFocus={!stacked} sendLabel={t.send} />
       </div>
     </div>
   );

@@ -95,10 +95,26 @@ button {
   border: none;
   font-family: inherit;
   color: inherit;
-  transition: all 0.18s ease;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
 }
-button:hover { opacity: 0.92; }
 button:active { transform: scale(0.97); }
+:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+.hero :focus-visible { outline-color: #fff; }
+.skip-link {
+  position: absolute;
+  z-index: 80;
+  inset-inline-start: 12px;
+  top: 10px;
+  transform: translateY(-160%);
+  background: #fff;
+  color: #0d0f14;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-weight: 750;
+  text-decoration: none;
+  box-shadow: var(--shadow-lg);
+}
+.skip-link:focus { transform: none; }
 button:disabled { opacity: 0.4; cursor: not-allowed; }
 a { color: inherit; }
 

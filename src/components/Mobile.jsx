@@ -67,7 +67,7 @@ export function MobileBottomNav({ t, page, go, onMore, moreOpen }) {
   );
 }
 
-export function MobileSheet({ open, onClose, title, children }) {
+export function MobileSheet({ open, onClose, title, children, closeLabel = 'Close' }) {
   useEffect(() => {
     if (!open) return undefined;
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
@@ -88,7 +88,7 @@ export function MobileSheet({ open, onClose, title, children }) {
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 16px 12px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
           <div style={{ flex: 1, fontWeight: 800, fontSize: 16 }}>{title}</div>
-          <button type="button" onClick={onClose} aria-label="Close" style={{ width: 40, height: 40, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-2)', fontSize: 18 }}>▾</button>
+          <button type="button" onClick={onClose} aria-label={closeLabel} style={{ width: 40, height: 40, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-2)', fontSize: 18 }}>▾</button>
         </div>
         <div style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>{children}</div>
       </div>
@@ -105,7 +105,7 @@ export function MobileMore({ t, open, onClose, recents, activeChatId, onPickRece
     </button>
   );
   return (
-    <MobileSheet open={open} onClose={onClose} title={t.recent}>
+    <MobileSheet open={open} onClose={onClose} title={t.recent} closeLabel={t.close}>
       <div style={{ padding: '14px 12px 18px', display: 'flex', flexDirection: 'column', gap: 16 }}>
         <div>
           {row(Icons.plusCircle, t.newChat, onNewChat)}
