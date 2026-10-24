@@ -264,7 +264,8 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         flex: 1, minHeight: 0, overflowY: 'auto',
         padding: stacked ? '4px 16px 8px' : '6px 30px 10px',
       }}>
-        <div ref={threadRef} style={{ width: 'min(720px, 100%)', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div ref={threadRef} role="log" aria-relevant="additions" aria-label={t.threadTitle(first)}
+          style={{ width: 'min(720px, 100%)', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 12 }}>
           {messages.map((msg, i) => (msg.role === 'user' ? (
             <div key={msg.id} dir="auto" style={{
               alignSelf: 'flex-end', maxWidth: '85%', background: 'var(--primary)', color: 'var(--primary-ink)',
