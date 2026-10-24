@@ -5,7 +5,7 @@ import projects from '../../content/projects.js';
 import questions from '../../content/questions.js';
 import { tx } from '../../shared/text.js';
 import { Pet, PetStage } from './Pet.jsx';
-import { Eyebrow } from './ui.jsx';
+import { Chip, Eyebrow } from './ui.jsx';
 import { IntroBubble } from './IntroBubble.jsx';
 import { Answer, Steps } from './Answer.jsx';
 import { architectures } from './architectures.js';
@@ -52,6 +52,31 @@ function HomeProjects({ t, lang, stacked }) {
 }
 
 /** The published headline, then the current employer. Both already live in the content. */
+function HomeSkills({ lang, stacked }) {
+  // The resume leads with these two groups. The home shows them in that order.
+  const groups = (resume.skills || []).slice(0, 2).filter((g) => (g.items || []).length);
+  if (!groups.length) return null;
+  return (
+    <div className="hero-rise" dir={lang === 'he' ? 'rtl' : 'ltr'} style={{
+      animationDelay: '0.66s',
+      width: 'min(560px, 100%)',
+      marginTop: stacked ? 28 : 36,
+      display: 'flex', flexDirection: 'column', gap: 16,
+    }}>
+      {groups.map((g) => (
+        <div key={tx(g.group, lang) || g.items[0]}>
+          {tx(g.group, lang) && <Eyebrow style={{ marginBottom: 8, textAlign: 'center' }}>{tx(g.group, lang)}</Eyebrow>}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center' }}>
+            {g.items.map((item) => (
+              <Chip key={item} style={{ whiteSpace: 'normal', maxWidth: '100%', textAlign: 'center' }}>{item}</Chip>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function whoLine(lang) {
   const headline = tx(profile.headline, lang);
   const job = (resume.experience || [])[0];
@@ -288,6 +313,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
           style={{ animationDelay: '0.52s', marginTop: stacked ? 14 : 18, width: stacked ? '100%' : 'min(760px, 100%)' }} />
 
         <HomeProjects t={t} lang={lang} stacked={stacked} />
+        <HomeSkills lang={lang} stacked={stacked} />
 
         {!stacked && (
           <div className="hero-rise" dir={dir} style={{ animationDelay: '0.62s', marginTop: 26, fontSize: 11.5, color: 'var(--text-muted)', textAlign: 'center' }}>{t.foot(first)}</div>
