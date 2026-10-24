@@ -43,7 +43,7 @@ export function HomeIndex({ t, lang }) {
       {tools.length > 0 && (
         <div className="home-tools">
           <Eyebrow style={{ textAlign: 'center' }}>{t.skills}</Eyebrow>
-          <a dir="ltr" href="/resume#skills" onClick={(e) => openInApp('/resume#skills', e)}>{tools.join(' · ')}</a>
+          <a lang="en" dir="ltr" href="/resume#skills" onClick={(e) => openInApp('/resume#skills', e)}>{tools.join(' · ')}</a>
         </div>
       )}
     </div>
