@@ -4,10 +4,7 @@ import { tx } from '../../shared/text.js';
 import { Pet } from './Pet.jsx';
 import { LangToggle } from './Sidebar.jsx';
 
-/* 8Legs' front door: the dark welcome panel on the left, the form on the right. */
-const HERO_INK = '#f2f3f7';
-const HERO_INK_DIM = 'rgba(242,243,247,0.66)';
-
+/* The same paper as the rest of the site: name, plate, then the form. */
 export function AdminLogin({ t, lang, setLang, onSignedIn, onBack, mobile }) {
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
@@ -39,26 +36,31 @@ export function AdminLogin({ t, lang, setLang, onSignedIn, onBack, mobile }) {
   return (
     <div style={{ display: 'flex', height: mobile ? '100dvh' : 'calc(100vh / var(--ui-zoom))', background: 'var(--bg-app)', overflow: 'hidden' }}>
       <div style={{
-        flex: 1, display: mobile ? 'none' : 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        background: 'linear-gradient(135deg, #0b0d10 0%, #0f1320 100%)', borderRight: '1px solid var(--border)',
-        position: 'relative', overflow: 'hidden',
+        flex: 1, display: mobile ? 'none' : 'flex', alignItems: 'flex-end',
+        background: 'var(--bg-sidebar)', borderInlineEnd: '1px solid var(--border)',
+        padding: '48px 56px', overflow: 'hidden',
       }}>
-        <div style={{ position: 'absolute', top: '38%', left: '50%', transform: 'translate(-50%,-50%)', width: 420, height: 420, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.09) 0%, transparent 70%)', pointerEvents: 'none' }} />
-        <div dir={dir} style={{ position: 'relative', zIndex: 1, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Pet size={190} mode="idle" pulse={{ name: 'waving', n: 1 }} follow />
-          <div dir={dir} style={{ fontSize: 40, fontWeight: 700, letterSpacing: '-0.03em', marginTop: 18, unicodeBidi: 'isolate' }}>
-            <span style={{ color: HERO_INK, unicodeBidi: 'normal' }}>{first}</span>
-            {rest.length > 0 && <>{' '}<span style={{ color: HERO_INK_DIM, unicodeBidi: 'normal' }}>{rest.join(' ')}</span></>}
+        <div dir={dir} style={{ position: 'relative', maxWidth: 480 }}>
+          <div style={{ position: 'relative', width: 210, height: 200, marginBottom: 12 }}>
+            <div aria-hidden="true" style={{ position: 'absolute', insetInlineEnd: 8, bottom: 0, width: 128, height: 148, background: 'var(--text)' }} />
+            <div style={{ position: 'relative' }}>
+              <Pet size={180} mode="idle" pulse={{ name: 'waving', n: 1 }} follow />
+            </div>
           </div>
-          <div style={{ marginTop: 22 }}>
-            <div style={{ fontSize: 20, fontWeight: 800, color: HERO_INK, letterSpacing: '-0.02em', marginBottom: 10, maxWidth: 380 }}>{L.heroTitle}</div>
-            <div style={{ fontSize: 14, color: HERO_INK_DIM, maxWidth: 330, lineHeight: 1.7, margin: '0 auto' }}>{L.heroSub}</div>
+          <div dir={dir} style={{ fontFamily: 'var(--display)', fontWeight: 500, fontSize: 64, lineHeight: 0.82, letterSpacing: '-0.03em', unicodeBidi: 'isolate' }}>
+            <span style={{ display: 'block', unicodeBidi: 'normal' }}>{first}</span>
+            {rest.length > 0 && <span style={{ display: 'block', fontStyle: lang === 'he' ? 'normal' : 'italic', unicodeBidi: 'normal' }}>{rest.join(' ')}</span>}
           </div>
-          <div style={{ display: 'flex', gap: 8, marginTop: 30, flexWrap: 'wrap', justifyContent: 'center' }}>
-            {L.pills.map((f) => (
-              <span key={f} style={{ fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 20, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.14)', color: HERO_INK_DIM }}>{f}</span>
+          <div style={{ marginTop: 18, fontFamily: 'var(--display)', fontWeight: 500, fontSize: 22, lineHeight: 1.25, maxWidth: 420 }}>{L.heroTitle}</div>
+          <div style={{ marginTop: 8, fontSize: 14, color: 'var(--text-2)', maxWidth: 420, lineHeight: 1.6 }}>{L.heroSub}</div>
+          <ul style={{ listStyle: 'none', margin: '20px 0 0', padding: 0, borderTop: '1px solid var(--border)', maxWidth: 360 }}>
+            {L.pills.map((f, i) => (
+              <li key={f} style={{ display: 'flex', gap: 12, alignItems: 'baseline', padding: '8px 0', borderBottom: '1px solid var(--border)', fontSize: 13.5 }}>
+                <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--accent)' }}>{String(i + 1).padStart(2, '0')}</span>
+                <span>{f}</span>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </div>
 
@@ -79,12 +81,12 @@ export function AdminLogin({ t, lang, setLang, onSignedIn, onBack, mobile }) {
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
               placeholder={L.password} aria-label={L.password} autoFocus autoComplete="current-password" dir="ltr" />
             {error && (
-              <div role="alert" style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--danger)', fontSize: 13, marginTop: 12, padding: '10px 12px', background: 'var(--danger-dim)', borderRadius: 'var(--r-sm)', border: '1px solid rgba(220,38,38,0.2)', lineHeight: 1.5 }}>
+              <div role="alert" style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--danger)', fontSize: 13, marginTop: 12, padding: '10px 12px', background: 'var(--danger-dim)', borderRadius: 0, borderInlineStart: '2px solid var(--danger)', lineHeight: 1.5 }}>
                 {error}
               </div>
             )}
             <button type="submit" disabled={busy || !password}
-              style={{ width: '100%', background: 'var(--primary)', color: 'var(--primary-ink)', padding: '12px 16px', borderRadius: 'var(--r-md)', fontWeight: 700, fontSize: 14, marginTop: 16, boxShadow: '0 2px 12px var(--primary-glow)' }}>
+              style={{ width: '100%', background: 'var(--primary)', color: 'var(--primary-ink)', padding: '12px 16px', borderRadius: 0, fontWeight: 650, fontSize: 14, marginTop: 16 }}>
               {busy ? L.busy : L.submit}
             </button>
           </form>
