@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-export function Composer({ value, onChange, onSend, disabled, placeholder, dir, width = 720, fieldRef, autoFocus, sendLabel = 'Send', align = 'center' }) {
+export function Composer({ value, onChange, onSend, disabled, placeholder, dir, width = 720, fieldRef, autoFocus, sendLabel = 'Send' }) {
   const [focus, setFocus] = useState(false);
   const own = useRef(null);
   const ref = fieldRef || own;
@@ -16,7 +16,7 @@ export function Composer({ value, onChange, onSend, disabled, placeholder, dir, 
   const empty = !value.trim();
   return (
     <div dir={dir} style={{
-      width: `min(${width}px, 100%)`, margin: align === 'start' ? 0 : '0 auto',
+      width: `min(${width}px, 100%)`, margin: '0 auto',
       background: 'transparent', borderBottom: `1px solid ${focus ? 'var(--text)' : 'var(--border)'}`,
       borderRadius: 0, padding: '0', display: 'flex', alignItems: 'flex-end', gap: 8,
       transition: 'border-color 0.18s, box-shadow 0.18s',
@@ -51,37 +51,35 @@ export function Composer({ value, onChange, onSend, disabled, placeholder, dir, 
   );
 }
 
-/* Follow-ups sit in a row of rules. The hero uses a numbered index instead. */
-export function QuestionChips({ items, onPick, disabled, dir, style, className, variant = 'solid' }) {
-  if (variant === 'index') {
-    return (
-      <ol dir={dir} className={`hero-index${className ? ` ${className}` : ''}`} style={style}>
-        {items.map((text, i) => (
-          <li key={text}>
-            <button type="button" onClick={() => onPick(text)} disabled={disabled}>
-              <span className="n">{String(i + 1).padStart(2, '0')}</span>
-              <span>{text}</span>
-            </button>
-          </li>
-        ))}
-      </ol>
-    );
-  }
+/* On a phone every question stays in view, as a two-column grid of small
+   cards: six pills wrapped one per line filled half the screen. */
+export function QuestionChips({ items, onPick, disabled, dir, style, grid, className, variant = 'solid' }) {
   return (
     <div dir={dir} className={className} style={{
-      display: 'flex', flexWrap: 'wrap', gap: '2px 16px', justifyContent: 'flex-start',
+      ...(grid
+        ? { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }
+        : { display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }),
       ...style,
     }}>
-      {items.map((text) => (
-        <button key={text} type="button" onClick={() => onPick(text)} disabled={disabled}
-          style={{
-            background: 'transparent', border: 'none', borderBottom: '1px solid var(--border)',
-            borderRadius: 0, color: 'var(--text-2)', fontWeight: 500, padding: '6px 0', fontSize: 13,
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.borderBottomColor = 'var(--accent)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-2)'; e.currentTarget.style.borderBottomColor = 'var(--border)'; }}
-        >{text}</button>
-      ))}
+      {items.map((text) => {
+        const glass = variant === 'glass';
+        return (
+          <button key={text} type="button" onClick={() => onPick(text)} disabled={disabled}
+            className={glass ? 'hero-chip' : undefined}
+            style={{
+              background: glass ? 'rgba(255,255,255,0.06)' : 'var(--bg-card)',
+              border: `1px solid ${glass ? 'rgba(255,255,255,0.16)' : 'var(--border)'}`,
+              color: glass ? '#eef3fa' : 'var(--text-2)',
+              fontWeight: 600,
+              ...(grid
+                ? { borderRadius: 14, padding: '9px 12px', fontSize: 12.5, lineHeight: 1.35, minHeight: 50, textAlign: 'start', display: 'flex', alignItems: 'center' }
+                : { borderRadius: 999, padding: '8px 15px', fontSize: 12.5 }),
+            }}
+            onMouseEnter={glass ? undefined : (e) => { e.currentTarget.style.borderColor = 'var(--primary)'; e.currentTarget.style.color = 'var(--text)'; }}
+            onMouseLeave={glass ? undefined : (e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-2)'; }}
+          >{text}</button>
+        );
+      })}
     </div>
   );
 }

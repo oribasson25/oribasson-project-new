@@ -15,9 +15,9 @@ function firstName(lang) {
 function Notice({ children, dir }) {
   return (
     <div dir={dir} style={{
-      background: 'transparent', borderInlineStart: '2px solid var(--accent)',
-      borderRadius: 0, padding: '2px 12px', fontSize: 12.5, color: 'var(--text-2)',
-      width: 'min(680px, 100%)', margin: '0 0 12px', textAlign: 'start',
+      background: 'var(--bg-card)', border: '1px solid var(--border)',
+      borderRadius: 'var(--r-md)', padding: '9px 14px', fontSize: 12.5, color: 'var(--text-2)',
+      width: 'min(720px, 100%)', margin: '0 auto 12px', textAlign: 'center',
     }}>{children}</div>
   );
 }
@@ -169,7 +169,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed, too
                 <span style={{ flex: 1, minWidth: 160 }}>{t.errors[error] || t.errors.error}</span>
                 {error !== 'refusal' && error !== 'unavailable' && (
                   <button type="button" onClick={chat.retry}
-                    style={{ background: 'transparent', border: '1px solid var(--danger)', color: 'var(--danger)', borderRadius: 0, padding: '5px 12px', fontSize: 12, fontWeight: 650 }}>
+                    style={{ background: 'var(--bg-card)', border: '1px solid rgba(220,38,38,0.3)', color: 'var(--danger)', borderRadius: 999, padding: '5px 12px', fontSize: 12, fontWeight: 650 }}>
                     {t.retry}
                   </button>
                 )}
@@ -178,7 +178,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed, too
           )}
 
           {!writing && !error && last && last.role === 'assistant' && followUps.length > 0 && (
-            <QuestionChips items={followUps} onPick={submit} disabled={offline} dir={dir} className="fade-in"
+            <QuestionChips items={followUps} onPick={submit} disabled={offline} dir={dir} grid={stacked} className="fade-in"
               style={{ justifyContent: 'flex-start', marginTop: 2 }} />
           )}
         </div>

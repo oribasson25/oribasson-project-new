@@ -106,7 +106,7 @@ export default function App() {
       seed={seed} onSeedUsed={() => setSeed(null)}
       toolbar={!stacked && (
         <>
-          <ContactActions t={t} />
+          <ContactActions t={t} onDark />
           <LangToggle lang={lang} setLang={setLang} />
         </>
       )} />
@@ -117,11 +117,11 @@ export default function App() {
     // Room under the content for the floating bar — none while it is hidden for the keyboard.
     const navSpace = typing ? '0px' : NAV_SPACE;
     return (
-      <div className="m-root m-app" style={{ position: 'relative', display: 'flex', flexDirection: 'column', background: 'var(--bg-app)', overflow: 'hidden' }}>
+      <div className="m-root m-app" style={{ position: 'relative', display: 'flex', flexDirection: 'column', background: welcome ? '#07080d' : 'var(--bg-app)', overflow: 'hidden' }}>
         <a href="#main" className="skip-link">{t.skip}</a>
-        <MobileTopBar t={t} lang={lang} setLang={setLang} go={go} home={page === 'chat'} />
+        <MobileTopBar t={t} lang={lang} setLang={setLang} go={go} home={page === 'chat'} onDark={welcome} />
         {page === 'chat' ? (
-          <main id="main" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', paddingBottom: navSpace }}>{home(true)}</main>
+          <main id="main" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', paddingBottom: navSpace, background: welcome ? '#07080d' : 'transparent' }}>{home(true)}</main>
         ) : (
           <main id="main" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `18px 14px calc(28px + ${navSpace})` }}>
             {title && page !== 'projects' && page !== 'resume' && <div dir="auto" style={{ fontSize: 26, fontWeight: 800, letterSpacing: '-0.03em', marginBottom: 14 }}>{title}</div>}
@@ -145,7 +145,7 @@ export default function App() {
         activeChatId={chat.messages.length ? chat.chatId : null}
         onPickRecent={pickRecent} onNewChat={newChat} onClearHistory={clearHistory}
         admin={admin} onSignOut={signOut} />
-      <main id="main" style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', background: 'var(--bg-app)' }}>
+      <main id="main" style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', background: welcome ? '#07080d' : 'var(--bg-app)' }}>
         {!welcome && <Crumbs trail={[section, t.nav[page]]} right={(
           <>
             {page === 'chat' && <ContactActions t={t} />}
