@@ -1,10 +1,19 @@
 import profile from '../../content/profile.js';
 import resume from '../../content/resume.js';
-import { tx, tl, bullet, span } from '../../shared/text.js';
+import { tx, tl, bullet } from '../../shared/text.js';
 import { Icons, PageHeader, Btn, Chip, EmptyState, Section, Eyebrow } from './ui.jsx';
 
-function period(start, end, t) {
-  return span(start, end, t.present);
+function yearTime(value) {
+  const text = value == null || value === '' ? '' : String(value);
+  if (!/^\d{4}$/.test(text)) return text;
+  return <time dateTime={text}>{text}</time>;
+}
+
+/** Same letters as span(): "2023 – 2024", one year when both ends match, "2024 – Present". */
+function Period({ start, end, present }) {
+  if (!start && !end) return null;
+  if (start && end && String(start) === String(end)) return yearTime(start);
+  return <>{yearTime(start || '?')}{' – '}{end ? yearTime(end) : present}</>;
 }
 
 function Bullets({ items, size = 13 }) {
@@ -39,7 +48,7 @@ function Job({ job, t, lang, onAsk }) {
             {[company, tx(job.location, lang)].filter(Boolean).join(' · ')}
           </div>
         </div>
-        <div dir="ltr" style={{ fontFamily: 'var(--mono)', fontSize: 11.5, color: 'var(--text-muted)', paddingTop: 3 }}>{period(job.start, job.end, t)}</div>
+        <div dir="ltr" style={{ fontFamily: 'var(--mono)', fontSize: 11.5, color: 'var(--text-muted)', paddingTop: 3 }}><Period start={job.start} end={job.end} present={t.present} /></div>
       </div>
       {tx(job.summary, lang) && (
         <div dir="auto" style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.7, marginTop: 10 }}>{tx(job.summary, lang)}</div>
@@ -111,7 +120,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
                       </div>
                       {tx(e.details, lang) && <div dir="auto" style={{ fontSize: 12.5, color: 'var(--text-2)', marginTop: 6, lineHeight: 1.6 }}>{tx(e.details, lang)}</div>}
                     </div>
-                    <div dir="ltr" style={{ fontFamily: 'var(--mono)', fontSize: 11.5, color: 'var(--text-muted)', paddingTop: 3 }}>{period(e.start, e.end, t)}</div>
+                    <div dir="ltr" style={{ fontFamily: 'var(--mono)', fontSize: 11.5, color: 'var(--text-muted)', paddingTop: 3 }}><Period start={e.start} end={e.end} present={t.present} /></div>
                   </div>
                 ))}
               </div>
@@ -152,7 +161,11 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
                     <div dir="auto" style={{ fontWeight: 600 }}>
                       {c.url ? <a href={c.url} target="_blank" rel="noopener noreferrer" style={{ position: 'relative' }}>{tx(c.name, lang)}<span className="sr-only">{t.newTab}</span></a> : tx(c.name, lang)}
                     </div>
-                    <div style={{ color: 'var(--text-muted)', fontSize: 12, marginTop: 2 }}>{[c.issuer, c.year].filter(Boolean).join(' · ')}</div>
+                    <div style={{ color: 'var(--text-muted)', fontSize: 12, marginTop: 2 }}>
+                      {[c.issuer, c.year].filter(Boolean).map((part, i) => (
+                        <span key={i}>{i > 0 && ' · '}{part === c.year ? yearTime(part) : part}</span>
+                      ))}
+                    </div>
                   </div>
                 ))}
               </Section>

@@ -17,7 +17,10 @@ function ProjectCard({ p, t, lang, onAsk }) {
   const name = tx(p.name, lang);
   const highlights = tl(p.highlights, lang);
   const links = p.links || {};
-  const meta = [p.year, tx(p.role, lang)].filter(Boolean).join(' · ');
+  const role = tx(p.role, lang);
+  const year = p.year && /^\d{4}$/.test(String(p.year))
+    ? <time dateTime={String(p.year)}>{p.year}</time>
+    : p.year;
   const spec = p.id ? architectures[p.id] : null;
 
   // Measured, not guessed: the same card can fit in English and overflow in Hebrew.
@@ -37,7 +40,11 @@ function ProjectCard({ p, t, lang, onAsk }) {
     <div>
       <h2 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em', lineHeight: 'inherit' }}>{name}</h2>
       {tx(p.tagline, lang) && <div dir="auto" style={{ fontSize: 12.5, color: 'var(--text-2)', marginTop: 4, fontWeight: 500 }}>{tx(p.tagline, lang)}</div>}
-      {meta && <div dir="auto" style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--text-muted)', marginTop: 6 }}>{meta}</div>}
+      {(p.year || role) && (
+        <div dir="auto" style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--text-muted)', marginTop: 6 }}>
+          {year}{p.year && role ? ' · ' : ''}{role}
+        </div>
+      )}
     </div>
   );
   const prose = (
