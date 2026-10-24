@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import profile from '../content/profile.js';
-import { tx } from '../shared/text.js';
 import { strings } from './i18n.js';
 import { usePath, useIsMobile, useViewportHeight, useTyping } from './lib/hooks.js';
+import { useSeo } from './lib/seo.js';
 import { savedLang, saveLang, loadChats, clearChats } from './lib/store.js';
 import { useChat } from './lib/useChat.js';
 import { Crumbs } from './components/ui.jsx';
@@ -59,6 +58,7 @@ export default function App() {
   if (page === 'login' && admin) page = 'settings';
   const needsLogin = page === 'login' || (ADMIN_PAGES.has(page) && admin === false);
 
+  useSeo(page, lang);
   useEffect(() => {
     document.documentElement.classList.toggle('is-home', page === 'chat' && chat.messages.length === 0);
   }, [page, chat.messages.length]);
@@ -66,14 +66,6 @@ export default function App() {
   // /admin, once signed in, is the settings screen — keep the address honest.
   useEffect(() => { if (path === '/admin' && admin) go('/admin/settings'); }, [path, admin]);
   useEffect(() => { setMoreOpen(false); }, [path]);
-
-  // The browser tab always reads in English, whatever the interface language.
-  useEffect(() => {
-    const en = strings('en');
-    const name = tx(profile.name, 'en');
-    const label = page === 'chat' ? null : page === 'login' ? en.adminSignIn : (en.nav[page] || null);
-    document.title = label ? `${label} · ${name}` : name;
-  }, [page]);
 
   function ask(text) {
     go('/');
