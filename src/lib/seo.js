@@ -33,6 +33,15 @@ function abs(path) {
   return ORIGIN + (path === '/' ? '/' : path);
 }
 
+/** Schema.org wants a telephone with a country code. 053… is the same Israeli number. */
+function schemaPhone(phone) {
+  const raw = String(phone || '').trim();
+  if (!raw) return undefined;
+  const digits = raw.replace(/[^\d]/g, '');
+  if (digits.startsWith('0')) return `+972${digits.slice(1)}`;
+  return raw.startsWith('+') ? `+${digits}` : raw;
+}
+
 function setMeta(attr, key, content) {
   if (!content) return;
   let el = document.head.querySelector(`meta[${attr}="${key}"]`);
@@ -68,7 +77,7 @@ function personNode() {
     image: `${ORIGIN}/og.png`,
     jobTitle: headline.split(' · ')[0] || headline,
     email: profile.contact?.email ? `mailto:${profile.contact.email}` : undefined,
-    telephone: profile.contact?.phone || undefined,
+    telephone: schemaPhone(profile.contact?.phone),
     address: tx(profile.location, 'en')
       ? { '@type': 'PostalAddress', addressCountry: 'IL' }
       : undefined,
