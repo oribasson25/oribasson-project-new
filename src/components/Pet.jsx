@@ -270,6 +270,8 @@ export function PetStage({ size = 220, mode, pulse, busy, voice, label, children
   const { fx, playing } = useVoiceGlitch(voice, reduced);
   // The parent's reactions and the click share one counter, so the latest wins.
   const [own, setOwn] = useState({ name: null, n: 0 });
+  const stageRef = useRef(null);
+  const [lean, setLean] = useState({ x: 0, y: 0 });
   // A reaction from before this stage mounted (an earlier conversation's error) is not replayed.
   const seen = useRef(pulse && pulse.n);
   useEffect(() => {
@@ -277,16 +279,55 @@ export function PetStage({ size = 220, mode, pulse, busy, voice, label, children
     seen.current = pulse.n;
     setOwn((p) => ({ name: pulse.name, n: p.n + 1 }));
   }, [pulse && pulse.n]);
+
+  // The light behind the figure leans a few pixels toward the pointer.
+  useEffect(() => {
+    if (reduced) { setLean({ x: 0, y: 0 }); return undefined; }
+    let raf = 0;
+    let point = null;
+    const place = () => {
+      raf = 0;
+      const el = stageRef.current;
+      if (!el || !point) return;
+      const r = el.getBoundingClientRect();
+      const dx = point.x - (r.left + r.width / 2);
+      const dy = point.y - (r.top + r.height / 2);
+      const dist = Math.hypot(dx, dy);
+      const next = dist < 12 || dist > r.height * 2.4
+        ? { x: 0, y: 0 }
+        : { x: Math.round(dx * (7 / dist)), y: Math.round(dy * (7 / dist)) };
+      setLean((prev) => (prev.x === next.x && prev.y === next.y ? prev : next));
+    };
+    const onMove = (e) => {
+      if (e.pointerType === 'touch') return;
+      point = { x: e.clientX, y: e.clientY };
+      if (!raf) raf = requestAnimationFrame(place);
+    };
+    const onLeave = () => { point = null; setLean({ x: 0, y: 0 }); };
+    window.addEventListener('pointermove', onMove);
+    document.addEventListener('mouseleave', onLeave);
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      document.removeEventListener('mouseleave', onLeave);
+      cancelAnimationFrame(raf);
+    };
+  }, [reduced]);
+
   return (
-    <div style={{
+    <div ref={stageRef} style={{
       position: 'relative', width: size * 1.15, height: size * 1.04, flexShrink: 0,
       display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
     }}>
-      <div className={`pet-halo${busy ? ' busy' : ''}`} style={{
-        position: 'absolute', left: '50%', top: '46%', width: size * 1.1, height: size * 1.1,
-        marginLeft: -(size * 0.55), marginTop: -(size * 0.55), borderRadius: '50%', pointerEvents: 'none',
-        background: 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0.75) 38%, rgba(255,255,255,0) 68%)',
-      }} />
+      <div aria-hidden="true" className="halo-lean" style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        transform: lean.x || lean.y ? `translate(${lean.x}px, ${lean.y}px)` : undefined,
+      }}>
+        <div className={`pet-halo${busy ? ' busy' : ''}`} style={{
+          position: 'absolute', left: '50%', top: '46%', width: size * 1.1, height: size * 1.1,
+          marginLeft: -(size * 0.55), marginTop: -(size * 0.55), borderRadius: '50%', pointerEvents: 'none',
+          background: 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0.75) 38%, rgba(255,255,255,0) 68%)',
+        }} />
+      </div>
       <div style={{
         position: 'absolute', left: '50%', bottom: size * 0.025, width: size * 0.42, height: size * 0.06,
         marginLeft: -(size * 0.21), borderRadius: '50%', pointerEvents: 'none',

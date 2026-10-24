@@ -74,6 +74,7 @@ body {
 
 .pet-halo { animation: haloBreathe 4.2s ease-in-out infinite; }
 .pet-halo.busy { animation-duration: 1.4s; }
+.halo-lean { transition: transform 0.45s ease; }
 
 /* The same hairline the project diagrams draw, under the greeting. */
 .hero-rule { display: block; margin: 8px auto 0; }
@@ -355,5 +356,6 @@ a { color: inherit; }
   .hero-rise { animation: none; opacity: 1; transform: none; }
   .q-chip:hover, .q-chip:active { transform: none; }
   .send-ready:hover .send-arrow { transform: none; }
+  .halo-lean { transform: none !important; }
   button:active { transform: none; }
 }
