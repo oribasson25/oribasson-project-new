@@ -6,10 +6,9 @@ import { Architecture } from './Architecture.jsx';
 import { architectures } from './architectures.js';
 
 // Every card is this tall; whatever does not fit waits behind "Read more".
-const CARD_HEIGHT = 340;
+const CARD_HEIGHT = 372;
 
 function ProjectCard({ p, t, lang, onAsk }) {
-  const [hovered, setHovered] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [overflows, setOverflows] = useState(false);
   const clipRef = useRef(null);
@@ -38,10 +37,10 @@ function ProjectCard({ p, t, lang, onAsk }) {
 
   const head = (
     <div>
-      <h2 tabIndex={-1} dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em', lineHeight: 'inherit' }}>{name}</h2>
-      {tx(p.tagline, lang) && <div dir="auto" style={{ fontSize: 12.5, color: 'var(--text-2)', marginTop: 4, fontWeight: 500 }}>{tx(p.tagline, lang)}</div>}
+      <h2 tabIndex={-1} dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 16, letterSpacing: '-0.02em', lineHeight: 1.3 }}>{name}</h2>
+      {tx(p.tagline, lang) && <div dir="auto" style={{ fontSize: 13, color: 'var(--text-2)', marginTop: 6, fontWeight: 500, lineHeight: 1.45 }}>{tx(p.tagline, lang)}</div>}
       {(p.year || role) && (
-        <div dir="auto" style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--text-muted)', marginTop: 6 }}>
+        <div dir="auto" style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--text-muted)', marginTop: 8 }}>
           {year}{p.year && role ? ' · ' : ''}{role}
         </div>
       )}
@@ -70,16 +69,10 @@ function ProjectCard({ p, t, lang, onAsk }) {
 
   return (
     <div id={p.id || undefined} className="project-card fade-in"
-      onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
       style={{
         scrollMarginTop: 18,
-        background: 'var(--bg-card)', borderRadius: 'var(--r-lg)',
-        border: `1px solid ${hovered ? 'var(--primary-soft)' : 'var(--border)'}`,
-        boxShadow: hovered ? '0 0 26px rgba(13,15,20,0.06), var(--shadow)' : 'var(--shadow)',
-        padding: '18px 18px 14px', display: 'flex', flexDirection: 'column', gap: 12,
+        padding: '20px 20px 16px', display: 'flex', flexDirection: 'column', gap: 14,
         height: spec ? 'auto' : (expanded ? 'auto' : CARD_HEIGHT), minHeight: spec ? 0 : CARD_HEIGHT,
-        transform: hovered ? 'translateY(-1px)' : undefined,
-        transition: 'border-color 0.2s, box-shadow 0.2s, transform 0.2s',
       }}>
       {spec && head}
       {spec && <Architecture spec={spec} lang={lang} label={t.architecture} />}
@@ -88,7 +81,7 @@ function ProjectCard({ p, t, lang, onAsk }) {
         : { flex: 1, minHeight: 0, overflow: expanded ? 'visible' : 'hidden', position: 'relative' }}>
         <div ref={bodyRef} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {p.image && (
-            <div style={{ margin: '-18px -18px 0', borderRadius: 'var(--r-lg) var(--r-lg) 0 0', overflow: 'hidden', borderBottom: '1px solid var(--border)', background: 'var(--bg-panel)' }}>
+            <div style={{ margin: '-20px -20px 0', borderRadius: 'var(--r-lg) var(--r-lg) 0 0', overflow: 'hidden', borderBottom: '1px solid var(--border)', background: 'var(--bg-app)' }}>
               <img src={p.image} alt="" loading="lazy" style={{ display: 'block', width: '100%', aspectRatio: '16 / 9', objectFit: 'cover' }} />
             </div>
           )}
@@ -114,11 +107,11 @@ function ProjectCard({ p, t, lang, onAsk }) {
           onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-2)'; }}>
           {expanded ? t.showLess : t.readMore}
-          <span style={{ display: 'inline-block', transform: expanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.18s' }}>▾</span>
+            <span style={{ display: 'inline-block', transform: expanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.22s var(--ease)' }}>▾</span>
         </button>
       )}
 
-      <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', borderTop: '1px solid var(--border)', paddingTop: 13 }}>
+      <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', borderTop: '1px solid var(--border)', paddingTop: 14, marginTop: 2 }}>
         {links.live && <Btn size="sm" icon={Icons.external} href={links.live} note={t.newTab}>{t.live}</Btn>}
         {links.repo && <Btn size="sm" icon={Icons.github} href={links.repo} note={t.newTab}>{t.code}</Btn>}
         <Btn size="sm" icon={Icons.sparkle} onClick={() => onAsk(t.askProjectQuestion(name))} style={{ marginInlineStart: 'auto' }}>
