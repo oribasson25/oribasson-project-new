@@ -79,7 +79,7 @@ export function PageHeader({ eyebrow, title, subtitle, actions, size = 38 }) {
     <div style={{ marginBottom: 24 }}>
       {eyebrow && <Eyebrow style={{ marginBottom: 10 }}>{eyebrow}</Eyebrow>}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
-        <h1 dir="auto" style={{ margin: 0, fontSize: size, fontWeight: 700, letterSpacing: '-0.035em', lineHeight: 1.08, color: 'var(--text)' }}>{title}</h1>
+        <div dir="auto" style={{ fontSize: size, fontWeight: 700, letterSpacing: '-0.035em', lineHeight: 1.08, color: 'var(--text)' }}>{title}</div>
         {actions && <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>{actions}</div>}
       </div>
       {subtitle && <div dir="auto" style={{ color: 'var(--text-2)', fontSize: 13, marginTop: 10, fontWeight: 500 }}>{subtitle}</div>}
@@ -199,7 +199,7 @@ export function Section({ id, title, children, right, pad = '14px 18px' }) {
           padding: '16px 20px 14px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 10,
           fontSize: 15, fontWeight: 700, letterSpacing: '-0.01em', color: 'var(--text)',
         }}>
-          <h2 dir="auto" style={{ flex: 1, minWidth: 0, margin: 0, fontSize: 'inherit', fontWeight: 'inherit', letterSpacing: 'inherit', lineHeight: 'inherit' }}>{title}</h2>
+          <div dir="auto" style={{ flex: 1, minWidth: 0 }}>{title}</div>
           {right}
         </div>
       )}

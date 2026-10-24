@@ -39,8 +39,7 @@ function ProjectCard({ p, t, lang, onAsk }) {
         boxShadow: hovered ? '0 0 26px rgba(13,15,20,0.06), var(--shadow)' : 'var(--shadow)',
         padding: '18px 18px 14px', display: 'flex', flexDirection: 'column', gap: 12,
         height: expanded ? 'auto' : CARD_HEIGHT, minHeight: CARD_HEIGHT,
-        transition: 'border-color 0.2s, box-shadow 0.2s, transform 0.2s',
-        transform: hovered ? 'translateY(-3px)' : 'none',
+        transition: 'border-color 0.2s, box-shadow 0.2s',
       }}>
       <div ref={clipRef} style={{ flex: 1, minHeight: 0, overflow: expanded ? 'visible' : 'hidden', position: 'relative' }}>
         <div ref={bodyRef} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -50,7 +49,7 @@ function ProjectCard({ p, t, lang, onAsk }) {
             </div>
           )}
           <div>
-            <h2 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em' }}>{name}</h2>
+            <div dir="auto" style={{ fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em' }}>{name}</div>
             {tx(p.tagline, lang) && <div dir="auto" style={{ fontSize: 12.5, color: 'var(--text-2)', marginTop: 4, fontWeight: 500 }}>{tx(p.tagline, lang)}</div>}
             {meta && <div dir="auto" style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--text-muted)', marginTop: 6 }}>{meta}</div>}
           </div>
@@ -103,55 +102,22 @@ function ProjectCard({ p, t, lang, onAsk }) {
   );
 }
 
-function LeadProject({ p, t, lang, onAsk }) {
-  const name = tx(p.name, lang);
-  const links = p.links || {};
-  const meta = [p.year, tx(p.role, lang)].filter(Boolean).join(' · ');
-  return (
-    <article className="project-lead fade-in">
-      <div>
-        {tx(p.tagline, lang) && <div className="project-kicker" dir="auto">{tx(p.tagline, lang)}</div>}
-        <h2 dir="auto" className="project-lead-name">{name}</h2>
-        {tx(p.description, lang) && (
-          <p dir="auto" className="project-lead-copy">{tx(p.description, lang)}</p>
-        )}
-      </div>
-      <div className="project-lead-side">
-        {meta && <div dir="auto" className="project-lead-meta">{meta}</div>}
-        <div className="project-lead-actions">
-          {links.live && <Btn size="sm" icon={Icons.external} href={links.live}>{t.live}</Btn>}
-          {links.repo && <Btn size="sm" icon={Icons.github} href={links.repo}>{t.code}</Btn>}
-          <Btn size="sm" variant="primary" icon={Icons.sparkle} onClick={() => onAsk(t.askProjectQuestion(name))}>
-            {t.askAboutProject}
-          </Btn>
-        </div>
-      </div>
-    </article>
-  );
-}
-
 export function ProjectsView({ t, lang, onAsk, onOpenChat, stacked }) {
   const dir = lang === 'he' ? 'rtl' : 'ltr';
   const list = projects || [];
-  const [lead, ...rest] = list;
   return (
-    <div dir={dir} className="project-page">
-      <PageHeader eyebrow={t.portfolio} title={t.projectsTitle} subtitle={list.length ? t.projectCount(list.length) : null} size={stacked ? 30 : 38} />
+    <div dir={dir}>
+      {!stacked && <PageHeader eyebrow={t.portfolio} title={t.projectsTitle} subtitle={list.length ? t.projectCount(list.length) : null} />}
       {list.length === 0 ? (
         <Section>
           <EmptyState icon={Icons.projects} title={t.comingSoon} subtitle={t.comingSoonSub}
             action={<Btn icon={Icons.chat} onClick={onOpenChat}>{t.openChat}</Btn>} />
         </Section>
       ) : (
-        <>
-          {lead && <LeadProject p={lead} t={t} lang={lang} onAsk={onAsk} />}
-          {rest.length > 0 && (
-            // An opened card grows on its own; the rest of its row keeps the common height.
-            <div className="project-grid">
-              {rest.map((p, i) => <ProjectCard key={p.id || i} p={p} t={t} lang={lang} onAsk={onAsk} />)}
-            </div>
-          )}
-        </>
+        // An opened card grows on its own; the rest of its row keeps the common height.
+        <div className="project-grid">
+          {list.map((p, i) => <ProjectCard key={p.id || i} p={p} t={t} lang={lang} onAsk={onAsk} />)}
+        </div>
       )}
     </div>
   );
