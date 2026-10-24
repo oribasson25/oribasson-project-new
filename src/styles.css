@@ -239,9 +239,10 @@ body {
 .home-fact-slot[data-side="right"] { left: calc(50% + 156px); text-align: left; }
 .home-fact-btn {
   display: block;
-  width: 100%;
+  width: max-content;
+  max-width: 100%;
   margin: 0;
-  padding: 0;
+  padding: 2px 0;
   background: none;
   border: none;
   color: inherit;
@@ -250,6 +251,10 @@ body {
   cursor: pointer;
   border-radius: 6px;
 }
+/* The slot is wider than a short line. Park the words against the figure,
+   so the focus ring hugs the sentence instead of an empty box. */
+.home-fact-slot[data-side="left"] .home-fact-live { display: flex; justify-content: flex-end; }
+.home-fact-slot[data-side="right"] .home-fact-live { display: flex; justify-content: flex-start; }
 .home-fact-btn:hover,
 .home-fact-btn:active { opacity: 1; transform: none; }
 .home-fact-slot[data-pinned="true"] .home-fact {
@@ -331,8 +336,10 @@ body {
     align-items: center;
     justify-content: center;
   }
-  .home-fact-live { width: 100%; min-width: 0; }
+  .home-fact-live { width: 100%; min-width: 0; display: block; }
   .home-fact-btn {
+    width: 100%;
+    max-width: none;
     min-height: 44px;
     display: flex;
     align-items: center;
