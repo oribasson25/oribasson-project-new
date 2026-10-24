@@ -133,6 +133,7 @@ export function ProjectsView({ t, lang, onAsk, onOpenChat, stacked }) {
   return (
     <div dir={dir}>
       {!stacked && <PageHeader eyebrow={t.portfolio} title={t.projectsTitle} subtitle={list.length ? t.projectCount(list.length) : null} />}
+      {stacked && list.length > 0 && <p className="page-lead" dir="auto">{t.projectCount(list.length)}</p>}
       {list.length === 0 ? (
         <Section>
           <EmptyState icon={Icons.projects} title={t.comingSoon} subtitle={t.comingSoonSub}

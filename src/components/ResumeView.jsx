@@ -72,10 +72,13 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
     ? <Btn variant="primary" icon={Icons.download} href={profile.cvPdf} download>{t.downloadCv}</Btn>
     : null;
 
+  const lead = sub ? <p className="page-lead" dir="auto">{sub}</p> : null;
+
   if (isEmpty()) {
     return (
       <div dir={dir}>
         {!stacked && <PageHeader eyebrow={t.portfolio} title={t.resumeTitle} subtitle={sub || name} actions={actions} />}
+        {stacked && lead}
         <Section>
           <EmptyState icon={Icons.resume} title={t.comingSoon} subtitle={t.comingSoonSub}
             action={<Btn icon={Icons.chat} onClick={onOpenChat}>{t.openChat}</Btn>} />
@@ -93,6 +96,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
   return (
     <div dir={dir}>
       {!stacked && <PageHeader eyebrow={t.resumeTitle} title={name} subtitle={sub} actions={actions} />}
+      {stacked && lead}
       <div className="resume-wrap">
       <div className={`resume-layout${side && !stacked ? ' has-side' : ''}`}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 22, minWidth: 0 }}>

@@ -167,6 +167,16 @@ body {
 }
 #skills { scroll-margin-top: 14px; }
 
+/* The line under a phone's page title: the same subtitle the desktop header shows. */
+.page-lead {
+  margin: -6px 0 16px;
+  max-width: 36em;
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
 /* The current post, one quiet line under the headline. Years match the resume. */
 .home-post {
   display: inline-flex;
