@@ -76,9 +76,9 @@ export function Composer({ value, onChange, onSend, disabled, placeholder, dir, 
 
 /* On a phone every question stays in view, as a two-column grid of small
    cards: six pills wrapped one per line filled half the screen. */
-function QuestionChips({ items, onPick, disabled, dir, style, grid, className }) {
+function QuestionChips({ items, onPick, disabled, dir, style, grid, className, label }) {
   return (
-    <div dir={dir} className={className} style={{
+    <div role="group" aria-label={label} dir={dir} className={className} style={{
       ...(grid
         ? { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }
         : { display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }),
@@ -218,7 +218,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
             placeholder={stacked ? t.placeholderShort : t.placeholder} />
         </div>
 
-        <QuestionChips items={chips} onPick={submit} disabled={pending || offline} dir={dir} grid={stacked}
+        <QuestionChips items={chips} onPick={submit} disabled={pending || offline} dir={dir} grid={stacked} label={t.suggestions}
           style={{ marginTop: stacked ? 14 : 18, width: stacked ? '100%' : 'min(760px, 100%)' }} />
 
         {!stacked && (
@@ -303,7 +303,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
           )}
 
           {!writing && !error && last && last.role === 'assistant' && followUps.length > 0 && (
-            <QuestionChips items={followUps} onPick={submit} disabled={offline} dir={dir} grid={stacked} className="fade-in"
+            <QuestionChips items={followUps} onPick={submit} disabled={offline} dir={dir} grid={stacked} label={t.suggestions} className="fade-in"
               style={{ justifyContent: 'flex-start', marginTop: 2 }} />
           )}
         </div>
