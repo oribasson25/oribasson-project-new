@@ -1,5 +1,5 @@
 /*
- * Your projects, in the order the page shows them. The Projects page renders them as an index, and
+ * Your projects, in the order the page shows them. The Projects page renders them as cards, and
  * the chatbot answers from them.
  *
  * Fields: id, name, tagline, year, role, description, highlights, tech,
