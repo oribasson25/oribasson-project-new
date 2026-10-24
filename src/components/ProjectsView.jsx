@@ -69,7 +69,7 @@ function ProjectCard({ p, t, lang, onAsk }) {
   );
 
   return (
-    <div id={p.id || undefined} className="fade-in"
+    <div id={p.id || undefined} className="project-card fade-in"
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
       style={{
         scrollMarginTop: 18,
@@ -82,7 +82,7 @@ function ProjectCard({ p, t, lang, onAsk }) {
       }}>
       {spec && head}
       {spec && <Architecture spec={spec} lang={lang} label={t.architecture} />}
-      <div ref={clipRef} style={spec
+      <div ref={clipRef} className="project-clip" style={spec
         ? { maxHeight: expanded ? 'none' : 120, overflow: expanded ? 'visible' : 'hidden', position: 'relative' }
         : { flex: 1, minHeight: 0, overflow: expanded ? 'visible' : 'hidden', position: 'relative' }}>
         <div ref={bodyRef} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -95,7 +95,7 @@ function ProjectCard({ p, t, lang, onAsk }) {
           {prose}
         </div>
         {overflows && !expanded && (
-          <div aria-hidden="true" style={{
+          <div className="project-fade" aria-hidden="true" style={{
             position: 'absolute', left: 0, right: 0, bottom: 0, height: 56, pointerEvents: 'none',
             background: 'linear-gradient(to bottom, rgba(255,255,255,0), var(--bg-card))',
           }} />

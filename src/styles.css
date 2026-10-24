@@ -602,6 +602,12 @@ a { color: inherit; }
 
 @media print {
   .screen-only, .skip-link { display: none !important; }
+  /* A card folds its description on screen. On paper the whole project is the point. */
+  .project-card { height: auto !important; }
+  .project-clip { max-height: none !important; overflow: visible !important; }
+  .project-fade, .read-more { display: none !important; }
+  .arch-node { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .arch-line { stroke-dashoffset: 0 !important; animation: none !important; }
   .hero-rise, .home-fact { animation: none; opacity: 1; transform: none; }
   .home-fact-slot,
   .home-fact-slot[data-side="left"],
