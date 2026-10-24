@@ -29,6 +29,15 @@ function Bullets({ items, size = 13 }) {
   );
 }
 
+/** On paper the sidebar is gone, so the resume carries its own contact line. */
+function PrintLine() {
+  const c = profile.contact || {};
+  const linkedin = c.linkedin ? c.linkedin.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : '';
+  const bits = [c.email, c.phone, linkedin].filter(Boolean);
+  if (!bits.length) return null;
+  return <p className="print-line">{bits.join(' · ')}</p>;
+}
+
 function isEmpty() {
   return !tx(resume.summary, 'en') && !tx(resume.summary, 'he')
     && !(resume.experience || []).length && !(resume.education || []).length
@@ -40,7 +49,7 @@ function Job({ job, t, lang, onAsk }) {
   const company = tx(job.company, lang);
   const highlights = tl(job.highlights, lang);
   return (
-    <div style={{ padding: '18px 22px 20px', borderTop: '1px solid var(--border)' }}>
+    <div className="resume-job" style={{ padding: '18px 22px 20px', borderTop: '1px solid var(--border)' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap' }}>
         <div style={{ flex: 1, minWidth: 200 }}>
           <h3 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 16, letterSpacing: '-0.02em', lineHeight: 1.3 }}>{role}</h3>
@@ -56,9 +65,11 @@ function Job({ job, t, lang, onAsk }) {
       {highlights.length > 0 && <Bullets items={highlights} />}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginTop: 14 }}>
         {(job.tech || []).map((x) => <Chip key={x} mono>{x}</Chip>)}
-        <Btn size="sm" icon={Icons.sparkle} onClick={() => onAsk(t.askJobQuestion(role, company))} style={{ marginInlineStart: 'auto' }}>
-          {t.askAboutExperience}
-        </Btn>
+        <span className="print-hide" style={{ display: 'contents' }}>
+          <Btn size="sm" icon={Icons.sparkle} onClick={() => onAsk(t.askJobQuestion(role, company))} style={{ marginInlineStart: 'auto' }}>
+            {t.askAboutExperience}
+          </Btn>
+        </span>
       </div>
     </div>
   );
@@ -78,7 +89,9 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
     return (
       <div dir={dir}>
         {!stacked && <PageHeader eyebrow={t.portfolio} title={t.resumeTitle} subtitle={sub || name} actions={actions} />}
+        {stacked && <p className="print-name">{name}</p>}
         {stacked && lead}
+        <PrintLine />
         <Section>
           <EmptyState icon={Icons.resume} title={t.comingSoon} subtitle={t.comingSoonSub}
             action={<Btn icon={Icons.chat} onClick={onOpenChat}>{t.openChat}</Btn>} />
@@ -96,7 +109,9 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
   return (
     <div dir={dir}>
       {!stacked && <PageHeader eyebrow={t.resumeTitle} title={name} subtitle={sub} actions={actions} />}
+      {stacked && <p className="print-name">{name}</p>}
       {stacked && lead}
+      <PrintLine />
       <div className="resume-wrap">
       <div className={`resume-layout${side && !stacked ? ' has-side' : ''}`}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 26, minWidth: 0 }}>

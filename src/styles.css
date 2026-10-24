@@ -649,8 +649,28 @@ a { color: inherit; }
   .thread-action { min-height: 44px; }
 }
 
+.print-name, .print-line { display: none; }
+
 @media print {
-  .screen-only, .skip-link { display: none !important; }
+  .screen-only, .skip-link, .print-hide { display: none !important; }
+  /* The phone's page title is the section name. The printed page leads with the person. */
+  .page-title { display: none !important; }
+  .print-name, .print-line { display: block; }
+  .print-name {
+    margin: 0 0 4px;
+    font-size: 22px;
+    font-weight: 750;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+  .print-line { margin: -8px 0 22px; font-size: 12.5px; line-height: 1.5; color: #243044; }
+  .resume-job { break-inside: avoid; }
+  /* A printed Live button is useless without the address. */
+  .project-card a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-weight: 500;
+    font-size: 11px;
+  }
   /* A card folds its description on screen. On paper the whole project is the point. */
   .project-card { height: auto !important; }
   .project-clip { max-height: none !important; overflow: visible !important; }

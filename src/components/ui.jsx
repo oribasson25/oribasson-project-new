@@ -54,7 +54,7 @@ export function Eyebrow({ children, style }) {
 /** Portfolio / Resume — where you are, across the top of the content column. */
 export function Crumbs({ trail, right }) {
   return (
-    <div style={{
+    <div className="screen-only" style={{
       height: 56, flexShrink: 0, display: 'flex', alignItems: 'center', gap: 10,
       padding: '0 34px', borderBottom: '1px solid var(--border)',
       background: 'var(--bg-app)', position: 'relative', zIndex: 2,
