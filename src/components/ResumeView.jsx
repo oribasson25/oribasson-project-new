@@ -114,7 +114,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
                 {education.map((e, i) => (
                   <div key={i} style={{ padding: '14px 20px', borderTop: '1px solid var(--border)', display: 'flex', gap: 14, flexWrap: 'wrap' }}>
                     <div style={{ flex: 1, minWidth: 200 }}>
-                      <div dir="auto" style={{ fontWeight: 700, fontSize: 14 }}>{tx(e.degree, lang)}</div>
+                      <h3 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 14, lineHeight: 'inherit' }}>{tx(e.degree, lang)}</h3>
                       <div dir="auto" style={{ fontSize: 12.5, color: 'var(--text-2)', marginTop: 3, fontWeight: 600 }}>
                         {[tx(e.school, lang), tx(e.location, lang)].filter(Boolean).join(' · ')}
                       </div>
