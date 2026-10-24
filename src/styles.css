@@ -81,6 +81,8 @@ body {
 .page-in { animation: pageIn 0.32s var(--ease) both; }
 
 .pet-halo { animation: haloBreathe 4.8s ease-in-out infinite; }
+.pet-ground { transform-origin: center; transition: transform 0.18s var(--ease), opacity 0.18s var(--ease); }
+.pet-ground.is-up { transform: scaleX(0.62); opacity: 0.45; }
 .pet-halo.busy { animation-duration: 1.6s; }
 .halo-lean { transition: transform 0.5s var(--ease); }
 
@@ -718,7 +720,8 @@ a { color: inherit; }
   .q-chip:hover, .q-chip:focus-visible, .q-chip:active { transform: none; }
   .project-card { transform: none !important; }
   .send-ready:hover .send-arrow { transform: none; }
-  .halo-lean { transform: none !important; }
+  .halo-lean, .pet-ground, .pet-ground.is-up { transform: none !important; }
+  .pet-ground { transition: none !important; opacity: 1 !important; }
   .home-fact { animation: none !important; transform: none !important; opacity: 1 !important; }
   .home-fact::before,
   .home-fact::after { animation: none !important; transform: none !important; }

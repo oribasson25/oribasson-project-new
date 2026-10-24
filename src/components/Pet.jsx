@@ -272,7 +272,9 @@ export function PetStage({ size = 220, mode, pulse, busy, voice, label, children
   const { fx, playing } = useVoiceGlitch(voice, reduced);
   // The parent's reactions and the click share one counter, so the latest wins.
   const [own, setOwn] = useState({ name: null, n: 0 });
+  const [lift, setLift] = useState(false);
   const stageRef = useRef(null);
+  const liftTimer = useRef(null);
   const [lean, setLean] = useState({ x: 0, y: 0 });
   // A reaction from before this stage mounted (an earlier conversation's error) is not replayed.
   const seen = useRef(pulse && pulse.n);
@@ -281,6 +283,17 @@ export function PetStage({ size = 220, mode, pulse, busy, voice, label, children
     seen.current = pulse.n;
     setOwn((p) => ({ name: pulse.name, n: p.n + 1 }));
   }, [pulse && pulse.n]);
+
+  useEffect(() => () => clearTimeout(liftTimer.current), []);
+
+  // The jump leaves the ground for a moment. The shadow thins, then comes back as he lands.
+  function jump() {
+    setOwn((p) => ({ name: 'jumping', n: p.n + 1 }));
+    if (reduced) return;
+    setLift(true);
+    clearTimeout(liftTimer.current);
+    liftTimer.current = setTimeout(() => setLift(false), 560);
+  }
 
   // The light behind the figure leans a few pixels toward the pointer.
   useEffect(() => {
@@ -330,10 +343,12 @@ export function PetStage({ size = 220, mode, pulse, busy, voice, label, children
           background: 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0.75) 38%, rgba(255,255,255,0) 68%)',
         }} />
       </div>
-      <div style={{
+      <div aria-hidden="true" className={`pet-ground${lift ? ' is-up' : ''}`} style={{
         position: 'absolute', left: '50%', bottom: size * 0.02, width: size * 0.58, height: size * 0.045,
         marginLeft: -(size * 0.29), borderRadius: '50%', pointerEvents: 'none',
         background: 'radial-gradient(ellipse, rgba(13,15,20,0.14) 0%, rgba(13,15,20,0) 72%)',
+        transform: fx.bounce ? `scaleX(${(1 - fx.bounce * 0.28).toFixed(3)})` : undefined,
+        opacity: fx.bounce ? 1 - fx.bounce * 0.35 : undefined,
       }} />
       {fx.scan > 0 && (
         <div aria-hidden="true" style={{
@@ -349,7 +364,7 @@ export function PetStage({ size = 220, mode, pulse, busy, voice, label, children
       }}>
         <Pet size={size} mode={playing ? 'talking' : mode} pulse={own} follow={!playing} label={label}
           glitch={fx.rgb || fx.slices.length ? fx : undefined}
-          onClick={() => setOwn((p) => ({ name: 'jumping', n: p.n + 1 }))} />
+          onClick={jump} />
       </div>
       {children}
     </div>
