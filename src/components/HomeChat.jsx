@@ -20,7 +20,7 @@ function questionBefore(messages, index) {
   return '';
 }
 
-export function Composer({ value, onChange, onSend, disabled, placeholder, dir, width = 720, fieldRef, autoFocus, sendLabel = 'Send' }) {
+export function Composer({ value, onChange, onSend, disabled, placeholder, dir, width = 720, fieldRef, autoFocus, sendLabel = 'Send', sendHint }) {
   const [focus, setFocus] = useState(false);
   const own = useRef(null);
   const ref = fieldRef || own;
@@ -58,6 +58,7 @@ export function Composer({ value, onChange, onSend, disabled, placeholder, dir, 
         disabled={disabled}
         placeholder={placeholder}
         aria-label={placeholder}
+        aria-describedby={sendHint ? 'chat-composer-hint' : undefined}
         style={{
           flex: 1, resize: 'none', border: 'none', background: 'transparent', outline: 'none',
           boxShadow: 'none', fontSize: 14.5, lineHeight: 1.6, padding: '13px 12px', maxHeight: 150,
@@ -70,6 +71,7 @@ export function Composer({ value, onChange, onSend, disabled, placeholder, dir, 
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           opacity: disabled || empty ? 0.35 : 1,
         }}>↑</button>
+      {sendHint && <span id="chat-composer-hint" className="sr-only">{sendHint}</span>}
     </div>
   );
 }
@@ -214,7 +216,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         <div style={{ width: '100%', marginTop: stacked ? 20 : 24 }}>
           {offlineNote}
           <Composer value={input} onChange={setInput} onSend={() => submit()} fieldRef={fieldRef}
-            disabled={pending || offline} dir={dir} sendLabel={t.send}
+            disabled={pending || offline} dir={dir} sendLabel={t.send} sendHint={t.sendHint}
             placeholder={stacked ? t.placeholderShort : t.placeholder} />
         </div>
 
@@ -312,7 +314,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
       <div className="screen-only" style={{ flexShrink: 0, padding: stacked ? '6px 16px 14px' : '6px 30px 20px' }}>
         {offlineNote}
         <Composer value={input} onChange={setInput} onSend={() => submit()} dir={dir}
-          disabled={pending || offline} placeholder={t.answer} autoFocus={!stacked} sendLabel={t.send} />
+          disabled={pending || offline} placeholder={t.answer} autoFocus={!stacked} sendLabel={t.send} sendHint={t.sendHint} />
       </div>
     </div>
   );
