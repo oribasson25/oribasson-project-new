@@ -62,7 +62,7 @@ export function AdminLogin({ t, lang, setLang, onSignedIn, onBack, mobile }) {
         </div>
       </div>
 
-      <div style={{ width: mobile ? '100%' : 420, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: mobile ? '32px 24px' : '40px 48px', position: 'relative' }}>
+      <main style={{ width: mobile ? '100%' : 420, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: mobile ? '32px 24px' : '40px 48px', position: 'relative' }}>
         <div style={{ position: 'absolute', top: 18, insetInlineEnd: 18 }}>
           <LangToggle lang={lang} setLang={setLang} />
         </div>
@@ -72,7 +72,7 @@ export function AdminLogin({ t, lang, setLang, onSignedIn, onBack, mobile }) {
             {L.back}
           </button>
           <div style={{ marginBottom: 22 }}>
-            <div style={{ fontWeight: 800, fontSize: 22, letterSpacing: '-0.02em', color: 'var(--text)', marginBottom: 6 }}>{L.heading}</div>
+            <h1 style={{ margin: '0 0 6px', fontWeight: 800, fontSize: 22, letterSpacing: '-0.02em', color: 'var(--text)', lineHeight: 'normal' }}>{L.heading}</h1>
             <div style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 500, lineHeight: 1.6 }}>{L.sub}</div>
           </div>
           <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
@@ -89,7 +89,7 @@ export function AdminLogin({ t, lang, setLang, onSignedIn, onBack, mobile }) {
             </button>
           </form>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
