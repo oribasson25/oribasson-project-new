@@ -242,9 +242,15 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
           className="hero-rise"
           style={{ animationDelay: '0.52s', marginTop: stacked ? 14 : 18, width: stacked ? '100%' : 'min(760px, 100%)' }} />
 
-        {!stacked && (
-          <div className="hero-rise" dir={dir} style={{ animationDelay: '0.62s', marginTop: 26, fontSize: 11.5, color: 'var(--text-muted)', textAlign: 'center' }}>{t.foot(first)}</div>
-        )}
+        <div className="hero-rise" dir={dir} style={{
+          animationDelay: '0.62s',
+          marginTop: stacked ? 16 : 26,
+          maxWidth: 420,
+          fontSize: 11.5,
+          lineHeight: 1.5,
+          color: 'var(--text-muted)',
+          textAlign: 'center',
+        }}>{t.foot(first)}</div>
       </div>
     );
   }
