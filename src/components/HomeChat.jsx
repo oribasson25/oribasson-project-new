@@ -102,7 +102,7 @@ function QuestionChips({ items, onPick, disabled, dir, style, grid, className })
 
 function Notice({ children, dir }) {
   return (
-    <div dir={dir} style={{
+    <div role="status" dir={dir} style={{
       background: 'var(--bg-card)', border: '1px solid var(--border)',
       borderRadius: 'var(--r-md)', padding: '9px 14px', fontSize: 12.5, color: 'var(--text-2)',
       width: 'min(720px, 100%)', margin: '0 auto 12px', textAlign: 'center',
@@ -285,7 +285,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
           {error && !pending && (
             <div className="fade-in" style={{ display: 'flex', alignItems: 'flex-end', gap: 10 }}>
               <Pet pulse={chat.pulse} size={58} />
-              <div dir={dir} style={{
+              <div role="alert" dir={dir} style={{
                 flex: 1, background: 'var(--danger-dim)', border: '1px solid rgba(220,38,38,0.25)',
                 color: 'var(--danger)', padding: '9px 13px', borderRadius: 'var(--r-md)',
                 fontSize: 12.5, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 6,
