@@ -109,8 +109,8 @@ function ProjectCard({ p, t, lang, onAsk }) {
       )}
 
       <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', borderTop: '1px solid var(--border)', paddingTop: 13 }}>
-        {links.live && <Btn size="sm" icon={Icons.external} href={links.live}>{t.live}</Btn>}
-        {links.repo && <Btn size="sm" icon={Icons.github} href={links.repo}>{t.code}</Btn>}
+        {links.live && <Btn size="sm" icon={Icons.external} href={links.live} note={t.newTab}>{t.live}</Btn>}
+        {links.repo && <Btn size="sm" icon={Icons.github} href={links.repo} note={t.newTab}>{t.code}</Btn>}
         <Btn size="sm" icon={Icons.sparkle} onClick={() => onAsk(t.askProjectQuestion(name))} style={{ marginInlineStart: 'auto' }}>
           {t.askAboutProject}
         </Btn>

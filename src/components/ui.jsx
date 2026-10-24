@@ -88,7 +88,7 @@ export function PageHeader({ eyebrow, title, subtitle, actions, size = 38 }) {
 }
 
 /** Two weights, one shape: `primary` (graphite, at most one per screen) and `ghost`. */
-export function Btn({ variant = 'ghost', icon, children, onClick, title, disabled, danger, style, size = 'md', href, type, download, sameTab }) {
+export function Btn({ variant = 'ghost', icon, children, onClick, title, disabled, danger, style, size = 'md', href, type, download, sameTab, note }) {
   const [hot, setHot] = useState(false);
   const pad = size === 'sm' ? '7px 12px' : '10px 17px';
   const font = size === 'sm' ? 12.5 : 13;
@@ -104,6 +104,7 @@ export function Btn({ variant = 'ghost', icon, children, onClick, title, disable
       onMouseEnter={() => !disabled && setHot(true)} onMouseLeave={() => setHot(false)}
       style={{
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 7,
+        position: 'relative',
         padding: pad, borderRadius: 'var(--r-md)', fontSize: font, fontWeight: 600,
         whiteSpace: 'nowrap', cursor: disabled ? 'default' : 'pointer', textDecoration: 'none',
         opacity: disabled ? 0.45 : 1, transition: 'background 0.16s, color 0.16s, border-color 0.16s, box-shadow 0.16s',
@@ -111,6 +112,7 @@ export function Btn({ variant = 'ghost', icon, children, onClick, title, disable
       }}>
       {icon && <span style={{ display: 'flex', alignItems: 'center' }}>{icon}</span>}
       {children}
+      {note && <span className="sr-only">{note}</span>}
     </Tag>
   );
 }

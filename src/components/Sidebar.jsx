@@ -72,11 +72,12 @@ export function ContactCard({ t }) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         {rows.map((r) => (
           <a key={r.key} href={r.href(c[r.key])} target={r.key === 'email' || r.key === 'phone' ? undefined : '_blank'} rel="noopener noreferrer"
-            style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 2px', fontSize: 12, fontWeight: 600, color: 'var(--text-2)', textDecoration: 'none', minWidth: 0 }}
+            style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 8, padding: '4px 2px', fontSize: 12, fontWeight: 600, color: 'var(--text-2)', textDecoration: 'none', minWidth: 0 }}
             onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-2)'; }}>
             <span style={{ display: 'flex', flexShrink: 0, color: 'var(--text-muted)' }}>{r.icon}</span>
             <span dir="ltr" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.label(c[r.key])}</span>
+            {r.key !== 'email' && r.key !== 'phone' && <span className="sr-only">{t.newTab}</span>}
           </a>
         ))}
       </div>
@@ -112,7 +113,7 @@ export function ContactActions({ t, compact }) {
     return (
       <div style={{ display: 'flex', gap: 6 }}>
         {items.map((it) => (
-          <a key={it.key} href={it.href} title={it.title} aria-label={it.title}
+          <a key={it.key} href={it.href} title={it.title} aria-label={it.external ? `${it.title}. ${t.newTab}` : it.title}
             target={it.external ? '_blank' : undefined} rel={it.external ? 'noopener noreferrer' : undefined}
             style={{
               width: 34, height: 34, borderRadius: '50%', flexShrink: 0,
@@ -129,7 +130,7 @@ export function ContactActions({ t, compact }) {
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
       {items.map((it, i) => (
         <Btn key={it.key} size="sm" variant={i === 0 ? 'primary' : 'ghost'} icon={it.icon} href={it.href} title={it.title}
-          sameTab={!it.external}
+          sameTab={!it.external} note={it.external ? t.newTab : undefined}
           style={it.key === 'phone' ? { direction: 'ltr' } : undefined}>
           {it.label}
         </Btn>

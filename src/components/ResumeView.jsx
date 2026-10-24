@@ -150,7 +150,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
                 {certs.map((c, i) => (
                   <div key={i} style={{ fontSize: 13, padding: '5px 0' }}>
                     <div dir="auto" style={{ fontWeight: 600 }}>
-                      {c.url ? <a href={c.url} target="_blank" rel="noopener noreferrer">{tx(c.name, lang)}</a> : tx(c.name, lang)}
+                      {c.url ? <a href={c.url} target="_blank" rel="noopener noreferrer" style={{ position: 'relative' }}>{tx(c.name, lang)}<span className="sr-only">{t.newTab}</span></a> : tx(c.name, lang)}
                     </div>
                     <div style={{ color: 'var(--text-muted)', fontSize: 12, marginTop: 2 }}>{[c.issuer, c.year].filter(Boolean).join(' · ')}</div>
                   </div>
