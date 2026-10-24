@@ -152,7 +152,11 @@ export function IntroBubble({ t, voice, transcript, stacked }) {
             {duration > 0 && <span style={{ fontSize: 11.5, color: 'var(--text-muted)', fontFamily: 'var(--mono)' }}>{fmt(duration)}</span>}
           </button>
           <button type="button" onClick={dismiss} title={t.introDismiss} aria-label={t.introDismiss}
-            style={{ background: 'transparent', color: 'var(--text-muted)', fontSize: 15, lineHeight: 1, padding: '0 2px' }}>×</button>
+            style={{
+              width: 32, height: 32, borderRadius: 8, flexShrink: 0,
+              background: 'transparent', color: 'var(--text-muted)', fontSize: 16, lineHeight: 1,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>×</button>
         </>
       )}
     </div>

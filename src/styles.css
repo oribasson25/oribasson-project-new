@@ -110,7 +110,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 0;
   width: 100%;
 }
 .home-index a {
@@ -122,6 +122,8 @@ body {
   text-align: center;
   text-decoration: none;
   text-wrap: balance;
+  padding: 4px 8px;
+  border-radius: 8px;
 }
 .home-index a:hover {
   color: var(--text);
