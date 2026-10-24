@@ -27,7 +27,8 @@
   --sel-ink: #ffffff;
   --text: #0d0f14;
   --text-2: #445068;
-  --text-muted: #8a97b0;
+  /* Same blue-grey, dark enough that 11px dates and labels clear the page. */
+  --text-muted: #5a6880;
   --border: #d8dde8;
   --border-focus: #0d0f14;
 
