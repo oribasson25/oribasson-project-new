@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { tx } from '../../shared/text.js';
+import { useReducedMotion } from '../lib/hooks.js';
 import { PageHeader, Eyebrow, Btn, StatusDot, Section } from './ui.jsx';
 
 function EyeIcon({ off }) {
@@ -37,6 +38,7 @@ function Toggle({ on, onChange, label }) {
 
 export function AdminSettings({ t, lang, onUnauthorized, onChanged, stacked }) {
   const S = t.settings;
+  const reduced = useReducedMotion();
   const dir = lang === 'he' ? 'rtl' : 'ltr';
   const [settings, setSettings] = useState(null);
   const [apiKey, setApiKey] = useState('');
@@ -88,7 +90,7 @@ export function AdminSettings({ t, lang, onUnauthorized, onChanged, stacked }) {
   function jump(id) {
     setSection(id);
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (el) el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
   }
 
   const dirty = apiKey.trim() || (settings && model !== settings.model);
