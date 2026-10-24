@@ -129,25 +129,28 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   }
 
   return (
-    <div className="home-fact-slot" data-side={side} data-pinned={pinned ? 'true' : 'false'} dir={lang === 'he' ? 'rtl' : 'ltr'}>
-      <button
-        type="button"
-        className="home-fact-btn"
-        aria-pressed={pinned}
-        aria-describedby="home-fact-hint"
-        onClick={togglePin}
-        onKeyDown={(e) => {
-          if (e.key !== 'Enter' && e.key !== ' ') return;
-          e.preventDefault();
-          togglePin();
-        }}
-        onMouseEnter={() => { if (fineHover) setHover(true); }}
-        onMouseLeave={() => setHover(false)}
-        onFocus={() => { if (fromKeyboard.current) setKeyFocus(true); }}
-        onBlur={() => setKeyFocus(false)}
-      >
-        <span key={`${index}-${phase}`} className={`home-fact is-${phase} from-${motion}`}>{text}</span>
-      </button>
+    <div className="home-fact-slot" role="group" aria-label={t.factsLabel} data-side={side} data-pinned={pinned ? 'true' : 'false'} dir={lang === 'he' ? 'rtl' : 'ltr'}>
+      {/* The hint stays outside the live region, so a new line is announced on its own. */}
+      <div aria-live={hold ? 'off' : 'polite'} aria-atomic="true">
+        <button
+          type="button"
+          className="home-fact-btn"
+          aria-pressed={pinned}
+          aria-describedby="home-fact-hint"
+          onClick={togglePin}
+          onKeyDown={(e) => {
+            if (e.key !== 'Enter' && e.key !== ' ') return;
+            e.preventDefault();
+            togglePin();
+          }}
+          onMouseEnter={() => { if (fineHover) setHover(true); }}
+          onMouseLeave={() => setHover(false)}
+          onFocus={() => { if (fromKeyboard.current) setKeyFocus(true); }}
+          onBlur={() => setKeyFocus(false)}
+        >
+          <span key={`${index}-${phase}`} className={`home-fact is-${phase} from-${motion}`}>{text}</span>
+        </button>
+      </div>
       <span id="home-fact-hint" className="sr-only">{pinned ? t.factsResume : t.factsPause}</span>
     </div>
   );
