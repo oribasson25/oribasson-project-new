@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import profile from '../../content/profile.js';
 import { tx } from '../../shared/text.js';
 import { strings } from '../i18n.js';
@@ -165,6 +166,29 @@ export function LangToggle({ lang, setLang, small = true }) {
   );
 }
 
+/** The first click asks. The second, within a few seconds, clears. */
+export function ClearHistoryButton({ t, onClear, style }) {
+  const [armed, setArmed] = useState(false);
+  useEffect(() => {
+    if (!armed) return undefined;
+    const timer = setTimeout(() => setArmed(false), 3500);
+    return () => clearTimeout(timer);
+  }, [armed]);
+  return (
+    <button type="button" onClick={() => {
+      if (!armed) { setArmed(true); return; }
+      setArmed(false);
+      onClear();
+    }}
+      style={{ ...style, color: armed ? 'var(--danger)' : 'var(--text-muted)' }}
+      onMouseEnter={(e) => { if (!armed) e.currentTarget.style.color = 'var(--text)'; }}
+      onMouseLeave={(e) => { if (!armed) e.currentTarget.style.color = 'var(--text-muted)'; }}
+    >
+      <span aria-live="polite">{armed ? t.clearHistoryConfirm : t.clearHistory}</span>
+    </button>
+  );
+}
+
 export function RecentList({ t, recents, activeChatId, onPickRecent }) {
   if (!recents.length) {
     return <div style={{ padding: '2px 13px', fontSize: 11.5, color: 'var(--text-muted)', lineHeight: 1.6 }}>{t.recentEmpty}</div>;
@@ -246,11 +270,8 @@ export function Sidebar({ t, lang, page, go, recents, activeChatId, onPickRecent
           <RecentList t={t} recents={recents} activeChatId={activeChatId} onPickRecent={onPickRecent} />
         </div>
         {recents.length > 0 && (
-          <button type="button" onClick={onClearHistory}
-            style={{ textAlign: 'start', padding: '8px 25px 4px', background: 'transparent', color: 'var(--text-muted)', fontSize: 11.5, fontWeight: 600 }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; }}
-          >{t.clearHistory}</button>
+          <ClearHistoryButton t={t} onClear={onClearHistory}
+            style={{ textAlign: 'start', padding: '8px 25px 4px', background: 'transparent', fontSize: 11.5, fontWeight: 600 }} />
         )}
       </div>
 

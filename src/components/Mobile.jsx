@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Icons, Eyebrow } from './ui.jsx';
-import { BrandMark, ContactCard, ContactActions, LangSwitch, RecentList } from './Sidebar.jsx';
+import { BrandMark, ContactCard, ContactActions, LangSwitch, RecentList, ClearHistoryButton } from './Sidebar.jsx';
 
 /* 8Legs' phone shell: a top bar, the screen, and four stops along the bottom. */
 
@@ -130,7 +130,8 @@ export function MobileMore({ t, open, onClose, recents, activeChatId, onPickRece
             <RecentList t={t} recents={recents} activeChatId={activeChatId} onPickRecent={onPickRecent} />
           </div>
           {recents.length > 0 && (
-            <button type="button" onClick={onClearHistory} style={{ padding: '8px 13px', background: 'transparent', color: 'var(--text-muted)', fontSize: 12, fontWeight: 600 }}>{t.clearHistory}</button>
+            <ClearHistoryButton t={t} onClear={onClearHistory}
+              style={{ padding: '8px 13px', background: 'transparent', fontSize: 12, fontWeight: 600, textAlign: 'start' }} />
           )}
         </div>
         <ContactCard t={t} />
