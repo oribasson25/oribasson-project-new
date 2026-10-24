@@ -79,19 +79,22 @@ export function Composer({ value, onChange, onSend, disabled, placeholder, dir, 
 
 /* On a phone every question stays in view, as a two-column grid of small
    cards: six pills wrapped one per line filled half the screen. */
-function QuestionChips({ items, onPick, disabled, dir, style, grid, className, label }) {
+function QuestionChips({ items, onPick, disabled, dir, style, grid, className, label, stagger }) {
   return (
-    <div role="group" aria-label={label} dir={dir} className={className} style={{
+    <div role="group" aria-label={label} dir={dir} className={stagger ? undefined : className} style={{
       ...(grid
         ? { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }
         : { display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }),
       ...style,
     }}>
-      {items.map((text) => (
-        <button key={text} type="button" className="q-chip" onClick={() => onPick(text)} disabled={disabled}
-          style={grid
-            ? { borderRadius: 14, padding: '10px 12px', fontSize: 13, lineHeight: 1.35, minHeight: 52, textAlign: 'start', display: 'flex', alignItems: 'center' }
-            : { borderRadius: 999, padding: '8px 14px', fontSize: 13, lineHeight: 1.35 }}
+      {items.map((text, i) => (
+        <button key={text} type="button" className={stagger ? 'q-chip hero-rise' : 'q-chip'} onClick={() => onPick(text)} disabled={disabled}
+          style={{
+            ...(grid
+              ? { borderRadius: 14, padding: '10px 12px', fontSize: 13, lineHeight: 1.35, minHeight: 52, textAlign: 'start', display: 'flex', alignItems: 'center' }
+              : { borderRadius: 999, padding: '8px 14px', fontSize: 13, lineHeight: 1.35 }),
+            ...(stagger ? { animationDelay: `${0.42 + i * 0.05}s` } : null),
+          }}
         >{text}</button>
       ))}
     </div>
@@ -221,10 +224,10 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         </div>
 
         <QuestionChips items={chips} onPick={submit} disabled={pending || offline} dir={dir} grid={stacked} label={t.suggestions}
-          className="hero-rise"
-          style={{ animationDelay: '0.48s', marginTop: stacked ? 16 : 20, width: stacked ? '100%' : 'min(720px, 100%)' }} />
+          stagger
+          style={{ marginTop: stacked ? 16 : 20, width: stacked ? '100%' : 'min(720px, 100%)' }} />
 
-        <div className="hero-foot hero-rise" dir={dir} style={{ animationDelay: '0.62s' }}>{t.foot(first)}</div>
+        <div className="hero-foot hero-rise" dir={dir} style={{ animationDelay: '0.74s' }}>{t.foot(first)}</div>
       </div>
     );
   }
