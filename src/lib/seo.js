@@ -12,11 +12,13 @@ const DESC = {
     home: 'Ori Basson — AI Solutions Engineer. Production LLM agents, a resume, projects, and an AI chat that answers from the published work.',
     resume: 'Resume of Ori Basson, AI Solutions Engineer — production LLM agents, tooling, evaluation, and claims operations.',
     projects: 'Projects by Ori Basson: production AI agents at Libra Insurance, an HR recruitment system, and 8Legs.ai.',
+    missing: 'That address does not match a page on Ori Basson\'s site.',
   },
   he: {
     home: 'אורי בסון — הנדסת פתרונות AI. סוכני LLM בפרודקשן, קורות חיים, פרויקטים, וצ׳אט AI שעונה מתוך החומר שפורסם.',
     resume: 'קורות החיים של אורי בסון — הנדסת פתרונות AI, סוכני LLM בפרודקשן, כלים והערכה.',
     projects: 'הפרויקטים של אורי בסון: סוכני AI בליברה ביטוח, מערכת גיוס, ו-8Legs.ai.',
+    missing: 'הכתובת הזו לא מתאימה לעמוד באתר של אורי בסון.',
   },
 };
 
@@ -68,6 +70,10 @@ function setLink(rel, href) {
     document.head.appendChild(el);
   }
   el.setAttribute('href', href);
+}
+
+function removeLink(rel) {
+  document.head.querySelector(`link[rel="${rel}"]`)?.remove();
 }
 
 function personNode() {
@@ -171,7 +177,10 @@ export function jsonLd(page) {
 export function pageTitle(page) {
   const en = strings('en');
   const name = tx(profile.name, 'en');
-  const label = page === 'chat' ? null : page === 'login' ? en.adminSignIn : (en.nav[page] || null);
+  const label = page === 'chat' ? null
+    : page === 'missing' ? en.notFoundTitle
+      : page === 'login' ? en.adminSignIn
+        : (en.nav[page] || null);
   return label ? `${label} · ${name}` : name;
 }
 
@@ -183,24 +192,38 @@ export function useSeo(page, lang) {
     const desc = copy[page] || copy.home;
     const title = pageTitle(page);
     const admin = page === 'login' || page === 'settings' || page === 'conversations';
+    const missing = page === 'missing' || !knownPath();
+    const here = missing ? (window.location.pathname.replace(/\/+$/, '') || '/') : path;
     document.title = title;
     setMeta('name', 'description', desc);
     setMeta('property', 'og:title', title);
     setMeta('property', 'og:description', desc);
-    setMeta('property', 'og:url', abs(path));
+    setMeta('property', 'og:url', abs(here));
     setMeta('property', 'og:site_name', tx(profile.name, 'en'));
     setMeta('name', 'twitter:title', title);
     setMeta('name', 'twitter:description', desc);
-    setMeta('name', 'twitter:url', abs(path));
+    setMeta('name', 'twitter:url', abs(here));
     setMeta('name', 'twitter:image:alt', `${tx(profile.name, 'en')} — AI Solutions Engineer`);
     setMeta('property', 'og:image:type', 'image/png');
     setMeta('property', 'og:locale', lang === 'he' ? 'he_IL' : 'en_US');
-    setMeta('name', 'robots', admin || !knownPath() ? 'noindex, nofollow' : 'index, follow');
+    setMeta('name', 'robots', admin || missing ? 'noindex, nofollow' : 'index, follow');
     setMeta('name', 'theme-color', '#f2f4f8');
     setMeta('name', 'color-scheme', 'light');
-    setLink('canonical', abs(path));
+    // A missing address is not the homepage. A canonical pointing there would
+    // ask a crawler to treat the typo as the front page.
+    if (missing) removeLink('canonical');
+    else setLink('canonical', abs(path));
     if (profile.contact?.linkedin) setLink('me', profile.contact.linkedin);
     const ld = document.getElementById('site-jsonld');
-    if (ld) ld.textContent = JSON.stringify(jsonLd(admin ? 'chat' : page));
+    if (ld) {
+      ld.textContent = JSON.stringify(missing
+        ? {
+            '@context': 'https://schema.org',
+            '@type': 'WebPage',
+            name: strings('en').notFoundTitle,
+            isPartOf: { '@id': `${ORIGIN}/#website` },
+          }
+        : jsonLd(admin ? 'chat' : page));
+    }
   }, [page, lang]);
 }

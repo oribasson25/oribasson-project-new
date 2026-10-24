@@ -14,6 +14,7 @@ import { AdminSettings } from './components/AdminSettings.jsx';
 import { AdminConversations } from './components/AdminConversations.jsx';
 import { PetWatermark } from './components/Pet.jsx';
 import { MobileTopBar, MobileBottomNav, MobileMore, NAV_SPACE } from './components/Mobile.jsx';
+import { NotFound } from './components/NotFound.jsx';
 
 const PAGES = {
   '/': 'chat',
@@ -54,7 +55,7 @@ export default function App() {
     fetch('/api/admin/me').then((r) => r.json()).then((b) => setAdmin(!!b.admin)).catch(() => setAdmin(false));
   }, []);
 
-  let page = PAGES[path.replace(/\/+$/, '') || '/'] || 'chat';
+  let page = PAGES[path.replace(/\/+$/, '') || '/'] || 'missing';
   if (page === 'login' && admin) page = 'settings';
   const needsLogin = page === 'login' || (ADMIN_PAGES.has(page) && admin === false);
 
@@ -113,6 +114,7 @@ export default function App() {
       case 'projects': return <ProjectsView t={t} lang={lang} onAsk={ask} onOpenChat={() => go('/')} stacked={stacked} />;
       case 'settings': return <AdminSettings t={t} lang={lang} onUnauthorized={onUnauthorized} onChanged={refreshStatus} stacked={stacked} />;
       case 'conversations': return <AdminConversations t={t} lang={lang} onUnauthorized={onUnauthorized} stacked={stacked} />;
+      case 'missing': return <NotFound t={t} lang={lang} stacked={stacked} onOpenChat={() => go('/')} />;
       default: return null;
     }
   };
@@ -122,7 +124,7 @@ export default function App() {
   );
 
   if (mobile) {
-    const title = page === 'chat' ? null : (t.nav[page] || '');
+    const title = page === 'chat' ? null : page === 'missing' ? t.notFoundTitle : (t.nav[page] || '');
     // Room under the content for the floating bar — none while it is hidden for the keyboard.
     const navSpace = typing ? '0px' : NAV_SPACE;
     return (
@@ -147,6 +149,7 @@ export default function App() {
   }
 
   const section = ADMIN_PAGES.has(page) ? t.adminEyebrow : t.portfolio;
+  const crumb = page === 'missing' ? t.notFoundTitle : t.nav[page];
   return (
     <div style={{ display: 'flex', height: 'calc(100vh / var(--ui-zoom))', overflow: 'hidden', position: 'relative' }}>
       <a href="#main" className="skip-link">{t.skip}</a>
@@ -155,7 +158,7 @@ export default function App() {
         onPickRecent={pickRecent} onNewChat={newChat} onClearHistory={clearHistory}
         admin={admin} onSignOut={signOut} />
       <main id="main" tabIndex={-1} style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', background: 'var(--bg-app)' }}>
-        <Crumbs trail={[section, t.nav[page]]} right={(
+        <Crumbs trail={[section, crumb]} right={(
           <>
             {page === 'chat' && <ContactActions t={t} />}
             <LangToggle lang={lang} setLang={setLang} />
