@@ -143,12 +143,15 @@ export function useSeo(page, lang) {
     setMeta('property', 'og:title', title);
     setMeta('property', 'og:description', desc);
     setMeta('property', 'og:url', abs(path));
+    setMeta('property', 'og:site_name', tx(profile.name, 'en'));
     setMeta('name', 'twitter:title', title);
     setMeta('name', 'twitter:description', desc);
+    setMeta('name', 'twitter:url', abs(path));
     setMeta('property', 'og:locale', lang === 'he' ? 'he_IL' : 'en_US');
     setMeta('name', 'robots', admin ? 'noindex, nofollow' : 'index, follow');
     setMeta('name', 'theme-color', '#f2f4f8');
     setLink('canonical', abs(path));
+    if (profile.contact?.linkedin) setLink('me', profile.contact.linkedin);
     const ld = document.getElementById('site-jsonld');
     if (ld) ld.textContent = JSON.stringify(jsonLd(admin ? 'chat' : page));
   }, [page, lang]);
