@@ -349,10 +349,10 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
               alignSelf: 'flex-end', maxWidth: '85%', background: 'var(--primary)', color: 'var(--primary-ink)',
               padding: '10px 14px', borderRadius: '16px 16px 4px 16px', fontSize: 13.5,
               lineHeight: 1.6, whiteSpace: 'pre-wrap', wordBreak: 'break-word',
-            }}>{msg.content}</div>
+            }}><span className="sr-only">{t.you}: </span>{msg.content}</div>
           ) : (
             <Answer key={msg.id} content={msg.content} streaming={msg.id === streamingId}
-              lang={lang} diagramLabel={t.architecture}
+              speaker={first} lang={lang} diagramLabel={t.architecture}
               diagram={architectures[diagramProjectId(questionBefore(messages, i), msg.content)] || null}
               onRevealed={() => setRevealing((id) => (id === msg.id ? null : id))} />
           )))}

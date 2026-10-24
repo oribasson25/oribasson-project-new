@@ -81,7 +81,7 @@ function animateEntrances(root, trail, now) {
   }
 }
 
-export function Answer({ content, streaming, onRevealed, diagram, lang, diagramLabel }) {
+export function Answer({ content, streaming, onRevealed, diagram, lang, diagramLabel, speaker }) {
   const reduced = useReducedMotion();
   const [live] = useState(() => streaming && !reduced);
   const [shown, setShown] = useState(live ? 0 : Infinity);
@@ -157,6 +157,7 @@ export function Answer({ content, streaming, onRevealed, diagram, lang, diagramL
       alignSelf: 'stretch', background: 'var(--bg-card)', border: '1px solid var(--border)',
       padding: '12px 15px', borderRadius: '16px 16px 16px 4px', fontSize: 13.5,
     }}>
+      {speaker && <span className="sr-only">{speaker}: </span>}
       <div ref={mdRef} className="md" dangerouslySetInnerHTML={{ __html: html }} />
       {diagram && !writing && (
         <div dir={lang === 'he' ? 'rtl' : 'ltr'} style={{ marginTop: 12 }}>
