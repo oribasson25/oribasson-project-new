@@ -133,10 +133,13 @@ body {
 }
 .q-chip:hover,
 .q-chip:focus-visible {
-  transform: translateY(-1px);
   border-color: var(--primary-soft);
   color: var(--text);
   box-shadow: var(--shadow);
+}
+@media (hover: hover) {
+  .q-chip:hover,
+  .q-chip:focus-visible { transform: translateY(-1px); }
 }
 .q-chip:active { transform: translateY(0) scale(0.985); }
 .send-btn {
@@ -477,11 +480,14 @@ a { color: inherit; }
   box-shadow: var(--shadow);
   transition: border-color 0.22s var(--ease), box-shadow 0.22s var(--ease), transform 0.22s var(--ease);
 }
-.project-card:hover,
-.project-card:focus-within {
-  border-color: var(--primary-soft);
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
+.project-card:focus-within { border-color: var(--primary-soft); }
+@media (hover: hover) {
+  .project-card:hover,
+  .project-card:focus-within {
+    border-color: var(--primary-soft);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
 }
 
 /* Architecture figures on the project cards. Same paper, same type. */
@@ -612,7 +618,7 @@ a { color: inherit; }
      sizes the components set for desktop. */
   .m-root input, .m-root textarea, .m-root select { font-size: 16px !important; }
   .m-root button { -webkit-tap-highlight-color: transparent; }
-  .hero-title { font-size: 28px; letter-spacing: -0.038em; }
+  .hero-title { font-size: 28px; letter-spacing: -0.038em; margin-top: 12px; }
   .hero-sub { font-size: 14.5px; margin-top: 10px; }
   .hero-rule { margin-top: 12px; }
   .hero-foot { margin-top: 20px; }
