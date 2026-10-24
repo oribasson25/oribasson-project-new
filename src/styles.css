@@ -168,28 +168,7 @@ a { color: inherit; }
 }
 @container (min-width: 920px) {
   .resume-layout.has-side { grid-template-columns: minmax(0, 1fr) 300px; }
-  .resume-layout.has-side > :last-child { position: sticky; top: 12px; }
 }
-.job-dot {
-  position: absolute;
-  inset-inline-start: 12px;
-  top: 22px;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--text);
-  box-shadow: 0 0 0 4px var(--bg-card);
-}
-.job::before {
-  content: '';
-  position: absolute;
-  inset-inline-start: 15px;
-  top: 32px;
-  bottom: -1px;
-  width: 1px;
-  background: var(--border);
-}
-.timeline .job:last-child::before { bottom: 16px; }
 
 .project-page { container-type: inline-size; }
 .project-grid {

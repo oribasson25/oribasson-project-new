@@ -124,7 +124,7 @@ export default function App() {
           <main id="main" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', paddingBottom: navSpace, background: welcome ? '#07080d' : 'transparent' }}>{home(true)}</main>
         ) : (
           <main id="main" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `18px 14px calc(28px + ${navSpace})` }}>
-            {title && page !== 'projects' && page !== 'resume' && <div dir="auto" style={{ fontSize: 26, fontWeight: 800, letterSpacing: '-0.03em', marginBottom: 14 }}>{title}</div>}
+            {title && page !== 'projects' && <div dir="auto" style={{ fontSize: 26, fontWeight: 800, letterSpacing: '-0.03em', marginBottom: 14 }}>{title}</div>}
             {view(true)}
           </main>
         )}

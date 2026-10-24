@@ -31,11 +31,10 @@ function Job({ job, t, lang, onAsk }) {
   const company = tx(job.company, lang);
   const highlights = tl(job.highlights, lang);
   return (
-    <div className="job" style={{ padding: '16px 20px', paddingInlineStart: 28, borderTop: '1px solid var(--border)', position: 'relative' }}>
-      <span className="job-dot" aria-hidden="true" />
+    <div style={{ padding: '16px 20px', borderTop: '1px solid var(--border)' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, flexWrap: 'wrap' }}>
         <div style={{ flex: 1, minWidth: 200 }}>
-          <h3 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em' }}>{role}</h3>
+          <div dir="auto" style={{ fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em' }}>{role}</div>
           <div dir="auto" style={{ fontSize: 12.5, color: 'var(--text-2)', marginTop: 4, fontWeight: 600 }}>
             {[company, tx(job.location, lang)].filter(Boolean).join(' · ')}
           </div>
@@ -84,7 +83,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
 
   return (
     <div dir={dir}>
-      <PageHeader eyebrow={t.resumeTitle} title={name} subtitle={sub} actions={actions} size={stacked ? 30 : 38} />
+      {!stacked && <PageHeader eyebrow={t.resumeTitle} title={name} subtitle={sub} actions={actions} />}
       <div className={`resume-wrap`}>
       <div className={`resume-layout${side ? ' has-side' : ''}`}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 22, minWidth: 0 }}>
@@ -95,7 +94,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
           )}
           {(resume.experience || []).length > 0 && (
             <Section title={t.experience} pad="0">
-              <div className="timeline" style={{ marginTop: -1 }}>
+              <div style={{ marginTop: -1 }}>
                 {resume.experience.map((job, i) => <Job key={i} job={job} t={t} lang={lang} onAsk={onAsk} />)}
               </div>
             </Section>
