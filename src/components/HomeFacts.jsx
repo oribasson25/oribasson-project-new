@@ -42,9 +42,10 @@ const EXIT = 420;
 /**
  * Cycles the facts. On a wide screen each one slides in from the left, then
  * the right. When the column is too narrow to hold a line beside the figure,
- * it sits under him and only fades. A mouse hover holds the current line; a
- * click, or Enter, keeps it there. Keyboard focus holds it too. Reduced
- * motion swaps the words in place, with no slide.
+ * it sits under him and still arrives from the side, by a few pixels, so it
+ * cannot leave the screen. A mouse hover holds the current line; a click, or
+ * Enter, keeps it there. Keyboard focus holds it too. Reduced motion swaps
+ * the words in place, with no slide.
  */
 export function HomeFacts({ lang, t }) {
   const reduced = useReducedMotion();

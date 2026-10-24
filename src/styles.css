@@ -196,6 +196,24 @@ body {
 }
 @keyframes factFade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes factFadeOut { from { opacity: 1; } to { opacity: 0; } }
+/* On a phone the line sits under the figure. A short slide still reads as
+   arriving from the side, and 10px stays inside the column. */
+@keyframes factInLeftSoft {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes factOutLeftSoft {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateX(-8px); }
+}
+@keyframes factInRightSoft {
+  from { opacity: 0; transform: translateX(10px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes factOutRightSoft {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateX(8px); }
+}
 .home-fact.is-in.from-left { animation: factInLeft 0.42s ease both; }
 .home-fact.is-out.from-left { animation: factOutLeft 0.34s ease forwards; }
 .home-fact.is-in.from-right { animation: factInRight 0.42s ease both; }
@@ -204,8 +222,9 @@ body {
 .home-fact.is-out.from-fade { animation: factFadeOut 0.34s ease forwards; }
 .home-fact.from-still { animation: none; }
 
-/* Beside the figure only while both lines fit. Otherwise, under him.
-   The side rules are more specific than the slot, so they are reset here too. */
+/* Beside the figure only while both lines fit. Otherwise, under him, with a
+   short slide that stays inside the column. The side rules are more specific
+   than the slot, so they are reset here too. */
 @container home-stage (max-width: 780px) {
   .home-fact-slot,
   .home-fact-slot[data-side="left"],
@@ -219,10 +238,10 @@ body {
     text-align: center;
     min-height: 2.9em;
   }
-  .home-fact.is-in.from-left,
-  .home-fact.is-in.from-right { animation-name: factFade; }
-  .home-fact.is-out.from-left,
-  .home-fact.is-out.from-right { animation-name: factFadeOut; }
+  .home-fact.is-in.from-left { animation-name: factInLeftSoft; }
+  .home-fact.is-out.from-left { animation-name: factOutLeftSoft; }
+  .home-fact.is-in.from-right { animation-name: factInRightSoft; }
+  .home-fact.is-out.from-right { animation-name: factOutRightSoft; }
 }
 
 input, textarea, select {
