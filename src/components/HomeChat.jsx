@@ -5,10 +5,19 @@ import { tx } from '../../shared/text.js';
 import { Pet, PetStage } from './Pet.jsx';
 import { IntroBubble } from './IntroBubble.jsx';
 import { Answer, Steps } from './Answer.jsx';
+import { architectures } from './architectures.js';
+import { diagramProjectId } from '../lib/projectDiagram.js';
 import { useIntroVoice } from '../lib/useIntroVoice.js';
 
 function firstName(lang) {
   return tx(profile.name, lang).split(' ')[0] || 'Ori';
+}
+
+function questionBefore(messages, index) {
+  for (let i = index - 1; i >= 0; i--) {
+    if (messages[i].role === 'user') return messages[i].content;
+  }
+  return '';
 }
 
 export function Composer({ value, onChange, onSend, disabled, placeholder, dir, width = 720, fieldRef, autoFocus, sendLabel = 'Send' }) {
@@ -256,7 +265,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         padding: stacked ? '4px 16px 8px' : '6px 30px 10px',
       }}>
         <div ref={threadRef} style={{ width: 'min(720px, 100%)', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {messages.map((msg) => (msg.role === 'user' ? (
+          {messages.map((msg, i) => (msg.role === 'user' ? (
             <div key={msg.id} dir="auto" style={{
               alignSelf: 'flex-end', maxWidth: '85%', background: 'var(--primary)', color: 'var(--primary-ink)',
               padding: '10px 14px', borderRadius: '16px 16px 4px 16px', fontSize: 13.5,
@@ -264,6 +273,8 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
             }}>{msg.content}</div>
           ) : (
             <Answer key={msg.id} content={msg.content} streaming={msg.id === streamingId}
+              lang={lang} diagramLabel={t.architecture}
+              diagram={architectures[diagramProjectId(questionBefore(messages, i), msg.content)] || null}
               onRevealed={() => setRevealing((id) => (id === msg.id ? null : id))} />
           )))}
 

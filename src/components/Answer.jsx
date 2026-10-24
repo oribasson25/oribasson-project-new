@@ -3,6 +3,7 @@ import { renderMarkdown } from '../lib/markdown.js';
 import { stripProjectMarkers } from '../lib/projectDiagram.js';
 import { useReducedMotion } from '../lib/hooks.js';
 import { Pet } from './Pet.jsx';
+import { Architecture } from './Architecture.jsx';
 
 /*
  * How an answer arrives, in stages: while the model reads, Ori works through
@@ -79,7 +80,7 @@ function animateEntrances(root, trail, now) {
   }
 }
 
-export function Answer({ content, streaming, onRevealed }) {
+export function Answer({ content, streaming, onRevealed, diagram, lang, diagramLabel }) {
   const reduced = useReducedMotion();
   const [live] = useState(() => streaming && !reduced);
   const [shown, setShown] = useState(live ? 0 : Infinity);
@@ -151,6 +152,11 @@ export function Answer({ content, streaming, onRevealed }) {
       padding: '12px 15px', borderRadius: '16px 16px 16px 4px', fontSize: 13.5,
     }}>
       <div ref={mdRef} className="md" dangerouslySetInnerHTML={{ __html: html }} />
+      {diagram && !writing && (
+        <div dir={lang === 'he' ? 'rtl' : 'ltr'} style={{ marginTop: 12 }}>
+          <Architecture spec={diagram} lang={lang} label={diagramLabel} />
+        </div>
+      )}
     </div>
   );
 }
