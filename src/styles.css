@@ -158,7 +158,7 @@ body {
 }
 .home-fact-slot {
   position: absolute;
-  top: 66%;
+  top: 54%;
   width: 210px;
   z-index: 1;
   margin: 0;
@@ -190,16 +190,32 @@ body {
   text-underline-offset: 3px;
   text-decoration-color: var(--text-muted);
 }
-/* A short fact beside the figure. Same type, same quiet grey. */
+/* A short fact beside the figure, in the same ink as the name, with a
+   short tick on the side that faces him. */
 .home-fact {
   display: block;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.45;
-  letter-spacing: -0.01em;
-  color: var(--text-2);
+  position: relative;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.4;
+  letter-spacing: -0.018em;
+  color: var(--text);
   text-wrap: balance;
 }
+/* Physical sides: the tick faces the figure, in either language. */
+.home-fact-slot[data-side="left"] .home-fact { padding-right: 14px; }
+.home-fact-slot[data-side="right"] .home-fact { padding-left: 14px; }
+.home-fact-slot[data-side="left"] .home-fact::after,
+.home-fact-slot[data-side="right"] .home-fact::before {
+  content: "";
+  position: absolute;
+  top: 0.62em;
+  width: 8px;
+  height: 1.5px;
+  background: var(--text);
+}
+.home-fact-slot[data-side="left"] .home-fact::after { right: 0; }
+.home-fact-slot[data-side="right"] .home-fact::before { left: 0; }
 @keyframes factInLeft {
   from { opacity: 0; transform: translateX(-14px); }
   to { opacity: 1; transform: none; }
@@ -236,12 +252,12 @@ body {
   from { opacity: 1; transform: none; }
   to { opacity: 0; transform: translateX(8px); }
 }
-.home-fact.is-in.from-left { animation: factInLeft 0.42s ease both; }
-.home-fact.is-out.from-left { animation: factOutLeft 0.34s ease forwards; }
-.home-fact.is-in.from-right { animation: factInRight 0.42s ease both; }
-.home-fact.is-out.from-right { animation: factOutRight 0.34s ease forwards; }
-.home-fact.is-in.from-fade { animation: factFade 0.42s ease both; }
-.home-fact.is-out.from-fade { animation: factFadeOut 0.34s ease forwards; }
+.home-fact.is-in.from-left { animation: factInLeft 0.46s var(--ease) both; }
+.home-fact.is-out.from-left { animation: factOutLeft 0.28s var(--ease) forwards; }
+.home-fact.is-in.from-right { animation: factInRight 0.46s var(--ease) both; }
+.home-fact.is-out.from-right { animation: factOutRight 0.28s var(--ease) forwards; }
+.home-fact.is-in.from-fade { animation: factFade 0.36s var(--ease) both; }
+.home-fact.is-out.from-fade { animation: factFadeOut 0.24s var(--ease) forwards; }
 .home-fact.from-still { animation: none; }
 
 /* Beside the figure only while both lines fit. Otherwise, under him, with a
@@ -278,7 +294,9 @@ body {
     align-items: center;
     justify-content: center;
   }
-  .home-fact { width: 100%; min-width: 0; }
+  .home-fact { width: 100%; min-width: 0; padding-left: 0; padding-right: 0; }
+  .home-fact::before,
+  .home-fact::after { display: none; }
   .home-fact.is-in.from-left { animation-name: factInLeftSoft; }
   .home-fact.is-out.from-left { animation-name: factOutLeftSoft; }
   .home-fact.is-in.from-right { animation-name: factInRightSoft; }
