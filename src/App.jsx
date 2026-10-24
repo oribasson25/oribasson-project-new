@@ -148,7 +148,7 @@ export default function App() {
         ) : (
           <main id="main" tabIndex={-1} style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `18px 14px calc(28px + ${navSpace})` }}>
             {title && <h1 dir="auto" style={{ margin: '0 0 14px', fontSize: 26, fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 'normal' }}>{title}</h1>}
-            {view(true)}
+            <div key={page} className="page-in">{view(true)}</div>
           </main>
         )}
         {/* While the keyboard is up the bottom bar would only take room from the conversation. */}
@@ -180,7 +180,7 @@ export default function App() {
           <div data-scroller style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', position: 'relative' }}>
             <PetWatermark size={560} style={{ bottom: -70, right: -40 }} />
             <div style={{ maxWidth: 1180, margin: '0 auto', width: '100%', padding: '30px 34px 80px', position: 'relative' }}>
-              {view(false)}
+              <div key={page} className="page-in">{view(false)}</div>
             </div>
           </div>
         )}
