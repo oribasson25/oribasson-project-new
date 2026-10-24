@@ -70,6 +70,7 @@ body {
 @keyframes caret { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
 .fade-in { animation: fadeIn 0.25s ease both; }
+.hero-rise { animation: fadeIn 0.48s ease both; }
 
 .pet-halo { animation: haloBreathe 4.2s ease-in-out infinite; }
 .pet-halo.busy { animation-duration: 1.4s; }
@@ -320,6 +321,7 @@ a { color: inherit; }
 
 @media print {
   .screen-only, .skip-link { display: none !important; }
+  .hero-rise { animation: none; opacity: 1; transform: none; }
   body {
     zoom: 1 !important;
     overflow: visible !important;
@@ -342,5 +344,6 @@ a { color: inherit; }
   .arch-node { opacity: 1 !important; transform: none !important; animation: none !important; }
   .arch-line { stroke-dashoffset: 0 !important; animation: none !important; }
   .hero-draw { stroke-dashoffset: 0 !important; animation: none !important; }
+  .hero-rise { animation: none; opacity: 1; transform: none; }
   button:active { transform: none; }
 }

@@ -197,26 +197,30 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         alignItems: 'center', justifyContent: 'center',
         padding: stacked ? '8px 18px 18px' : '0 34px 50px', overflowY: 'auto',
       }}>
-        <PetStage size={stacked ? 148 : 230} mode={pending ? 'working' : 'idle'} pulse={chat.pulse} busy={pending} voice={voice} label={t.petJump}>
-          {!stacked && <IntroBubble t={t} voice={voice} transcript={introText} />}
-          {stacked && voice.heard && voice.state !== 'playing' && <IntroBubble t={t} voice={voice} stacked />}
-        </PetStage>
-        {stacked && !(voice.heard && voice.state !== 'playing') && (
-          <IntroBubble t={t} voice={voice} transcript={introText} stacked />
-        )}
-        <h1 dir={dir} style={{
+        <div className="hero-rise" style={{ animationDelay: '0.04s', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <PetStage size={stacked ? 148 : 230} mode={pending ? 'working' : 'idle'} pulse={chat.pulse} busy={pending} voice={voice} label={t.petJump}>
+            {!stacked && <IntroBubble t={t} voice={voice} transcript={introText} />}
+            {stacked && voice.heard && voice.state !== 'playing' && <IntroBubble t={t} voice={voice} stacked />}
+          </PetStage>
+          {stacked && !(voice.heard && voice.state !== 'playing') && (
+            <IntroBubble t={t} voice={voice} transcript={introText} stacked />
+          )}
+        </div>
+        <h1 className="hero-rise" dir={dir} style={{
+          animationDelay: '0.14s',
           margin: 0, marginTop: 6, fontSize: stacked ? 25 : 30, fontWeight: 800, letterSpacing: '-0.035em',
           lineHeight: 'normal', textAlign: 'center',
         }}>{t.hello(first)}</h1>
-        <svg className="hero-rule" viewBox="0 0 88 8" width="88" height="8" aria-hidden="true">
+        <svg className="hero-rule hero-rise" viewBox="0 0 88 8" width="88" height="8" aria-hidden="true" style={{ animationDelay: '0.22s' }}>
           <path className="arch-line hero-draw" d="M4 4 H84" pathLength="1" />
         </svg>
-        <div dir={dir} style={{
+        <div className="hero-rise" dir={dir} style={{
+          animationDelay: '0.28s',
           fontSize: 13.5, color: 'var(--text-2)', textAlign: 'center',
           marginTop: stacked ? 6 : 9, lineHeight: 1.65, maxWidth: 520,
         }}>{stacked ? t.helloSubShort(firstPerson) : t.helloSub(first, firstPerson)}</div>
 
-        <div style={{ width: '100%', marginTop: stacked ? 20 : 24 }}>
+        <div className="hero-rise" style={{ animationDelay: '0.38s', width: '100%', marginTop: stacked ? 20 : 24 }}>
           {offlineNote}
           <Composer value={input} onChange={setInput} onSend={() => submit()} fieldRef={fieldRef}
             disabled={pending || offline} dir={dir} sendLabel={t.send} sendHint={t.sendHint}
@@ -224,10 +228,11 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         </div>
 
         <QuestionChips items={chips} onPick={submit} disabled={pending || offline} dir={dir} grid={stacked} label={t.suggestions}
-          style={{ marginTop: stacked ? 14 : 18, width: stacked ? '100%' : 'min(760px, 100%)' }} />
+          className="hero-rise"
+          style={{ animationDelay: '0.48s', marginTop: stacked ? 14 : 18, width: stacked ? '100%' : 'min(760px, 100%)' }} />
 
         {!stacked && (
-          <div dir={dir} style={{ marginTop: 26, fontSize: 11.5, color: 'var(--text-muted)', textAlign: 'center' }}>{t.foot(first)}</div>
+          <div className="hero-rise" dir={dir} style={{ animationDelay: '0.58s', marginTop: 26, fontSize: 11.5, color: 'var(--text-muted)', textAlign: 'center' }}>{t.foot(first)}</div>
         )}
       </div>
     );
