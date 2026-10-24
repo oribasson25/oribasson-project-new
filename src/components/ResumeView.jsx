@@ -84,7 +84,8 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
   return (
     <div dir={dir}>
       {!stacked && <PageHeader eyebrow={t.resumeTitle} title={name} subtitle={sub} actions={actions} />}
-      <div style={{ display: 'grid', gridTemplateColumns: side && !stacked ? 'minmax(0, 1fr) 320px' : 'minmax(0, 1fr)', gap: 22, alignItems: 'start' }}>
+      <div className="resume-wrap">
+      <div className={`resume-layout${side && !stacked ? ' has-side' : ''}`}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 22, minWidth: 0 }}>
           {tx(resume.summary, lang) && (
             <Section title={t.summary}>
@@ -158,6 +159,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
             )}
           </div>
         ) : null}
+      </div>
       </div>
     </div>
   );

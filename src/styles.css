@@ -157,6 +157,25 @@ a { color: inherit; }
   animation: shimmer 1.6s linear infinite;
 }
 
+/* The resume's side column only when the content pane can hold it.
+   A window that still shows the sidebar can be too narrow for 320px beside the jobs. */
+.resume-wrap { container-type: inline-size; }
+.resume-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+@container (min-width: 860px) {
+  .resume-layout.has-side { grid-template-columns: minmax(0, 1fr) 320px; }
+}
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
 /* ── phones ── */
 @media (max-width: 768px) {
   :root { --ui-zoom: 1; }
