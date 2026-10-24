@@ -8,7 +8,14 @@
   <meta property="og:title" content="Ori Basson" />
   <meta property="og:description" content="Resume, projects, and an AI chat that answers questions about my work." />
   <meta property="og:type" content="website" />
-  <meta name="theme-color" content="#f2f4f8" />
+  <meta name="theme-color" content="#07080d" />
+  <script>
+    (function () {
+      var path = location.pathname.replace(/\/+$/, '') || '/';
+      if (path === '/') document.documentElement.classList.add('is-home');
+    })();
+  </script>
+  <style>html.is-home body { background: #07080d; }</style>
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="preload" as="image" href="/pet/ori.webp" type="image/webp" />

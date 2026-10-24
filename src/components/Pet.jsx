@@ -251,7 +251,7 @@ function useVoiceGlitch(voice, reduced) {
  * soft light halo, standing on a faint shadow. Clicking it makes it jump.
  * `voice` (from useIntroVoice) makes it speak along with the recording.
  */
-export function PetStage({ size = 220, mode, pulse, busy, voice, children }) {
+export function PetStage({ size = 220, mode, pulse, busy, voice, children, tone = 'light' }) {
   const reduced = useReducedMotion();
   const { fx, playing } = useVoiceGlitch(voice, reduced);
   // The parent's reactions and the click share one counter, so the latest wins.
@@ -271,12 +271,16 @@ export function PetStage({ size = 220, mode, pulse, busy, voice, children }) {
       <div className={`pet-halo${busy ? ' busy' : ''}`} style={{
         position: 'absolute', left: '50%', top: '46%', width: size * 1.1, height: size * 1.1,
         marginLeft: -(size * 0.55), marginTop: -(size * 0.55), borderRadius: '50%', pointerEvents: 'none',
-        background: 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0.75) 38%, rgba(255,255,255,0) 68%)',
+        background: tone === 'dark'
+          ? 'radial-gradient(circle, rgba(125,211,252,0.55) 0%, rgba(167,139,250,0.28) 38%, rgba(125,211,252,0) 68%)'
+          : 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0.75) 38%, rgba(255,255,255,0) 68%)',
       }} />
       <div style={{
         position: 'absolute', left: '50%', bottom: size * 0.025, width: size * 0.42, height: size * 0.06,
         marginLeft: -(size * 0.21), borderRadius: '50%', pointerEvents: 'none',
-        background: 'radial-gradient(ellipse, rgba(13,15,20,0.16) 0%, rgba(13,15,20,0) 70%)',
+        background: tone === 'dark'
+          ? 'radial-gradient(ellipse, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 70%)'
+          : 'radial-gradient(ellipse, rgba(13,15,20,0.16) 0%, rgba(13,15,20,0) 70%)',
       }} />
       {fx.scan > 0 && (
         <div aria-hidden="true" style={{

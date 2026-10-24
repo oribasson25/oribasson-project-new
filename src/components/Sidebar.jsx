@@ -98,7 +98,7 @@ const telHref = (v) => `tel:${v.replace(/[^\d+]/g, '')}`;
  * looks first. Desktop gets labelled buttons with the number written out;
  * a phone gets three solid round icons that fit beside the logo.
  */
-export function ContactActions({ t, compact }) {
+export function ContactActions({ t, compact, onDark }) {
   const c = profile.contact || {};
   const items = [
     c.email && { key: 'email', href: `mailto:${c.email}`, icon: Icons.mail, label: t.contactEmail, title: c.email },
@@ -127,7 +127,7 @@ export function ContactActions({ t, compact }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
       {items.map((it, i) => (
-        <Btn key={it.key} size="sm" variant={i === 0 ? 'primary' : 'ghost'} icon={it.icon} href={it.href} title={it.title}
+        <Btn key={it.key} size="sm" variant={i === 0 && !onDark ? 'primary' : 'ghost'} icon={it.icon} href={it.href} title={it.title}
           sameTab={!it.external}
           style={it.key === 'phone' ? { direction: 'ltr' } : undefined}>
           {it.label}
