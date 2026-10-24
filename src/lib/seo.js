@@ -77,6 +77,7 @@ function personNode() {
   const schools = (resume.education || []).map((e) => tx(e.school, 'en')).filter(Boolean);
   const headline = tx(profile.headline, 'en');
   const sameAs = [profile.contact?.linkedin, profile.contact?.github, profile.contact?.website].filter(Boolean);
+  const knowsAbout = (resume.skills || []).flatMap((g) => g.items || []).filter(Boolean);
   return {
     '@type': 'Person',
     '@id': `${ORIGIN}/#person`,
@@ -97,6 +98,7 @@ function personNode() {
       ? { '@type': 'EducationalOrganization', name: schools[0] }
       : (schools.length ? schools.map((name) => ({ '@type': 'EducationalOrganization', name })) : undefined),
     knowsLanguage: (resume.languages || []).map((l) => tx(l.name, 'en')).filter(Boolean),
+    knowsAbout: knowsAbout.length ? knowsAbout : undefined,
     description: tx(resume.summary, 'en'),
   };
 }
