@@ -17,8 +17,9 @@ export function Composer({ value, onChange, onSend, disabled, placeholder, dir, 
   return (
     <div dir={dir} style={{
       width: `min(${width}px, 100%)`, margin: '0 auto',
-      background: 'transparent', borderBottom: `1px solid ${focus ? 'var(--text)' : 'var(--border)'}`,
-      borderRadius: 0, padding: '0', display: 'flex', alignItems: 'flex-end', gap: 8,
+      background: 'var(--bg-card)', border: `1px solid ${focus ? 'var(--primary)' : 'var(--border)'}`,
+      borderRadius: 26, boxShadow: focus ? '0 0 0 4px var(--primary-dim), var(--shadow)' : 'var(--shadow)',
+      padding: '5px 6px', display: 'flex', alignItems: 'flex-end', gap: 8,
       transition: 'border-color 0.18s, box-shadow 0.18s',
     }}>
       <textarea
@@ -42,8 +43,8 @@ export function Composer({ value, onChange, onSend, disabled, placeholder, dir, 
       />
       <button type="button" onClick={onSend} disabled={disabled || empty} title={sendLabel} aria-label={sendLabel}
         style={{
-          width: 36, height: 36, borderRadius: 0, flexShrink: 0, marginBottom: 6,
-          background: 'var(--primary)', color: 'var(--primary-ink)', fontSize: 16, fontWeight: 600,
+          width: 40, height: 40, borderRadius: '50%', flexShrink: 0, marginBottom: 4,
+          background: 'var(--primary)', color: 'var(--primary-ink)', fontSize: 17, fontWeight: 800,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           opacity: disabled || empty ? 0.35 : 1,
         }}>↑</button>
