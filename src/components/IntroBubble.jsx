@@ -127,9 +127,14 @@ export function IntroBubble({ t, voice, transcript, stacked }) {
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div dir="auto" style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text)', lineHeight: 1.45 }}>
-              {caption || fmt((duration || 0) - (a ? a.currentTime : 0))}
+              {caption
+                ? <span aria-live="polite" aria-atomic="true">{caption}</span>
+                : fmt((duration || 0) - (a ? a.currentTime : 0))}
             </div>
-            <div style={{ height: 3, borderRadius: 2, background: 'var(--bg-hover)', marginTop: 6, overflow: 'hidden' }}>
+            <div role="progressbar" aria-label={t.introProgress}
+              aria-valuemin={0} aria-valuemax={Math.max(1, Math.round(duration || 0))}
+              aria-valuenow={Math.round(a ? a.currentTime : 0)}
+              style={{ height: 3, borderRadius: 2, background: 'var(--bg-hover)', marginTop: 6, overflow: 'hidden' }}>
               <div style={{ width: `${progress * 100}%`, height: '100%', background: 'var(--primary)' }} />
             </div>
           </div>
