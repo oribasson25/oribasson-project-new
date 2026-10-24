@@ -162,10 +162,7 @@ export function Answer({ content, streaming, onRevealed, diagram, lang, diagramL
   }, [html]);
 
   return (
-    <div dir="auto" className={live ? 'fade-in' : undefined} style={{
-      alignSelf: 'stretch', background: 'var(--bg-card)', border: '1px solid var(--border)',
-      padding: '12px 15px', borderRadius: '16px 16px 16px 4px', fontSize: 13.5,
-    }}>
+    <div dir="auto" className={live ? 'bubble-assistant fade-in' : 'bubble-assistant'}>
       {speaker && <span className="sr-only">{speaker}: </span>}
       <div ref={mdRef} className="md" dangerouslySetInnerHTML={{ __html: html }} />
       {diagram && !writing && (

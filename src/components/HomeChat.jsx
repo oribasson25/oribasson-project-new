@@ -40,9 +40,9 @@ export function Composer({ value, onChange, onSend, disabled, placeholder, dir, 
     <div dir={dir} style={{
       width: `min(${width}px, 100%)`, margin: '0 auto',
       background: 'var(--bg-card)', border: `1px solid ${focus ? 'var(--primary)' : 'var(--border)'}`,
-      borderRadius: 26, boxShadow: focus ? '0 0 0 4px var(--primary-dim), var(--shadow)' : 'var(--shadow)',
-      padding: '5px 6px', display: 'flex', alignItems: 'flex-end', gap: 8,
-      transition: 'border-color 0.18s, box-shadow 0.18s',
+      borderRadius: 28, boxShadow: focus ? '0 0 0 4px var(--primary-dim), var(--shadow-lg)' : 'var(--shadow)',
+      padding: 6, paddingInlineStart: 8, display: 'flex', alignItems: 'flex-end', gap: 6,
+      transition: 'border-color 0.2s var(--ease), box-shadow 0.2s var(--ease)',
     }}>
       <textarea
         ref={ref}
@@ -63,15 +63,13 @@ export function Composer({ value, onChange, onSend, disabled, placeholder, dir, 
         aria-describedby={sendHint ? 'chat-composer-hint' : undefined}
         style={{
           flex: 1, resize: 'none', border: 'none', background: 'transparent', outline: 'none',
-          boxShadow: 'none', fontSize: 14.5, lineHeight: 1.6, padding: '13px 12px', maxHeight: 150,
+          boxShadow: 'none', fontSize: 15, lineHeight: 1.55, padding: '12px 10px', maxHeight: 150,
         }}
       />
       <button type="button" onClick={onSend} disabled={disabled || empty} title={sendLabel} aria-label={sendLabel}
-        className={disabled || empty ? undefined : 'send-ready'}
+        className={disabled || empty ? 'send-btn' : 'send-btn send-ready'}
         style={{
-          width: large ? 44 : 40, height: large ? 44 : 40, borderRadius: '50%', flexShrink: 0, marginBottom: 4,
-          background: 'var(--primary)', color: 'var(--primary-ink)', fontSize: 17, fontWeight: 800,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: large ? 44 : 40, height: large ? 44 : 40, borderRadius: '50%', flexShrink: 0, marginBottom: 3,
           opacity: disabled || empty ? 0.35 : 1,
         }}><span className="send-arrow" aria-hidden="true">↑</span></button>
       {sendHint && <span id="chat-composer-hint" className="sr-only">{sendHint}</span>}
@@ -241,7 +239,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
     <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
       <div dir={dir} style={{
         flexShrink: 0, display: 'flex', alignItems: 'center', gap: 11,
-        padding: stacked ? '8px 16px 6px' : '14px 30px 10px',
+        padding: stacked ? '10px 16px 8px' : '16px 34px 12px',
       }}>
         <div style={{
           width: 38, height: 38, borderRadius: 12, flexShrink: 0, overflow: 'hidden',
@@ -270,13 +268,9 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         padding: stacked ? '4px 16px 8px' : '6px 30px 10px',
       }}>
         <div ref={threadRef} role="log" aria-relevant="additions" aria-label={t.threadTitle(first)}
-          style={{ width: 'min(720px, 100%)', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 12 }}>
+          style={{ width: 'min(720px, 100%)', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 14 }}>
           {messages.map((msg, i) => (msg.role === 'user' ? (
-            <div key={msg.id} dir="auto" style={{
-              alignSelf: 'flex-end', maxWidth: '85%', background: 'var(--primary)', color: 'var(--primary-ink)',
-              padding: '10px 14px', borderRadius: '16px 16px 4px 16px', fontSize: 13.5,
-              lineHeight: 1.6, whiteSpace: 'pre-wrap', wordBreak: 'break-word',
-            }}><span className="sr-only">{t.you}: </span>{msg.content}</div>
+            <div key={msg.id} dir="auto" className="bubble-user"><span className="sr-only">{t.you}: </span>{msg.content}</div>
           ) : (
             <Answer key={msg.id} content={msg.content} streaming={msg.id === streamingId}
               speaker={first} lang={lang} diagramLabel={t.architecture}
