@@ -1,11 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import profile from '../../content/profile.js';
-import resume from '../../content/resume.js';
-import projects from '../../content/projects.js';
 import questions from '../../content/questions.js';
 import { tx } from '../../shared/text.js';
 import { Pet, PetStage } from './Pet.jsx';
-import { Chip, Eyebrow } from './ui.jsx';
 import { IntroBubble } from './IntroBubble.jsx';
 import { Answer, Steps } from './Answer.jsx';
 import { architectures } from './architectures.js';
@@ -14,116 +11,6 @@ import { useIntroVoice } from '../lib/useIntroVoice.js';
 
 function firstName(lang) {
   return tx(profile.name, lang).split(' ')[0] || 'Ori';
-}
-
-function openInApp(href, event) {
-  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
-  event.preventDefault();
-  window.history.pushState({}, '', href);
-  window.dispatchEvent(new PopStateEvent('popstate'));
-}
-
-function HomeProjects({ t, lang, stacked }) {
-  const items = (projects || []).filter((p) => p.id && tx(p.name, lang));
-  if (!items.length) return null;
-  return (
-    <section className="hero-rise home-index" dir={lang === 'he' ? 'rtl' : 'ltr'} aria-label={t.projectsTitle} style={{
-      animationDelay: '0.58s',
-      width: 'min(560px, 100%)',
-      marginTop: stacked ? 28 : 36,
-    }}>
-      <Eyebrow style={{ marginBottom: 4, textAlign: 'center' }}>{t.projectsTitle}</Eyebrow>
-      {items.map((p) => {
-        const name = tx(p.name, lang);
-        const line = tx(p.tagline, lang);
-        return (
-          <a key={p.id} href={`/projects#${p.id}`} onClick={(e) => openInApp(`/projects#${p.id}`, e)}
-            style={{
-              display: 'block', padding: '11px 0', borderTop: '1px solid var(--border)',
-              textDecoration: 'none', color: 'inherit',
-            }}>
-            <span className="home-name" dir="auto" style={{ display: 'block', fontSize: 14, fontWeight: 700, letterSpacing: '-0.01em', lineHeight: 1.4, color: 'var(--text)' }}>{name}</span>
-            {line && <span dir="auto" style={{ display: 'block', marginTop: 3, fontSize: 12.5, lineHeight: 1.5, color: 'var(--text-2)' }}>{line}</span>}
-          </a>
-        );
-      })}
-    </section>
-  );
-}
-
-/** The published headline, then the current employer. Both already live in the content. */
-function HomeSkills({ lang, stacked }) {
-  // The resume leads with these two groups. The home shows them in that order.
-  const groups = (resume.skills || []).slice(0, 2).filter((g) => (g.items || []).length);
-  if (!groups.length) return null;
-  return (
-    <div className="hero-rise" dir={lang === 'he' ? 'rtl' : 'ltr'} style={{
-      animationDelay: '0.66s',
-      width: 'min(560px, 100%)',
-      marginTop: stacked ? 28 : 36,
-      display: 'flex', flexDirection: 'column', gap: 16,
-    }}>
-      {groups.map((g) => (
-        <div key={tx(g.group, lang) || g.items[0]}>
-          {tx(g.group, lang) && <Eyebrow style={{ marginBottom: 8, textAlign: 'center' }}>{tx(g.group, lang)}</Eyebrow>}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center' }}>
-            {g.items.map((item) => (
-              <Chip key={item} style={{ whiteSpace: 'normal', maxWidth: '100%', textAlign: 'center' }}>{item}</Chip>
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function telHref(value) {
-  const digits = String(value || '').replace(/[^\d]/g, '');
-  if (!digits) return 'tel:';
-  return `tel:${digits.startsWith('0') ? `+972${digits.slice(1)}` : `+${digits}`}`;
-}
-
-function HomeContact({ t, stacked }) {
-  const c = profile.contact || {};
-  const items = [
-    c.email && { key: 'email', href: `mailto:${c.email}`, label: c.email },
-    c.phone && { key: 'phone', href: telHref(c.phone), label: c.phone, ltr: true },
-    c.linkedin && { key: 'linkedin', href: c.linkedin, label: 'LinkedIn', external: true },
-  ].filter(Boolean);
-  if (!items.length) return null;
-  return (
-    <div className="hero-rise home-contact" dir="ltr" style={{
-      animationDelay: '0.74s',
-      width: 'min(560px, 100%)',
-      marginTop: stacked ? 28 : 36,
-      textAlign: 'center',
-    }}>
-      <Eyebrow style={{ marginBottom: 10, textAlign: 'center' }}>{t.contact}</Eyebrow>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', columnGap: 0, rowGap: 6 }}>
-        {items.map((it, i) => (
-          <span key={it.key} style={{ display: 'inline-flex', alignItems: 'center', maxWidth: '100%' }}>
-            {i > 0 && <span aria-hidden="true" style={{ color: 'var(--text-muted)', margin: '0 8px' }}>·</span>}
-            <a href={it.href} dir={it.ltr ? 'ltr' : undefined}
-              target={it.external ? '_blank' : undefined}
-              rel={it.external ? 'noopener noreferrer' : undefined}
-              style={{ position: 'relative', fontSize: 12.5, fontWeight: 600, color: 'var(--text-2)', textDecoration: 'none' }}>
-              {it.label}
-              {it.external && <span className="sr-only"> {t.newTab}</span>}
-            </a>
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function whoLine(lang) {
-  const headline = tx(profile.headline, lang);
-  const job = (resume.experience || [])[0];
-  const company = job ? tx(job.company, lang) : '';
-  const role = job ? tx(job.role, lang) : '';
-  if (headline && company) return `${headline} · ${company}`;
-  return [role, company].filter(Boolean).join(' · ');
 }
 
 function questionBefore(messages, index) {
@@ -306,9 +193,9 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
   /* ── nothing said yet: Ori in the middle of the screen ── */
   if (!started) {
     return (
-      <div data-home style={{
+      <div style={{
         flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'safe center',
+        alignItems: 'center', justifyContent: 'center',
         padding: stacked ? '8px 18px 18px' : '0 34px 50px', overflowY: 'auto',
       }}>
         <div className="hero-rise" style={{ animationDelay: '0.04s', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -328,20 +215,13 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         <svg className="hero-rule hero-rise" viewBox="0 0 88 8" width="88" height="8" aria-hidden="true" style={{ animationDelay: '0.22s' }}>
           <path className="arch-line hero-draw" d="M4 4 H84" pathLength="1" />
         </svg>
-        {whoLine(lang) && (
-          <div className="hero-rise" dir={dir} style={{
-            animationDelay: '0.26s',
-            marginTop: 10, maxWidth: 520, textAlign: 'center',
-            fontSize: 13.5, fontWeight: 650, lineHeight: 1.5, color: 'var(--text)',
-          }}>{whoLine(lang)}</div>
-        )}
         <div className="hero-rise" dir={dir} style={{
-          animationDelay: '0.34s',
+          animationDelay: '0.28s',
           fontSize: 13.5, color: 'var(--text-2)', textAlign: 'center',
           marginTop: stacked ? 6 : 9, lineHeight: 1.65, maxWidth: 520,
         }}>{stacked ? t.helloSubShort(firstPerson) : t.helloSub(first, firstPerson)}</div>
 
-        <div className="hero-rise" style={{ animationDelay: '0.42s', width: '100%', marginTop: stacked ? 20 : 24 }}>
+        <div className="hero-rise" style={{ animationDelay: '0.38s', width: '100%', marginTop: stacked ? 20 : 24 }}>
           {offlineNote}
           <Composer value={input} onChange={setInput} onSend={() => submit()} fieldRef={fieldRef}
             disabled={pending || offline} dir={dir} sendLabel={t.send} sendHint={t.sendHint}
@@ -350,14 +230,10 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
 
         <QuestionChips items={chips} onPick={submit} disabled={pending || offline} dir={dir} grid={stacked} label={t.suggestions}
           className="hero-rise"
-          style={{ animationDelay: '0.52s', marginTop: stacked ? 14 : 18, width: stacked ? '100%' : 'min(760px, 100%)' }} />
-
-        <HomeProjects t={t} lang={lang} stacked={stacked} />
-        <HomeSkills lang={lang} stacked={stacked} />
-        <HomeContact t={t} stacked={stacked} />
+          style={{ animationDelay: '0.48s', marginTop: stacked ? 14 : 18, width: stacked ? '100%' : 'min(760px, 100%)' }} />
 
         {!stacked && (
-          <div className="hero-rise" dir={dir} style={{ animationDelay: '0.82s', marginTop: 26, fontSize: 11.5, color: 'var(--text-muted)', textAlign: 'center' }}>{t.foot(first)}</div>
+          <div className="hero-rise" dir={dir} style={{ animationDelay: '0.58s', marginTop: 26, fontSize: 11.5, color: 'var(--text-muted)', textAlign: 'center' }}>{t.foot(first)}</div>
         )}
       </div>
     );

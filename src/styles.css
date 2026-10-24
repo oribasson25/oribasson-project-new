@@ -89,8 +89,6 @@ body {
   box-shadow: var(--shadow);
 }
 .q-chip:active { transform: translateY(0) scale(0.97); }
-.home-index a:hover .home-name { text-decoration: underline; text-underline-offset: 3px; }
-.home-contact a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
 .send-arrow { display: block; line-height: 1; transition: transform 0.18s ease; }
 .send-ready:hover .send-arrow { transform: translateY(-2px); }
 
