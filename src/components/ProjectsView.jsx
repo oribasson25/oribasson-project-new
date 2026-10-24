@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import projects from '../../content/projects.js';
 import { tx, tl, bullet } from '../../shared/text.js';
+import { useReducedMotion } from '../lib/hooks.js';
 import { titleFor } from '../lib/seo.js';
 import { Icons, PageHeader, Btn, Chip, EmptyState, Section } from './ui.jsx';
 import { Architecture } from './Architecture.jsx';
@@ -26,9 +27,13 @@ function ProjectCard({ p, t, lang, onAsk, linked }) {
   // A shared link names one project. That card starts open, so the write-up
   // is not still folded behind Read more when the page arrives.
   const [expanded, setExpanded] = useState(!!linked);
+  // A pixel max-height while the fold is moving. Null means the card is at rest.
+  const [held, setHeld] = useState(null);
   const [overflows, setOverflows] = useState(false);
   const clipRef = useRef(null);
   const bodyRef = useRef(null);
+  const frame = useRef(0);
+  const reduced = useReducedMotion();
   const name = tx(p.name, lang);
   const highlights = tl(p.highlights, lang);
   const links = p.links || {};
@@ -37,10 +42,54 @@ function ProjectCard({ p, t, lang, onAsk, linked }) {
     ? <time dateTime={String(p.year)}>{p.year}</time>
     : p.year;
   const spec = p.id ? architectures[p.id] : null;
+  const restH = useRef(spec ? 120 : null);
 
   useEffect(() => {
     if (linked) setExpanded(true);
   }, [linked]);
+
+  useEffect(() => () => cancelAnimationFrame(frame.current), []);
+
+  // The resting height of a card that has no diagram, so closing it returns
+  // to the same fold instead of a guessed one.
+  useLayoutEffect(() => {
+    if (spec || expanded || held != null || !clipRef.current) return;
+    restH.current = clipRef.current.offsetHeight;
+  }, [spec, expanded, held, lang]);
+
+  function later(fn) {
+    cancelAnimationFrame(frame.current);
+    frame.current = requestAnimationFrame(() => {
+      frame.current = requestAnimationFrame(fn);
+    });
+  }
+
+  // The fold eases open and shut. Reduced motion just switches.
+  function toggle() {
+    const next = !expanded;
+    const clip = clipRef.current;
+    rememberProject(p.id, next);
+    if (!clip || reduced) {
+      setHeld(null);
+      setExpanded(next);
+      return;
+    }
+    const from = clip.offsetHeight;
+    const full = clip.scrollHeight;
+    const shut = spec ? Math.min(120, full) : Math.round(restH.current || from);
+    const to = next ? full : shut;
+    if (Math.abs(to - from) < 2) {
+      setHeld(null);
+      setExpanded(next);
+      return;
+    }
+    setHeld(from);
+    if (next) setExpanded(true);
+    later(() => {
+      setExpanded(next);
+      setHeld(to);
+    });
+  }
 
   // Measured, not guessed: the same card can fit in English and overflow in Hebrew.
   useLayoutEffect(() => {
@@ -92,13 +141,22 @@ function ProjectCard({ p, t, lang, onAsk, linked }) {
       style={{
         scrollMarginTop: 18,
         padding: '20px 20px 16px', display: 'flex', flexDirection: 'column', gap: 14,
-        height: spec ? 'auto' : (expanded ? 'auto' : CARD_HEIGHT), minHeight: spec ? 0 : CARD_HEIGHT,
+        height: spec ? 'auto' : (expanded || held != null ? 'auto' : CARD_HEIGHT), minHeight: spec ? 0 : CARD_HEIGHT,
       }}>
       {spec && head}
       {spec && <Architecture spec={spec} lang={lang} label={t.architecture} />}
-      <div ref={clipRef} className="project-clip" style={spec
-        ? { maxHeight: expanded ? 'none' : 120, overflow: expanded ? 'visible' : 'hidden', position: 'relative' }
-        : { flex: 1, minHeight: 0, overflow: expanded ? 'visible' : 'hidden', position: 'relative' }}>
+      <div ref={clipRef} className={`project-clip${held != null ? ' is-easing' : ''}`}
+        onTransitionEnd={(e) => {
+          if (e.propertyName !== 'max-height' || e.target !== e.currentTarget) return;
+          setHeld(null);
+        }}
+        style={(() => {
+          const moving = held != null;
+          const open = expanded && !moving;
+          return spec
+            ? { maxHeight: moving ? held : (expanded ? 'none' : 120), overflow: open ? 'visible' : 'hidden', position: 'relative' }
+            : { flex: !expanded && !moving ? 1 : undefined, minHeight: 0, maxHeight: moving ? held : (expanded ? 'none' : undefined), overflow: open ? 'visible' : 'hidden', position: 'relative' };
+        })()}>
         <div ref={bodyRef} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {p.image && (
             <div style={{ margin: '-20px -20px 0', borderRadius: 'var(--r-lg) var(--r-lg) 0 0', overflow: 'hidden', borderBottom: '1px solid var(--border)', background: 'var(--bg-app)' }}>
@@ -108,7 +166,7 @@ function ProjectCard({ p, t, lang, onAsk, linked }) {
           {!spec && head}
           {prose}
         </div>
-        {overflows && !expanded && (
+        {overflows && (!expanded || held != null) && (
           <div className="project-fade" aria-hidden="true" style={{
             position: 'absolute', left: 0, right: 0, bottom: 0, height: 56, pointerEvents: 'none',
             background: 'linear-gradient(to bottom, rgba(255,255,255,0), var(--bg-card))',
@@ -116,12 +174,8 @@ function ProjectCard({ p, t, lang, onAsk, linked }) {
         )}
       </div>
 
-      {(overflows || expanded) && (
-        <button type="button" onClick={() => {
-          const next = !expanded;
-          setExpanded(next);
-          rememberProject(p.id, next);
-        }} aria-expanded={expanded}
+      {(overflows || expanded || held != null) && (
+        <button type="button" onClick={toggle} aria-expanded={expanded}
           aria-label={expanded ? t.showLessAbout(name) : t.readMoreAbout(name)}
           className="read-more"
           style={{

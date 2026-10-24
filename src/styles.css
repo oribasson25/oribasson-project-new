@@ -481,6 +481,8 @@ a { color: inherit; }
   transition: border-color 0.22s var(--ease), box-shadow 0.22s var(--ease), transform 0.22s var(--ease);
 }
 .project-card:focus-within { border-color: var(--primary-soft); }
+/* The folded write-up eases open. The height itself is set on the card. */
+.project-clip.is-easing { transition: max-height 0.45s var(--ease); }
 @media (hover: hover) {
   .project-card:hover,
   .project-card:focus-within {
