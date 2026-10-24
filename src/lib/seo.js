@@ -66,6 +66,8 @@ function setLink(rel, href) {
 function personNode() {
   const job = (resume.experience || [])[0];
   const company = job ? tx(job.company, 'en') : '';
+  const role = job ? tx(job.role, 'en') : '';
+  const schools = (resume.education || []).map((e) => tx(e.school, 'en')).filter(Boolean);
   const headline = tx(profile.headline, 'en');
   const sameAs = [profile.contact?.linkedin, profile.contact?.github, profile.contact?.website].filter(Boolean);
   return {
@@ -83,6 +85,10 @@ function personNode() {
       : undefined,
     sameAs: sameAs.length ? sameAs : undefined,
     worksFor: company ? { '@type': 'Organization', name: company } : undefined,
+    hasOccupation: role ? { '@type': 'Occupation', name: role } : undefined,
+    alumniOf: schools.length === 1
+      ? { '@type': 'EducationalOrganization', name: schools[0] }
+      : (schools.length ? schools.map((name) => ({ '@type': 'EducationalOrganization', name })) : undefined),
     knowsLanguage: (resume.languages || []).map((l) => tx(l.name, 'en')).filter(Boolean),
     description: tx(resume.summary, 'en'),
   };
