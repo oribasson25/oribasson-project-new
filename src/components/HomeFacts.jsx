@@ -20,6 +20,12 @@ import { useReducedMotion } from '../lib/hooks.js';
  * 11. projects live-call-intelligence: writes a CRM event while the call is in progress.
  * 12. projects 8legs highlight "Privacy": card and Israeli ID numbers are masked
  *     before they reach the model.
+ * 13. projects back-office-agent: incoming mail, documents filed on the claim.
+ * 14. projects policy-documents: authenticates, then sends the policy in chat.
+ * 15. resume.experience[0] highlight "Automated Eval & QA Pipelines": a judge
+ *     model scores Hebrew transcripts.
+ * 16. resume.education[0]: cybersecurity certificate at Kernelios.
+ * 17. resume.languages English, professional working proficiency, beside native Hebrew.
  */
 const FACTS = [
   { en: 'Live LLM agents at Libra Insurance.', he: 'סוכני LLM בפרודקשן, בליברה ביטוח.' },
@@ -34,6 +40,11 @@ const FACTS = [
   { en: 'IDF network admin — Active Directory and Cisco.', he: 'ניהול רשת בצה״ל — Active Directory ו-Cisco.' },
   { en: 'The live-call agent writes the CRM event mid-call.', he: 'סוכן השיחה כותב ל-CRM עוד בזמן השיחה.' },
   { en: 'On 8Legs, card and ID numbers never reach the model.', he: 'ב-8Legs, כרטיס ותעודת זהות לא מגיעים למודל.' },
+  { en: 'The back office reads the mail and files it on the claim.', he: 'הבק-אופיס קורא את המייל ומתייק אותו בתיק התביעה.' },
+  { en: 'The chat checks who is asking, then sends the policy.', he: 'הצ׳אט בודק מי פונה, ואז שולח את הפוליסה.' },
+  { en: 'A judge model scores the Hebrew call transcripts.', he: 'מודל שופט נותן ציון לתמלולי השיחות בעברית.' },
+  { en: 'A cybersecurity certificate from Kernelios.', he: 'הסמכת סייבר ממכללת Kernelios.' },
+  { en: 'English as well, at a working professional level.', he: 'גם אנגלית, ברמה של עבודה.' },
 ];
 
 const HOLD = 4600;
