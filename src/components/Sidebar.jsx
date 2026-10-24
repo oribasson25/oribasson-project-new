@@ -121,7 +121,7 @@ export function ContactActions({ t, compact }) {
           <a key={it.key} href={it.href} title={it.title} aria-label={it.external ? `${it.title}. ${t.newTab}` : it.title}
             target={it.external ? '_blank' : undefined} rel={it.external ? 'noopener noreferrer' : undefined}
             style={{
-              width: 34, height: 34, borderRadius: '50%', flexShrink: 0,
+              width: 40, height: 40, borderRadius: '50%', flexShrink: 0,
               background: 'var(--primary)', color: 'var(--primary-ink)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               boxShadow: '0 2px 10px var(--primary-glow)',
@@ -151,7 +151,7 @@ export function LangSwitch({ lang, setLang }) {
   return (
     <button type="button" onClick={() => setLang(other)} title={name} aria-label={name}
       style={{
-        height: 34, minWidth: 40, padding: '0 10px', borderRadius: 10, flexShrink: 0,
+        height: 40, minWidth: 44, padding: '0 11px', borderRadius: 10, flexShrink: 0,
         background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-2)',
         fontSize: 12.5, fontWeight: 700,
       }}>{other === 'he' ? 'עב' : 'EN'}</button>
