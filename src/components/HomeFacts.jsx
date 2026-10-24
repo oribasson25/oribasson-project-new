@@ -47,17 +47,27 @@ const FACTS = [
   { en: 'English as well, at a working professional level.', he: 'גם אנגלית, ברמה של עבודה.' },
 ];
 
-const HOLD = 4600;
 const EXIT = 420;
+const ENTER = 420;
+
+/** Long enough to read this line, and no longer. A short one moves on. */
+function readTime(text) {
+  const chars = Array.from(text || '').length;
+  const words = String(text || '').trim().split(/\s+/).filter(Boolean).length;
+  const ms = Math.max(1800 + chars * 55, 2200 + words * 320);
+  return Math.round(Math.min(7600, Math.max(4000, ms)));
+}
 
 /**
  * Cycles the facts. On a wide screen each one slides in from the left, then
  * the right. When the column is too narrow to hold a line beside the figure,
  * it sits under him and still arrives from the side, by a few pixels, so it
  * cannot leave the screen. A mouse hover holds the current line; a click, or
- * Enter, keeps it there. Reaching the line while it is leaving brings that
- * same line back. Keyboard focus holds it too. Reduced motion swaps the
- * words in place, with no slide.
+ * Enter, keeps it there. Arrow keys, while the line is focused, show the
+ * next or the previous one. Reaching the line while it is leaving brings
+ * that same line back. Keyboard focus holds it too, and so does scrolling it
+ * off the screen. Reduced motion swaps the words in place, with no slide,
+ * and leaves each line up a little longer.
  *
  * `hold` freezes the cycle while the recorded hello is playing. `avoidRight`
  * keeps every line on the left while the hello bubble occupies that side.
@@ -71,11 +81,13 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   const [pinned, setPinned] = useState(false);
   const [keyFocus, setKeyFocus] = useState(false);
   const [hidden, setHidden] = useState(() => document.hidden);
+  const [seen, setSeen] = useState(true);
   const [side, setSide] = useState('left');
+  const slotRef = useRef(null);
   const fromKeyboard = useRef(false);
   const fact = FACTS[index];
   const text = fact[lang] || fact.en;
-  const paused = hover || pinned || keyFocus || hidden || hold;
+  const paused = hover || pinned || keyFocus || hidden || hold || !seen;
 
   // A new line picks a side. While the hello bubble is on the right, every
   // line stays on the left. Clearing the bubble does not move the line that
@@ -101,6 +113,17 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
     };
   }, []);
 
+  // A line scrolled under the fold on a phone should not change unseen.
+  useEffect(() => {
+    const el = slotRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return undefined;
+    const io = new IntersectionObserver(([entry]) => {
+      setSeen(entry.isIntersecting);
+    }, { threshold: 0.6 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   useEffect(() => {
     // Caught on the way out: bring the same line back, instead of finishing
     // the exit and holding the next one.
@@ -109,7 +132,9 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
       return undefined;
     }
     if (paused && phase === 'in') return undefined;
-    const wait = reduced ? 5600 : (phase === 'in' ? HOLD : EXIT);
+    // The entrance is not reading time. Reduced motion has no entrance.
+    const reading = readTime(text) + (reduced ? 1800 : 0);
+    const wait = phase === 'in' ? reading + (reduced ? 0 : ENTER) : EXIT;
     const timer = setTimeout(() => {
       if (reduced || phase === 'out') {
         setIndex((n) => (n + 1) % FACTS.length);
@@ -119,7 +144,7 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
       }
     }, wait);
     return () => clearTimeout(timer);
-  }, [paused, phase, index, reduced]);
+  }, [paused, phase, index, reduced, text]);
 
   const motion = reduced ? 'still' : side;
   const fineHover = typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches;
@@ -128,10 +153,15 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
     setPinned((v) => !v);
   }
 
+  function step(dir) {
+    setPhase('in');
+    setIndex((n) => (n + dir + FACTS.length) % FACTS.length);
+  }
+
   return (
-    <div className="home-fact-slot" role="group" aria-label={t.factsLabel} data-side={side} data-pinned={pinned ? 'true' : 'false'} dir={lang === 'he' ? 'rtl' : 'ltr'}>
+    <div ref={slotRef} className="home-fact-slot" role="group" aria-label={t.factsLabel} data-side={side} data-pinned={pinned ? 'true' : 'false'} dir={lang === 'he' ? 'rtl' : 'ltr'}>
       {/* The hint stays outside the live region, so a new line is announced on its own. */}
-      <div aria-live={hold ? 'off' : 'polite'} aria-atomic="true">
+      <div className="home-fact-live" aria-live={hold ? 'off' : 'polite'} aria-atomic="true">
         <button
           type="button"
           className="home-fact-btn"
@@ -139,9 +169,17 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
           aria-describedby="home-fact-hint"
           onClick={togglePin}
           onKeyDown={(e) => {
-            if (e.key !== 'Enter' && e.key !== ' ') return;
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              togglePin();
+              return;
+            }
+            if (e.altKey || e.metaKey || e.ctrlKey || e.shiftKey) return;
+            const forward = lang === 'he' ? 'ArrowLeft' : 'ArrowRight';
+            const back = lang === 'he' ? 'ArrowRight' : 'ArrowLeft';
+            if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp' && e.key !== forward && e.key !== back) return;
             e.preventDefault();
-            togglePin();
+            step(e.key === 'ArrowDown' || e.key === forward ? 1 : -1);
           }}
           onMouseEnter={() => { if (fineHover) setHover(true); }}
           onMouseLeave={() => setHover(false)}
