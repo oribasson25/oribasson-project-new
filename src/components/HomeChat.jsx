@@ -77,6 +77,46 @@ function HomeSkills({ lang, stacked }) {
   );
 }
 
+function telHref(value) {
+  const digits = String(value || '').replace(/[^\d]/g, '');
+  if (!digits) return 'tel:';
+  return `tel:${digits.startsWith('0') ? `+972${digits.slice(1)}` : `+${digits}`}`;
+}
+
+function HomeContact({ t, stacked }) {
+  const c = profile.contact || {};
+  const items = [
+    c.email && { key: 'email', href: `mailto:${c.email}`, label: c.email },
+    c.phone && { key: 'phone', href: telHref(c.phone), label: c.phone, ltr: true },
+    c.linkedin && { key: 'linkedin', href: c.linkedin, label: 'LinkedIn', external: true },
+  ].filter(Boolean);
+  if (!items.length) return null;
+  return (
+    <div className="hero-rise home-contact" dir="ltr" style={{
+      animationDelay: '0.74s',
+      width: 'min(560px, 100%)',
+      marginTop: stacked ? 28 : 36,
+      textAlign: 'center',
+    }}>
+      <Eyebrow style={{ marginBottom: 10, textAlign: 'center' }}>{t.contact}</Eyebrow>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', columnGap: 0, rowGap: 6 }}>
+        {items.map((it, i) => (
+          <span key={it.key} style={{ display: 'inline-flex', alignItems: 'center', maxWidth: '100%' }}>
+            {i > 0 && <span aria-hidden="true" style={{ color: 'var(--text-muted)', margin: '0 8px' }}>·</span>}
+            <a href={it.href} dir={it.ltr ? 'ltr' : undefined}
+              target={it.external ? '_blank' : undefined}
+              rel={it.external ? 'noopener noreferrer' : undefined}
+              style={{ position: 'relative', fontSize: 12.5, fontWeight: 600, color: 'var(--text-2)', textDecoration: 'none' }}>
+              {it.label}
+              {it.external && <span className="sr-only"> {t.newTab}</span>}
+            </a>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function whoLine(lang) {
   const headline = tx(profile.headline, lang);
   const job = (resume.experience || [])[0];
@@ -314,9 +354,10 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
 
         <HomeProjects t={t} lang={lang} stacked={stacked} />
         <HomeSkills lang={lang} stacked={stacked} />
+        <HomeContact t={t} stacked={stacked} />
 
         {!stacked && (
-          <div className="hero-rise" dir={dir} style={{ animationDelay: '0.62s', marginTop: 26, fontSize: 11.5, color: 'var(--text-muted)', textAlign: 'center' }}>{t.foot(first)}</div>
+          <div className="hero-rise" dir={dir} style={{ animationDelay: '0.82s', marginTop: 26, fontSize: 11.5, color: 'var(--text-muted)', textAlign: 'center' }}>{t.foot(first)}</div>
         )}
       </div>
     );
