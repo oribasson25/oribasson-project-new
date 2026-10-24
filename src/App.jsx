@@ -59,10 +59,6 @@ export default function App() {
   const needsLogin = page === 'login' || (ADMIN_PAGES.has(page) && admin === false);
 
   useSeo(page, lang);
-  useEffect(() => {
-    document.documentElement.classList.toggle('is-home', page === 'chat' && chat.messages.length === 0);
-  }, [page, chat.messages.length]);
-
   // /admin, once signed in, is the settings screen — keep the address honest.
   useEffect(() => { if (path === '/admin' && admin) go('/admin/settings'); }, [path, admin]);
   useEffect(() => { setMoreOpen(false); }, [path]);
@@ -100,16 +96,9 @@ export default function App() {
       default: return null;
     }
   };
-  const welcome = page === 'chat' && chat.messages.length === 0;
   const home = (stacked) => (
     <HomeChat t={t} lang={lang} chat={chat} status={status} stacked={stacked}
-      seed={seed} onSeedUsed={() => setSeed(null)}
-      toolbar={!stacked && (
-        <>
-          <ContactActions t={t} onDark />
-          <LangToggle lang={lang} setLang={setLang} />
-        </>
-      )} />
+      seed={seed} onSeedUsed={() => setSeed(null)} />
   );
 
   if (mobile) {
@@ -117,11 +106,11 @@ export default function App() {
     // Room under the content for the floating bar — none while it is hidden for the keyboard.
     const navSpace = typing ? '0px' : NAV_SPACE;
     return (
-      <div className="m-root m-app" style={{ position: 'relative', display: 'flex', flexDirection: 'column', background: welcome ? '#07080d' : 'var(--bg-app)', overflow: 'hidden' }}>
+      <div className="m-root m-app" style={{ position: 'relative', display: 'flex', flexDirection: 'column', background: 'var(--bg-app)', overflow: 'hidden' }}>
         <a href="#main" className="skip-link">{t.skip}</a>
-        <MobileTopBar t={t} lang={lang} setLang={setLang} go={go} home={page === 'chat'} onDark={welcome} />
+        <MobileTopBar t={t} lang={lang} setLang={setLang} go={go} home={page === 'chat'} />
         {page === 'chat' ? (
-          <main id="main" style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', paddingBottom: navSpace, background: welcome ? '#07080d' : 'transparent' }}>{home(true)}</main>
+          <main id="main" style={{ flex: 1, minHeight: 0, display: 'flex', paddingBottom: navSpace }}>{home(true)}</main>
         ) : (
           <main id="main" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `18px 14px calc(28px + ${navSpace})` }}>
             {title && <div dir="auto" style={{ fontSize: 26, fontWeight: 800, letterSpacing: '-0.03em', marginBottom: 14 }}>{title}</div>}
@@ -145,13 +134,13 @@ export default function App() {
         activeChatId={chat.messages.length ? chat.chatId : null}
         onPickRecent={pickRecent} onNewChat={newChat} onClearHistory={clearHistory}
         admin={admin} onSignOut={signOut} />
-      <main id="main" style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', background: welcome ? '#07080d' : 'var(--bg-app)' }}>
-        {!welcome && <Crumbs trail={[section, t.nav[page]]} right={(
+      <main id="main" style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', background: 'var(--bg-app)' }}>
+        <Crumbs trail={[section, t.nav[page]]} right={(
           <>
             {page === 'chat' && <ContactActions t={t} />}
             <LangToggle lang={lang} setLang={setLang} />
           </>
-        )} />}
+        )} />
         {page === 'chat' ? home(false) : (
           <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', position: 'relative' }}>
             <PetWatermark size={560} style={{ bottom: -70, right: -40 }} />
