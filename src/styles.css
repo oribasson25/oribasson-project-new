@@ -237,8 +237,20 @@ body {
     width: min(280px, 100%);
     margin-top: 10px;
     text-align: center;
-    min-height: 2.9em;
+    /* Two lines, centered, so a short line and a long one leave the name where it is. */
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
+  .home-fact-live { width: 100%; min-width: 0; }
+  .home-fact-btn {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .home-fact { width: 100%; min-width: 0; }
   .home-fact.is-in.from-left { animation-name: factInLeftSoft; }
   .home-fact.is-out.from-left { animation-name: factOutLeftSoft; }
   .home-fact.is-in.from-right { animation-name: factInRightSoft; }
