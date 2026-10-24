@@ -203,7 +203,7 @@ export function Section({ id, title, children, right, pad = '14px 18px' }) {
           padding: '16px 20px 14px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 10,
           fontSize: 15, fontWeight: 700, letterSpacing: '-0.01em', color: 'var(--text)',
         }}>
-          <h2 dir="auto" style={{ flex: 1, minWidth: 0, margin: 0, fontSize: 15, fontWeight: 700, letterSpacing: '-0.01em', lineHeight: 'inherit' }}>{title}</h2>
+          <h2 tabIndex={id ? -1 : undefined} dir="auto" style={{ flex: 1, minWidth: 0, margin: 0, fontSize: 15, fontWeight: 700, letterSpacing: '-0.01em', lineHeight: 'inherit' }}>{title}</h2>
           {right}
         </div>
       )}

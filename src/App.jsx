@@ -29,7 +29,7 @@ const ADMIN_PAGES = new Set(['settings', 'conversations']);
 export default function App() {
   const [lang, setLangState] = useState(savedLang);
   const t = strings(lang);
-  const [path, go] = usePath();
+  const [path, go, hash] = usePath();
   const mobile = useIsMobile();
   const reduced = useReducedMotion();
   useViewportHeight(mobile);
@@ -72,20 +72,29 @@ export default function App() {
   useEffect(() => {
     const main = document.getElementById('main');
     if (!main) return;
-    main.scrollTop = 0;
-    main.querySelector('[data-scroller]')?.scrollTo(0, 0);
-    const hash = window.location.hash.replace(/^#/, '');
-    if (hash) {
-      const target = main.querySelector(`[id="${CSS.escape(hash)}"]`);
-      if (target) target.scrollIntoView({ block: 'start', behavior: reducedRef.current ? 'auto' : 'smooth' });
+    const target = hash ? main.querySelector(`[id="${CSS.escape(hash)}"]`) : null;
+    // No reset first: on a phone the same scroller carries the previous page,
+    // and jumping to the top before the glide made the link feel like two moves.
+    if (target) target.scrollIntoView({ block: 'start', behavior: reducedRef.current ? 'auto' : 'smooth' });
+    else {
+      main.scrollTop = 0;
+      main.querySelector('[data-scroller]')?.scrollTo(0, 0);
     }
     if (firstPage.current) {
       firstPage.current = false;
       return;
     }
     const el = document.activeElement;
+    const field = el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT');
+    if (field) return;
+    if (target) {
+      const heading = target.querySelector('h1, h2, h3') || target;
+      if (heading.tabIndex < 0) heading.tabIndex = -1;
+      heading.focus({ preventScroll: true });
+      return;
+    }
     if (el && el.tagName === 'BUTTON') main.focus({ preventScroll: true });
-  }, [page]);
+  }, [page, hash]);
 
   function ask(text) {
     go('/');

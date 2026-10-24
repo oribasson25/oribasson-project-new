@@ -4,19 +4,31 @@ import { useEffect, useState } from 'react';
  * Pages have real addresses — /resume, /projects, /admin — so a recruiter can
  * be sent straight to one. Vercel rewrites every path to index.html.
  */
+function readLocation() {
+  return {
+    path: window.location.pathname,
+    hash: window.location.hash.replace(/^#/, ''),
+  };
+}
+
 export function usePath() {
-  const [path, setPath] = useState(() => window.location.pathname);
+  const [loc, setLoc] = useState(readLocation);
   useEffect(() => {
-    const onPop = () => setPath(window.location.pathname);
+    const onPop = () => setLoc(readLocation());
     window.addEventListener('popstate', onPop);
-    return () => window.removeEventListener('popstate', onPop);
+    window.addEventListener('hashchange', onPop);
+    return () => {
+      window.removeEventListener('popstate', onPop);
+      window.removeEventListener('hashchange', onPop);
+    };
   }, []);
   const go = (next) => {
-    if (next === window.location.pathname) return;
-    window.history.pushState({}, '', next);
-    setPath(next);
+    const url = new URL(next, window.location.href);
+    if (url.pathname === window.location.pathname && url.hash === window.location.hash) return;
+    window.history.pushState({}, '', `${url.pathname}${url.search}${url.hash}`);
+    setLoc({ path: url.pathname, hash: url.hash.replace(/^#/, '') });
   };
-  return [path, go];
+  return [loc.path, go, loc.hash];
 }
 
 const PHONE = '(max-width: 768px)';
