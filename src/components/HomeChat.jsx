@@ -65,12 +65,13 @@ export function Composer({ value, onChange, onSend, disabled, placeholder, dir, 
         }}
       />
       <button type="button" onClick={onSend} disabled={disabled || empty} title={sendLabel} aria-label={sendLabel}
+        className={disabled || empty ? undefined : 'send-ready'}
         style={{
           width: 40, height: 40, borderRadius: '50%', flexShrink: 0, marginBottom: 4,
           background: 'var(--primary)', color: 'var(--primary-ink)', fontSize: 17, fontWeight: 800,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           opacity: disabled || empty ? 0.35 : 1,
-        }}>↑</button>
+        }}><span className="send-arrow" aria-hidden="true">↑</span></button>
       {sendHint && <span id="chat-composer-hint" className="sr-only">{sendHint}</span>}
     </div>
   );
