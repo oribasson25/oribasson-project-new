@@ -151,7 +151,7 @@ export function LangSwitch({ lang, setLang }) {
   const other = lang === 'he' ? 'en' : 'he';
   const name = other === 'he' ? 'עברית' : 'English';
   return (
-    <button type="button" onClick={() => setLang(other)} title={name} aria-label={name}
+    <button type="button" onClick={() => setLang(other)} title={name} aria-label={name} lang={other}
       style={{
         height: 40, minWidth: 44, padding: '0 11px', borderRadius: 10, flexShrink: 0,
         background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-2)',
@@ -163,7 +163,7 @@ export function LangSwitch({ lang, setLang }) {
 export function LangToggle({ lang, setLang, small = true }) {
   return (
     <SegTabs small={small} value={lang} onChange={setLang} label={strings(lang).language}
-      items={[{ id: 'en', label: 'EN', title: 'English' }, { id: 'he', label: 'עב', title: 'עברית' }]} />
+      items={[{ id: 'en', label: 'EN', title: 'English', lang: 'en' }, { id: 'he', label: 'עב', title: 'עברית', lang: 'he' }]} />
   );
 }
 

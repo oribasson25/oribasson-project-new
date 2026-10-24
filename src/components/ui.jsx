@@ -152,7 +152,7 @@ export function SegTabs({ items, value, onChange, style, small, label }) {
       {items.map((it) => {
         const on = value === it.id;
         return (
-          <button key={it.id} type="button" onClick={() => onChange(it.id)} title={it.title}
+          <button key={it.id} type="button" onClick={() => onChange(it.id)} title={it.title} lang={it.lang}
             aria-pressed={on} aria-label={it.title || it.label}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 6,
