@@ -74,6 +74,14 @@ body {
 .pet-halo { animation: haloBreathe 4.2s ease-in-out infinite; }
 .pet-halo.busy { animation-duration: 1.4s; }
 
+/* The same hairline the project diagrams draw, under the greeting. */
+.hero-rule { display: block; margin: 8px auto 0; }
+.hero-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: archDraw 0.75s ease 0.28s forwards;
+}
+
 input, textarea, select {
   background: var(--bg-input);
   color: var(--text);
@@ -333,5 +341,6 @@ a { color: inherit; }
   }
   .arch-node { opacity: 1 !important; transform: none !important; animation: none !important; }
   .arch-line { stroke-dashoffset: 0 !important; animation: none !important; }
+  .hero-draw { stroke-dashoffset: 0 !important; animation: none !important; }
   button:active { transform: none; }
 }

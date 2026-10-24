@@ -208,6 +208,9 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
           margin: 0, marginTop: 6, fontSize: stacked ? 25 : 30, fontWeight: 800, letterSpacing: '-0.035em',
           lineHeight: 'normal', textAlign: 'center',
         }}>{t.hello(first)}</h1>
+        <svg className="hero-rule" viewBox="0 0 88 8" width="88" height="8" aria-hidden="true">
+          <path className="arch-line hero-draw" d="M4 4 H84" pathLength="1" />
+        </svg>
         <div dir={dir} style={{
           fontSize: 13.5, color: 'var(--text-2)', textAlign: 'center',
           marginTop: stacked ? 6 : 9, lineHeight: 1.65, maxWidth: 520,
