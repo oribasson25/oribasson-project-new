@@ -17,6 +17,18 @@
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
     },
     {
+      "source": "/intro-:name.mp3",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
+    },
+    {
+      "source": "/favicon.png",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
+    },
+    {
+      "source": "/apple-touch-icon.png",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
+    },
+    {
       "source": "/(.*)",
       "headers": [
         { "key": "X-Content-Type-Options", "value": "nosniff" },
