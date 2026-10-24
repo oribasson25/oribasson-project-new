@@ -92,13 +92,54 @@ body {
 .send-arrow { display: block; line-height: 1; transition: transform 0.18s ease; }
 .send-ready:hover .send-arrow { transform: translateY(-2px); }
 
+/* The figure, and one short fact beside it. On a narrow column the fact
+   drops under the figure so it cannot cover him or leave the screen. */
+.home-stage {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  container: home-stage / inline-size;
+}
+.home-fact-slot {
+  position: absolute;
+  top: 66%;
+  width: 210px;
+  z-index: 1;
+  margin: 0;
+}
+.home-fact-slot[data-side="left"] { right: calc(50% + 156px); text-align: right; }
+.home-fact-slot[data-side="right"] { left: calc(50% + 156px); text-align: left; }
+.home-fact-btn {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: default;
+  border-radius: 6px;
+}
+.home-fact-btn:hover,
+.home-fact-btn:active { opacity: 1; transform: none; }
+.home-fact-slot[data-pinned="true"] .home-fact {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--text-muted);
+}
 /* A short fact beside the figure. Same type, same quiet grey. */
 .home-fact {
+  display: block;
   font-size: 13px;
   font-weight: 600;
   line-height: 1.45;
   letter-spacing: -0.01em;
   color: var(--text-2);
+  text-wrap: balance;
 }
 @keyframes factInLeft {
   from { opacity: 0; transform: translateX(-14px); }
@@ -124,6 +165,25 @@ body {
 .home-fact.is-out.from-right { animation: factOutRight 0.34s ease forwards; }
 .home-fact.is-in.from-fade { animation: factFade 0.42s ease both; }
 .home-fact.is-out.from-fade { animation: factFadeOut 0.34s ease forwards; }
+.home-fact.from-still { animation: none; }
+
+/* Beside the figure only while both lines fit. Otherwise, under him. */
+@container home-stage (max-width: 780px) {
+  .home-fact-slot {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    width: min(280px, 100%);
+    margin-top: 10px;
+    text-align: center;
+    min-height: 4.4em;
+  }
+  .home-fact.is-in.from-left,
+  .home-fact.is-in.from-right { animation-name: factFade; }
+  .home-fact.is-out.from-left,
+  .home-fact.is-out.from-right { animation-name: factFadeOut; }
+}
 
 input, textarea, select {
   background: var(--bg-input);
@@ -364,6 +424,14 @@ a { color: inherit; }
 @media print {
   .screen-only, .skip-link { display: none !important; }
   .hero-rise, .home-fact { animation: none; opacity: 1; transform: none; }
+  .home-fact-slot {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    width: auto;
+    text-align: center;
+  }
   body {
     zoom: 1 !important;
     overflow: visible !important;
