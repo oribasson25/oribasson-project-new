@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { strings } from './i18n.js';
 import { usePath, useIsMobile, useViewportHeight, useTyping } from './lib/hooks.js';
 import { useSeo } from './lib/seo.js';
@@ -63,11 +63,19 @@ export default function App() {
   useEffect(() => { if (path === '/admin' && admin) go('/admin/settings'); }, [path, admin]);
   useEffect(() => { setMoreOpen(false); }, [path]);
   // A new page starts at the top. The shell keeps one scroller, so the previous page's position would otherwise stick.
+  // After a button opened the page, the keyboard follows it. A text field keeps focus, so "ask about this" still lands in the composer.
+  const firstPage = useRef(true);
   useEffect(() => {
     const main = document.getElementById('main');
     if (!main) return;
     main.scrollTop = 0;
     main.querySelector('[data-scroller]')?.scrollTo(0, 0);
+    if (firstPage.current) {
+      firstPage.current = false;
+      return;
+    }
+    const el = document.activeElement;
+    if (el && el.tagName === 'BUTTON') main.focus({ preventScroll: true });
   }, [page]);
 
   function ask(text) {
@@ -117,9 +125,9 @@ export default function App() {
         <a href="#main" className="skip-link">{t.skip}</a>
         <MobileTopBar t={t} lang={lang} setLang={setLang} go={go} home={page === 'chat'} />
         {page === 'chat' ? (
-          <main id="main" style={{ flex: 1, minHeight: 0, display: 'flex', paddingBottom: navSpace }}>{home(true)}</main>
+          <main id="main" tabIndex={-1} style={{ flex: 1, minHeight: 0, display: 'flex', paddingBottom: navSpace }}>{home(true)}</main>
         ) : (
-          <main id="main" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `18px 14px calc(28px + ${navSpace})` }}>
+          <main id="main" tabIndex={-1} style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `18px 14px calc(28px + ${navSpace})` }}>
             {title && <h1 dir="auto" style={{ margin: '0 0 14px', fontSize: 26, fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 'normal' }}>{title}</h1>}
             {view(true)}
           </main>
@@ -141,7 +149,7 @@ export default function App() {
         activeChatId={chat.messages.length ? chat.chatId : null}
         onPickRecent={pickRecent} onNewChat={newChat} onClearHistory={clearHistory}
         admin={admin} onSignOut={signOut} />
-      <main id="main" style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', background: 'var(--bg-app)' }}>
+      <main id="main" tabIndex={-1} style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', background: 'var(--bg-app)' }}>
         <Crumbs trail={[section, t.nav[page]]} right={(
           <>
             {page === 'chat' && <ContactActions t={t} />}
