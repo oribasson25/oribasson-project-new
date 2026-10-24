@@ -333,4 +333,5 @@ a { color: inherit; }
   }
   .arch-node { opacity: 1 !important; transform: none !important; animation: none !important; }
   .arch-line { stroke-dashoffset: 0 !important; animation: none !important; }
+  button:active { transform: none; }
 }
