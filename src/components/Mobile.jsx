@@ -131,7 +131,7 @@ export function MobileMore({ t, open, onClose, recents, activeChatId, onPickRece
           </div>
           {recents.length > 0 && (
             <ClearHistoryButton t={t} onClear={onClearHistory}
-              style={{ padding: '8px 13px', background: 'transparent', fontSize: 12, fontWeight: 600, textAlign: 'start' }} />
+              style={{ padding: '8px 13px', minHeight: 44, background: 'transparent', fontSize: 12, fontWeight: 600, textAlign: 'start' }} />
           )}
         </div>
         <ContactCard t={t} />

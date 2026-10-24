@@ -567,6 +567,9 @@ a { color: inherit; }
   animation-delay: var(--arch-d, 0ms);
 }
 
+.contact-row { padding: 4px 2px; }
+.read-more { min-height: 32px; }
+
 /* ── phones ── */
 @media (max-width: 768px) {
   :root { --ui-zoom: 1; }
@@ -582,6 +585,12 @@ a { color: inherit; }
   .home-index { margin-top: 18px; padding-top: 14px; gap: 14px; }
   .home-index-list a,
   .home-tools a { font-size: 13px; }
+  /* The quiet rows stay looking like text. The extra height is the tap. */
+  .contact-row { min-height: 44px; }
+  .read-more { min-height: 44px; }
+  .btn-sm { min-height: 44px; }
+  .recent-row { min-height: 44px; }
+  .login-back { min-height: 44px; }
 }
 
 @media print {

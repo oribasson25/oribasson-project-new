@@ -80,7 +80,8 @@ export function ContactCard({ t }) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         {rows.map((r) => (
           <a key={r.key} href={r.href(c[r.key])} target={r.key === 'email' || r.key === 'phone' ? undefined : '_blank'} rel="noopener noreferrer"
-            style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 8, padding: '4px 2px', fontSize: 12, fontWeight: 600, color: 'var(--text-2)', textDecoration: 'none', minWidth: 0 }}
+            className="contact-row"
+            style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, fontWeight: 600, color: 'var(--text-2)', textDecoration: 'none', minWidth: 0 }}
             onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-2)'; }}>
             <span style={{ display: 'flex', flexShrink: 0, color: 'var(--text-muted)' }}>{r.icon}</span>
@@ -198,8 +199,9 @@ export function RecentList({ t, recents, activeChatId, onPickRecent }) {
     const title = chatTitle(c.messages) || '…';
     return (
       <button key={c.id} type="button" onClick={() => onPickRecent(c)} title={title} aria-current={on ? 'true' : undefined}
+        className="recent-row"
         style={{
-          display: 'block', flexShrink: 0, width: '100%', textAlign: 'start', padding: '7px 13px', borderRadius: 9,
+          display: 'flex', alignItems: 'center', flexShrink: 0, width: '100%', textAlign: 'start', padding: '7px 13px', borderRadius: 9,
           background: on ? 'var(--bg-hover)' : 'transparent',
           color: on ? 'var(--text)' : 'var(--text-2)', fontSize: 12.5, lineHeight: 1.45,
           fontWeight: on ? 650 : 500,
@@ -207,7 +209,7 @@ export function RecentList({ t, recents, activeChatId, onPickRecent }) {
         onMouseEnter={(e) => { if (!on) e.currentTarget.style.background = 'var(--bg-hover)'; }}
         onMouseLeave={(e) => { if (!on) e.currentTarget.style.background = 'transparent'; }}
       >
-        <span dir="auto" style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, overflow: 'hidden', wordBreak: 'break-word' }}>{title}</span>
+        <span dir="auto" style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, overflow: 'hidden', wordBreak: 'break-word', minWidth: 0 }}>{title}</span>
       </button>
     );
   });

@@ -67,7 +67,7 @@ export function AdminLogin({ t, lang, setLang, onSignedIn, onBack, mobile }) {
           <LangToggle lang={lang} setLang={setLang} />
         </div>
         <div dir={dir} style={{ width: '100%', maxWidth: 340 }}>
-          <button type="button" onClick={onBack}
+          <button type="button" onClick={onBack} className="login-back"
             style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--text-muted)', background: 'none', padding: 0, marginBottom: 16 }}>
             {L.back}
           </button>

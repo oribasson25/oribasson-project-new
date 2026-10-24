@@ -101,6 +101,7 @@ export function Btn({ variant = 'ghost', icon, children, onClick, title, disable
     <Tag href={href} target={href && !download && !sameTab ? '_blank' : undefined} rel={href ? 'noopener noreferrer' : undefined}
       download={download} type={href ? undefined : type || 'button'}
       onClick={onClick} title={title} disabled={disabled}
+      className={size === 'sm' ? 'btn-sm' : undefined}
       onMouseEnter={() => !disabled && setHot(true)} onMouseLeave={() => setHot(false)}
       style={{
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 7,

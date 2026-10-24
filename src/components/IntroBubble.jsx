@@ -91,8 +91,8 @@ export function IntroBubble({ t, voice, transcript, stacked }) {
     return (
       <button type="button" onClick={play} title={t.introReplay} aria-label={t.introReplay}
         style={{
-          position: 'absolute', top: stacked ? 6 : 14, right: stacked ? 0 : 6, zIndex: 3,
-          width: 32, height: 32, borderRadius: '50%',
+          position: 'absolute', top: stacked ? 4 : 14, right: stacked ? 0 : 6, zIndex: 3,
+          width: stacked ? 44 : 32, height: stacked ? 44 : 32, borderRadius: '50%',
           background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-2)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--shadow)',
         }}>{speakerIcon}</button>
@@ -139,21 +139,21 @@ export function IntroBubble({ t, voice, transcript, stacked }) {
             </div>
           </div>
           <button type="button" onClick={stop} title={t.introStop} aria-label={t.introStop}
-            style={{ width: 28, height: 28, borderRadius: '50%', flexShrink: 0, background: 'var(--bg-hover)', color: 'var(--text)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            style={{ width: stacked ? 44 : 28, height: stacked ? 44 : 28, borderRadius: '50%', flexShrink: 0, background: 'var(--bg-hover)', color: 'var(--text)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <span style={{ width: 9, height: 9, borderRadius: 2, background: 'currentColor' }} />
           </button>
         </>
       ) : (
         <>
           <button type="button" onClick={play}
-            style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'transparent', padding: 0, textAlign: 'start', minWidth: 0, flex: '1 1 auto' }}>
+            style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'transparent', padding: 0, textAlign: 'start', minWidth: 0, flex: '1 1 auto', minHeight: stacked ? 44 : undefined }}>
             <span style={{ width: 30, height: 30, borderRadius: '50%', flexShrink: 0, background: 'var(--primary)', color: 'var(--primary-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11 }}>▶</span>
             <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', lineHeight: 1.35, minWidth: 0 }}>{t.introOffer}</span>
             {duration > 0 && <span style={{ fontSize: 11.5, color: 'var(--text-muted)', fontFamily: 'var(--mono)', flexShrink: 0 }}>{fmt(duration)}</span>}
           </button>
           <button type="button" onClick={dismiss} title={t.introDismiss} aria-label={t.introDismiss}
             style={{
-              width: 32, height: 32, borderRadius: 8, flexShrink: 0,
+              width: stacked ? 44 : 32, height: stacked ? 44 : 32, borderRadius: 8, flexShrink: 0,
               background: 'transparent', color: 'var(--text-muted)', fontSize: 16, lineHeight: 1,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>×</button>

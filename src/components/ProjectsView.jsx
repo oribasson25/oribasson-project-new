@@ -105,9 +105,10 @@ function ProjectCard({ p, t, lang, onAsk }) {
       {(overflows || expanded) && (
         <button type="button" onClick={() => setExpanded((v) => !v)} aria-expanded={expanded}
           aria-label={expanded ? t.showLessAbout(name) : t.readMoreAbout(name)}
+          className="read-more"
           style={{
             alignSelf: 'flex-start', display: 'inline-flex', alignItems: 'center', gap: 5,
-            background: 'transparent', padding: '6px 2px', minHeight: 32, fontSize: 12, fontWeight: 650, color: 'var(--text-2)',
+            background: 'transparent', padding: '6px 2px', fontSize: 12, fontWeight: 650, color: 'var(--text-2)',
           }}
           onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-2)'; }}>
