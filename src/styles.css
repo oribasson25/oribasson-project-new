@@ -336,7 +336,12 @@ body {
     align-items: center;
     justify-content: center;
   }
-  .home-fact-live { width: 100%; min-width: 0; display: block; }
+  .home-fact-slot[data-side="left"] .home-fact-live,
+  .home-fact-slot[data-side="right"] .home-fact-live {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
   .home-fact-btn {
     width: 100%;
     max-width: none;
