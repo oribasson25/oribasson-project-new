@@ -2,6 +2,8 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import projects from '../../content/projects.js';
 import { tx, tl, bullet } from '../../shared/text.js';
 import { Icons, PageHeader, Btn, Chip, EmptyState, Section } from './ui.jsx';
+import { Architecture } from './Architecture.jsx';
+import { architectures } from './architectures.js';
 
 // Every card is this tall; whatever does not fit waits behind "Read more".
 const CARD_HEIGHT = 340;
@@ -16,6 +18,7 @@ function ProjectCard({ p, t, lang, onAsk }) {
   const highlights = tl(p.highlights, lang);
   const links = p.links || {};
   const meta = [p.year, tx(p.role, lang)].filter(Boolean).join(' · ');
+  const spec = p.id ? architectures[p.id] : null;
 
   // Measured, not guessed: the same card can fit in English and overflow in Hebrew.
   useLayoutEffect(() => {
@@ -30,6 +33,34 @@ function ProjectCard({ p, t, lang, onAsk }) {
     return () => ro.disconnect();
   }, [lang, expanded]);
 
+  const head = (
+    <div>
+      <h2 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em', lineHeight: 'inherit' }}>{name}</h2>
+      {tx(p.tagline, lang) && <div dir="auto" style={{ fontSize: 12.5, color: 'var(--text-2)', marginTop: 4, fontWeight: 500 }}>{tx(p.tagline, lang)}</div>}
+      {meta && <div dir="auto" style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--text-muted)', marginTop: 6 }}>{meta}</div>}
+    </div>
+  );
+  const prose = (
+    <>
+      {tx(p.description, lang) && (
+        <div dir="auto" style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>{tx(p.description, lang)}</div>
+      )}
+      {highlights.length > 0 && (
+        <ul style={{ margin: 0, paddingInlineStart: 18, fontSize: 12.5, color: 'var(--text-2)', lineHeight: 1.7 }}>
+          {highlights.map((item, i) => {
+            const { title, text } = bullet(item);
+            return <li key={i} style={{ unicodeBidi: 'normal' }}>{title && <strong style={{ color: 'var(--text)', fontWeight: 650 }}>{title}: </strong>}{text}</li>;
+          })}
+        </ul>
+      )}
+      {(p.tech || []).length > 0 && (
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          {p.tech.map((x) => <Chip key={x} mono>{x}</Chip>)}
+        </div>
+      )}
+    </>
+  );
+
   return (
     <div className="fade-in"
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
@@ -38,37 +69,22 @@ function ProjectCard({ p, t, lang, onAsk }) {
         border: `1px solid ${hovered ? 'var(--primary-soft)' : 'var(--border)'}`,
         boxShadow: hovered ? '0 0 26px rgba(13,15,20,0.06), var(--shadow)' : 'var(--shadow)',
         padding: '18px 18px 14px', display: 'flex', flexDirection: 'column', gap: 12,
-        height: expanded ? 'auto' : CARD_HEIGHT, minHeight: CARD_HEIGHT,
+        height: spec ? 'auto' : (expanded ? 'auto' : CARD_HEIGHT), minHeight: spec ? 0 : CARD_HEIGHT,
         transition: 'border-color 0.2s, box-shadow 0.2s',
       }}>
-      <div ref={clipRef} style={{ flex: 1, minHeight: 0, overflow: expanded ? 'visible' : 'hidden', position: 'relative' }}>
+      {spec && head}
+      {spec && <Architecture spec={spec} lang={lang} label={t.architecture} />}
+      <div ref={clipRef} style={spec
+        ? { maxHeight: expanded ? 'none' : 120, overflow: expanded ? 'visible' : 'hidden', position: 'relative' }
+        : { flex: 1, minHeight: 0, overflow: expanded ? 'visible' : 'hidden', position: 'relative' }}>
         <div ref={bodyRef} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {p.image && (
             <div style={{ margin: '-18px -18px 0', borderRadius: 'var(--r-lg) var(--r-lg) 0 0', overflow: 'hidden', borderBottom: '1px solid var(--border)', background: 'var(--bg-panel)' }}>
               <img src={p.image} alt="" loading="lazy" style={{ display: 'block', width: '100%', aspectRatio: '16 / 9', objectFit: 'cover' }} />
             </div>
           )}
-          <div>
-            <h2 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em', lineHeight: 'inherit' }}>{name}</h2>
-            {tx(p.tagline, lang) && <div dir="auto" style={{ fontSize: 12.5, color: 'var(--text-2)', marginTop: 4, fontWeight: 500 }}>{tx(p.tagline, lang)}</div>}
-            {meta && <div dir="auto" style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--text-muted)', marginTop: 6 }}>{meta}</div>}
-          </div>
-          {tx(p.description, lang) && (
-            <div dir="auto" style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>{tx(p.description, lang)}</div>
-          )}
-          {highlights.length > 0 && (
-            <ul style={{ margin: 0, paddingInlineStart: 18, fontSize: 12.5, color: 'var(--text-2)', lineHeight: 1.7 }}>
-              {highlights.map((item, i) => {
-                const { title, text } = bullet(item);
-                return <li key={i} style={{ unicodeBidi: 'normal' }}>{title && <strong style={{ color: 'var(--text)', fontWeight: 650 }}>{title}: </strong>}{text}</li>;
-              })}
-            </ul>
-          )}
-          {(p.tech || []).length > 0 && (
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-              {p.tech.map((x) => <Chip key={x} mono>{x}</Chip>)}
-            </div>
-          )}
+          {!spec && head}
+          {prose}
         </div>
         {overflows && !expanded && (
           <div aria-hidden="true" style={{

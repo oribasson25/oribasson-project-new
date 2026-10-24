@@ -176,6 +176,112 @@ a { color: inherit; }
   align-items: start;
 }
 
+/* Architecture figures on the project cards. Same paper, same type. */
+.arch {
+  margin: 0;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 10px 10px 12px;
+  unicode-bidi: isolate;
+}
+[data-ui-lang="he"] .arch,
+[data-ui-lang="he"] .arch :is(.arch-group, .arch-step, .arch-row, .arch-node) {
+  unicode-bidi: isolate;
+}
+.arch-cap {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+[dir="rtl"] .arch-cap {
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.arch-group + .arch-group { margin-top: 12px; }
+.arch-group-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin: 0 0 6px;
+}
+.arch-step { display: flex; flex-direction: column; align-items: center; }
+.arch-step-gap { margin-top: 8px; }
+.arch-stem { display: block; flex: none; }
+.arch-rail { display: block; margin: 1px auto 5px; }
+.arch-line {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.arch-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 100%;
+  justify-content: center;
+}
+/* Three or more parts sit under one line, full width, so the label can be read
+   in a card. The side rule marks them as one set rather than a sequence. */
+.arch-row-stack {
+  flex-direction: column;
+  align-items: stretch;
+  border-inline-start: 1px solid var(--border);
+  margin-inline-start: 8px;
+  padding-inline-start: 8px;
+}
+.arch-row-stack .arch-node { flex-basis: auto; }
+.arch-node {
+  flex: 1 1 92px;
+  min-width: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 7px;
+  text-align: center;
+}
+.arch-label, .arch-sub { display: block; text-wrap: balance; unicode-bidi: plaintext; }
+.arch-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.arch-sub {
+  margin-top: 2px;
+  font-size: 10.5px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--text-2);
+}
+
+@keyframes archNode {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes archDraw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+.arch-motion:not(.is-in) .arch-node { opacity: 0; }
+.arch-motion:not(.is-in) .arch-line { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.arch-motion.is-in .arch-node { animation: archNode 0.42s ease both; }
+.arch-motion.is-in .arch-line {
+  stroke-dasharray: 1;
+  animation: archDraw 0.4s ease both;
+  animation-delay: var(--arch-d, 0ms);
+}
+
 /* ── phones ── */
 @media (max-width: 768px) {
   :root { --ui-zoom: 1; }
@@ -195,4 +301,6 @@ a { color: inherit; }
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+  .arch-node { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .arch-line { stroke-dashoffset: 0 !important; animation: none !important; }
 }

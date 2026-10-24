@@ -71,6 +71,7 @@ const STRINGS = {
     askAboutProject: 'Ask about it',
     readMore: 'Read more',
     showLess: 'Show less',
+    architecture: 'Architecture',
     askProjectQuestion: (name) => `Tell me about the project ${name}`,
     askJobQuestion: (role, company) => `Tell me about the ${role} role at ${company}`,
 
@@ -207,6 +208,7 @@ const STRINGS = {
     askAboutProject: 'שאלו על הפרויקט',
     readMore: 'קראו עוד',
     showLess: 'הצגת פחות',
+    architecture: 'מבנה',
     askProjectQuestion: (name) => `ספרו לי על הפרויקט ${name}`,
     askJobQuestion: (role, company) => `ספרו לי על התפקיד ${role} ב-${company}`,
 
