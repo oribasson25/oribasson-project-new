@@ -20,7 +20,7 @@ function splitHeadline(lang) {
  */
 export function Hero({
   t, lang, stacked, toolbar, input, onChange, onSend, disabled, notice,
-  chips, voice, introText, petMode, pulse,
+  chips, voice, introText, petMode, pulse, busy,
 }) {
   const reduced = useReducedMotion();
   const dir = lang === 'he' ? 'rtl' : 'ltr';
@@ -75,7 +75,7 @@ export function Hero({
 
         <div className="hero-figure">
           <div className="hero-plate" aria-hidden="true" />
-          <PetStage size={stacked ? 112 : 220} mode={petMode} pulse={pulse} voice={voice}>
+          <PetStage size={stacked ? 112 : 220} mode={petMode} pulse={pulse} busy={busy} voice={voice} tone="flat">
             {replay && <IntroBubble t={t} voice={voice} stacked />}
           </PetStage>
         </div>
