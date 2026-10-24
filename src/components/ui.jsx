@@ -137,9 +137,9 @@ export function Chip({ children, mono, style, title }) {
   const latin = typeof children === 'string' && children.trim() && !isHebrew(children);
   return (
     <span lang={latin ? 'en' : undefined} title={title} style={{
-      display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 11px',
-      borderRadius: 999, fontSize: 11.5, fontWeight: 600, lineHeight: 1.5,
-      background: 'var(--bg-hover)', color: 'var(--text-2)', border: '1px solid var(--border)',
+      display: 'inline-flex', alignItems: 'center', gap: 6, padding: '3px 10px',
+      borderRadius: 999, fontSize: 12, fontWeight: 600, lineHeight: 1.5,
+      background: 'var(--bg-app)', color: 'var(--text-2)', border: '1px solid var(--border)',
       fontFamily: mono ? 'var(--mono)' : 'inherit', whiteSpace: 'nowrap', ...style,
     }}>{children}</span>
   );
