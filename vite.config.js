@@ -44,5 +44,15 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react(), vercelFunctions()],
     server: { port: 5173 },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/')) return 'react';
+            if (id.includes('node_modules/markdown-it')) return 'markdown';
+          },
+        },
+      },
+    },
   };
 });
