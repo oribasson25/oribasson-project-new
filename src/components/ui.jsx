@@ -133,8 +133,10 @@ export function IconBtn({ onClick, title, children, danger, style, disabled }) {
 }
 
 export function Chip({ children, mono, style, title }) {
+  // Skill and tool names are the resume's English labels in both languages.
+  const latin = typeof children === 'string' && children.trim() && !isHebrew(children);
   return (
-    <span title={title} style={{
+    <span lang={latin ? 'en' : undefined} title={title} style={{
       display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 11px',
       borderRadius: 999, fontSize: 11.5, fontWeight: 600, lineHeight: 1.5,
       background: 'var(--bg-hover)', color: 'var(--text-2)', border: '1px solid var(--border)',
