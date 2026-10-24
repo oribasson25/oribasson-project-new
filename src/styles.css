@@ -467,6 +467,7 @@ a { color: inherit; }
   gap: 16px;
   align-items: start;
 }
+.project-card:focus-within { transform: translateY(-1px); }
 
 /* Architecture figures on the project cards. Same paper, same type. */
 .arch {
@@ -647,6 +648,7 @@ a { color: inherit; }
   .hero-draw { stroke-dashoffset: 0 !important; animation: none !important; }
   .hero-rise { animation: none; opacity: 1; transform: none; }
   .q-chip:hover, .q-chip:active { transform: none; }
+  .project-card { transform: none !important; }
   .send-ready:hover .send-arrow { transform: none; }
   .halo-lean { transform: none !important; }
   .home-fact { animation: none !important; transform: none !important; opacity: 1 !important; }

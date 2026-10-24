@@ -78,7 +78,8 @@ function ProjectCard({ p, t, lang, onAsk }) {
         boxShadow: hovered ? '0 0 26px rgba(13,15,20,0.06), var(--shadow)' : 'var(--shadow)',
         padding: '18px 18px 14px', display: 'flex', flexDirection: 'column', gap: 12,
         height: spec ? 'auto' : (expanded ? 'auto' : CARD_HEIGHT), minHeight: spec ? 0 : CARD_HEIGHT,
-        transition: 'border-color 0.2s, box-shadow 0.2s',
+        transform: hovered ? 'translateY(-1px)' : undefined,
+        transition: 'border-color 0.2s, box-shadow 0.2s, transform 0.2s',
       }}>
       {spec && head}
       {spec && <Architecture spec={spec} lang={lang} label={t.architecture} />}
