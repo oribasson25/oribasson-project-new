@@ -96,6 +96,7 @@ function ProjectCard({ p, t, lang, onAsk }) {
 
       {(overflows || expanded) && (
         <button type="button" onClick={() => setExpanded((v) => !v)} aria-expanded={expanded}
+          aria-label={expanded ? t.showLessAbout(name) : t.readMoreAbout(name)}
           style={{
             alignSelf: 'flex-start', display: 'inline-flex', alignItems: 'center', gap: 5,
             background: 'transparent', padding: '2px 0', fontSize: 12, fontWeight: 650, color: 'var(--text-2)',
