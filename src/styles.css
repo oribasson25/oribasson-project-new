@@ -197,6 +197,17 @@ body {
 .home-post:hover .home-post-when { color: var(--text-2); }
 #experience { scroll-margin-top: 14px; }
 
+/* A finger never sees the hover underline, so the quiet lines stay marked as links. */
+@media (hover: none) {
+  .home-index-list a,
+  .home-tools a,
+  .home-post {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--text-muted);
+  }
+}
+
 /* The figure, and one short fact beside it. On a narrow column the fact
    drops under the figure so it cannot cover him or leave the screen. */
 .home-stage {
