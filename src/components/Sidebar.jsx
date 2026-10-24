@@ -34,12 +34,12 @@ function NavButton({ active, icon, label, onClick }) {
   return (
     <button type="button" onClick={onClick} aria-current={active ? 'page' : undefined}
       style={{
-        display: 'flex', alignItems: 'center', gap: 11, height: 40, padding: '0 13px',
-        borderRadius: 11, flexShrink: 0, width: '100%',
+        display: 'flex', alignItems: 'center', gap: 10, height: 42, padding: '0 12px',
+        borderRadius: 12, flexShrink: 0, width: '100%',
         background: active ? 'var(--primary-dim)' : 'transparent',
         color: active ? 'var(--text)' : 'var(--text-2)',
         fontWeight: active ? 650 : 500,
-        fontSize: 13.5, textAlign: 'start',
+        fontSize: 14, textAlign: 'start', letterSpacing: '-0.011em',
         transition: 'background 0.18s var(--ease), color 0.18s var(--ease), border-color 0.18s var(--ease)',
         border: `1px solid ${active ? 'var(--primary-soft)' : 'transparent'}`,
       }}
@@ -72,7 +72,7 @@ export function ContactCard({ t }) {
   const c = profile.contact || {};
   const rows = CONTACT_ROWS.filter((r) => c[r.key]);
   return (
-    <div style={{ padding: '11px 13px', borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
+    <div style={{ padding: '13px 14px 12px', borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}>
       <Eyebrow style={{ fontSize: 9.5, marginBottom: 8 }}>{t.contact}</Eyebrow>
       {rows.length === 0 && !profile.cvPdf && (
         <div style={{ fontSize: 11.5, color: 'var(--text-muted)', lineHeight: 1.5 }}>{t.contactEmpty}</div>
