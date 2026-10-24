@@ -47,8 +47,12 @@ const EXIT = 420;
  * Enter, keeps it there. Reaching the line while it is leaving brings that
  * same line back. Keyboard focus holds it too. Reduced motion swaps the
  * words in place, with no slide.
+ *
+ * `hold` freezes the cycle while the recorded hello is playing. `avoidRight`
+ * keeps every line on the left while the hello bubble occupies that side.
+ * The line already on screen does not jump across when the bubble goes away.
  */
-export function HomeFacts({ lang, t }) {
+export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   const reduced = useReducedMotion();
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState('in');
@@ -56,11 +60,21 @@ export function HomeFacts({ lang, t }) {
   const [pinned, setPinned] = useState(false);
   const [keyFocus, setKeyFocus] = useState(false);
   const [hidden, setHidden] = useState(() => document.hidden);
+  const [side, setSide] = useState('left');
   const fromKeyboard = useRef(false);
   const fact = FACTS[index];
   const text = fact[lang] || fact.en;
-  const side = index % 2 === 0 ? 'left' : 'right';
-  const paused = hover || pinned || keyFocus || hidden;
+  const paused = hover || pinned || keyFocus || hidden || hold;
+
+  // A new line picks a side. While the hello bubble is on the right, every
+  // line stays on the left. Clearing the bubble does not move the line that
+  // is already up — the next one takes its own side.
+  useEffect(() => {
+    setSide(avoidRight || index % 2 === 0 ? 'left' : 'right');
+  }, [index]);
+  useEffect(() => {
+    if (avoidRight) setSide('left');
+  }, [avoidRight]);
 
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Tab') fromKeyboard.current = true; };

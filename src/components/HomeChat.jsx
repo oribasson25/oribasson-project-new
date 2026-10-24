@@ -209,7 +209,8 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
           {stacked && !(voice.heard && voice.state !== 'playing') && (
             <IntroBubble t={t} voice={voice} transcript={introText} stacked />
           )}
-          <HomeFacts lang={lang} t={t} />
+          <HomeFacts lang={lang} t={t} hold={voice.state === 'playing'}
+            avoidRight={voice.available && (!voice.heard || voice.state === 'playing')} />
         </div>
         <h1 className="hero-rise" dir={dir} style={{
           animationDelay: '0.14s',
