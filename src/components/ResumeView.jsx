@@ -35,7 +35,7 @@ function Job({ job, t, lang, onAsk }) {
       <span className="job-dot" aria-hidden="true" />
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, flexWrap: 'wrap' }}>
         <div style={{ flex: 1, minWidth: 200 }}>
-          <h3 dir="auto" style={{ margin: 0, fontFamily: 'var(--display)', fontWeight: 500, fontSize: 20, letterSpacing: '-0.02em', lineHeight: 1.2 }}>{role}</h3>
+          <h3 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em' }}>{role}</h3>
           <div dir="auto" style={{ fontSize: 12.5, color: 'var(--text-2)', marginTop: 4, fontWeight: 600 }}>
             {[company, tx(job.location, lang)].filter(Boolean).join(' · ')}
           </div>
@@ -48,7 +48,7 @@ function Job({ job, t, lang, onAsk }) {
       {highlights.length > 0 && <Bullets items={highlights} />}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginTop: 12 }}>
         {(job.tech || []).map((x) => <Chip key={x} mono>{x}</Chip>)}
-        <Btn size="sm" onClick={() => onAsk(t.askJobQuestion(role, company))} style={{ marginInlineStart: 'auto' }}>
+        <Btn size="sm" icon={Icons.sparkle} onClick={() => onAsk(t.askJobQuestion(role, company))} style={{ marginInlineStart: 'auto' }}>
           {t.askAboutExperience}
         </Btn>
       </div>
@@ -90,7 +90,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 22, minWidth: 0 }}>
           {tx(resume.summary, lang) && (
             <Section title={t.summary}>
-              <div dir="auto" className="resume-summary">{tx(resume.summary, lang)}</div>
+              <div dir="auto" style={{ fontSize: 13.5, color: 'var(--text-2)', lineHeight: 1.75, whiteSpace: 'pre-wrap' }}>{tx(resume.summary, lang)}</div>
             </Section>
           )}
           {(resume.experience || []).length > 0 && (
