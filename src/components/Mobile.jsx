@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Icons, Eyebrow } from './ui.jsx';
 import { BrandMark, ContactCard, ContactActions, LangSwitch, RecentList } from './Sidebar.jsx';
 
@@ -33,7 +33,7 @@ export function MobileBottomNav({ t, page, go, onMore, moreOpen }) {
     { id: 'more', label: t.more, icon: Icons.more, onClick: onMore },
   ];
   return (
-    <nav aria-label="Main" style={{
+    <nav aria-label={t.mainNav} style={{
       position: 'absolute', left: 14, right: 14, bottom: 'calc(12px + env(safe-area-inset-bottom))', zIndex: 50,
       height: 70, padding: 6, borderRadius: 999, display: 'flex', gap: 4,
       background: 'rgba(255,255,255,0.82)',
@@ -60,28 +60,52 @@ export function MobileBottomNav({ t, page, go, onMore, moreOpen }) {
   );
 }
 
+function focusable(root) {
+  return [...root.querySelectorAll('button, a[href], input, textarea, select, [tabindex]:not([tabindex="-1"])')]
+    .filter((el) => !el.disabled && el.getAttribute('aria-hidden') !== 'true');
+}
+
 export function MobileSheet({ open, onClose, title, children, closeLabel = 'Close' }) {
+  const dialogRef = useRef(null);
+  const restoreRef = useRef(null);
   useEffect(() => {
     if (!open) return undefined;
-    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    restoreRef.current = document.activeElement;
+    const onKey = (e) => {
+      if (e.key === 'Escape') { onClose(); return; }
+      if (e.key !== 'Tab' || !dialogRef.current) return;
+      const items = focusable(dialogRef.current);
+      if (!items.length) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
     document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
+    const closeBtn = dialogRef.current?.querySelector('[data-sheet-close]');
+    (closeBtn || dialogRef.current)?.focus();
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      const back = restoreRef.current;
+      if (back && typeof back.focus === 'function') back.focus();
+    };
   }, [open, onClose]);
   if (!open) return null;
   return (
     <>
       <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(13,15,20,0.35)', zIndex: 300 }} />
-      <div className="m-sheet fade-in" role="dialog" aria-label={title} style={{
+      <div ref={dialogRef} className="m-sheet fade-in" role="dialog" aria-modal="true" aria-label={title} tabIndex={-1} style={{
         position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 301, display: 'flex', flexDirection: 'column',
         maxHeight: 'calc(100dvh - 28px)', background: 'var(--bg-sidebar)', borderRadius: '22px 22px 0 0',
         borderTop: '1px solid var(--border)', overflow: 'hidden', boxShadow: '0 -12px 40px rgba(13,15,20,0.18)',
+        outline: 'none',
       }}>
         <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0 2px', flexShrink: 0 }}>
           <div style={{ width: 40, height: 5, borderRadius: 3, background: 'var(--border)' }} />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 16px 12px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
           <div style={{ flex: 1, fontWeight: 800, fontSize: 16 }}>{title}</div>
-          <button type="button" onClick={onClose} aria-label={closeLabel} style={{ width: 40, height: 40, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-2)', fontSize: 18 }}>▾</button>
+          <button type="button" data-sheet-close onClick={onClose} aria-label={closeLabel} style={{ width: 40, height: 40, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-2)', fontSize: 18 }}>▾</button>
         </div>
         <div style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>{children}</div>
       </div>
