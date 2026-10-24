@@ -615,7 +615,7 @@ a { color: inherit; }
   .project-fade, .read-more { display: none !important; }
   .arch-node { opacity: 1 !important; transform: none !important; animation: none !important; }
   .arch-line { stroke-dashoffset: 0 !important; animation: none !important; }
-  .hero-rise, .home-fact { animation: none; opacity: 1; transform: none; }
+  .hero-rise, .home-fact, .fade-in { animation: none; opacity: 1; transform: none; }
   .home-fact-slot,
   .home-fact-slot[data-side="left"],
   .home-fact-slot[data-side="right"] {
@@ -652,7 +652,7 @@ a { color: inherit; }
   .arch-node { opacity: 1 !important; transform: none !important; animation: none !important; }
   .arch-line { stroke-dashoffset: 0 !important; animation: none !important; }
   .hero-draw { stroke-dashoffset: 0 !important; animation: none !important; }
-  .hero-rise { animation: none; opacity: 1; transform: none; }
+  .hero-rise, .fade-in { animation: none; opacity: 1; transform: none; }
   .q-chip:hover, .q-chip:active { transform: none; }
   .project-card { transform: none !important; }
   .send-ready:hover .send-arrow { transform: none; }
