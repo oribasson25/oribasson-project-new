@@ -88,7 +88,10 @@ export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size 
   /* Looking at the cursor: only while idle, and only while the cursor is
      moving — after a pause the figure goes back to its own idle loop. */
   useEffect(() => {
-    if (!follow) return undefined;
+    if (!follow || reduced) {
+      setLook(null);
+      return undefined;
+    }
     let raf = 0;
     let settle;
     const onMove = (e) => {
@@ -116,7 +119,7 @@ export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size 
       cancelAnimationFrame(raf);
       clearTimeout(settle);
     };
-  }, [follow]);
+  }, [follow, reduced]);
 
   let row;
   let col;
