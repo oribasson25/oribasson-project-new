@@ -10,8 +10,8 @@ export function BrandMark({ lang, mark = 34, text = 19, onClick }) {
   return (
     <button type="button" onClick={onClick} style={{ display: 'flex', alignItems: 'center', gap: 11, background: 'transparent', padding: 0, textAlign: 'start' }}>
       <div style={{
-        width: mark, height: mark, borderRadius: 0, flexShrink: 0, overflow: 'hidden',
-        background: 'var(--text)', border: '1px solid var(--text)',
+        width: mark, height: mark, borderRadius: 11, flexShrink: 0, overflow: 'hidden',
+        background: 'var(--bg-card)', border: '1px solid var(--border)',
         display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
       }}>
         <Pet crop="head" size={mark - 4} />
@@ -20,7 +20,7 @@ export function BrandMark({ lang, mark = 34, text = 19, onClick }) {
           leaves this line with no strong letter of its own: it falls back to
           left-to-right and reads "בסון אורי". The line takes the language's
           direction and the two parts stay in it. */}
-      <div dir={lang === 'he' ? 'rtl' : 'ltr'} style={{ fontFamily: 'var(--display)', fontSize: text, fontWeight: 500, letterSpacing: '-0.03em', whiteSpace: 'nowrap', unicodeBidi: 'isolate' }}>
+      <div dir={lang === 'he' ? 'rtl' : 'ltr'} style={{ fontSize: text, fontWeight: 800, letterSpacing: '-0.03em', whiteSpace: 'nowrap', unicodeBidi: 'isolate' }}>
         <span style={{ color: 'var(--text)', unicodeBidi: 'normal' }}>{first}</span>
         {rest.length > 0 && <>{' '}<span style={{ color: 'var(--text-muted)', unicodeBidi: 'normal' }}>{rest.join(' ')}</span></>}
       </div>
@@ -33,14 +33,13 @@ function NavButton({ active, icon, label, onClick }) {
     <button type="button" onClick={onClick} aria-current={active ? 'page' : undefined}
       style={{
         display: 'flex', alignItems: 'center', gap: 11, height: 40, padding: '0 13px',
-        borderRadius: 0, flexShrink: 0, width: '100%',
-        background: 'transparent',
+        borderRadius: 11, flexShrink: 0, width: '100%',
+        background: active ? 'var(--primary-dim)' : 'transparent',
         color: active ? 'var(--text)' : 'var(--text-2)',
         fontWeight: active ? 650 : 500,
         fontSize: 13.5, textAlign: 'start',
         transition: 'background 0.16s, color 0.16s',
-        border: 'none',
-        borderInlineStart: active ? '2px solid var(--accent)' : '2px solid transparent',
+        border: `1px solid ${active ? 'var(--primary-soft)' : 'transparent'}`,
       }}
       onMouseEnter={(e) => { if (!active) { e.currentTarget.style.background = 'var(--bg-hover)'; e.currentTarget.style.color = 'var(--text)'; } }}
       onMouseLeave={(e) => { if (!active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-2)'; } }}
@@ -64,7 +63,7 @@ export function ContactCard({ t }) {
   const c = profile.contact || {};
   const rows = CONTACT_ROWS.filter((r) => c[r.key]);
   return (
-    <div style={{ padding: '11px 13px', borderRadius: 0, background: 'transparent', borderTop: '1px solid var(--text)' }}>
+    <div style={{ padding: '11px 13px', borderRadius: 14, background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
       <Eyebrow style={{ fontSize: 9.5, marginBottom: 8 }}>{t.contact}</Eyebrow>
       {rows.length === 0 && !profile.cvPdf && (
         <div style={{ fontSize: 11.5, color: 'var(--text-muted)', lineHeight: 1.5 }}>{t.contactEmpty}</div>
@@ -84,7 +83,7 @@ export function ContactCard({ t }) {
         <a href={profile.cvPdf} download
           style={{
             marginTop: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
-            padding: '7px 10px', borderRadius: 0, background: 'var(--primary)', color: 'var(--primary-ink)',
+            padding: '7px 10px', borderRadius: 10, background: 'var(--primary)', color: 'var(--primary-ink)',
             fontSize: 12, fontWeight: 650, textDecoration: 'none',
           }}>{Icons.download}{t.downloadCv}</a>
       )}
@@ -115,9 +114,10 @@ export function ContactActions({ t, compact, onDark }) {
           <a key={it.key} href={it.href} title={it.title} aria-label={it.title}
             target={it.external ? '_blank' : undefined} rel={it.external ? 'noopener noreferrer' : undefined}
             style={{
-              width: 34, height: 34, borderRadius: 0, flexShrink: 0,
+              width: 34, height: 34, borderRadius: '50%', flexShrink: 0,
               background: 'var(--primary)', color: 'var(--primary-ink)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 2px 10px var(--primary-glow)',
             }}>{it.icon}</a>
         ))}
       </div>
@@ -143,7 +143,7 @@ export function LangSwitch({ lang, setLang }) {
   return (
     <button type="button" onClick={() => setLang(other)} title={other === 'he' ? 'עברית' : 'English'}
       style={{
-        height: 34, minWidth: 40, padding: '0 10px', borderRadius: 0, flexShrink: 0,
+        height: 34, minWidth: 40, padding: '0 10px', borderRadius: 10, flexShrink: 0,
         background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-2)',
         fontSize: 12.5, fontWeight: 700,
       }}>{other === 'he' ? 'עב' : 'EN'}</button>
@@ -167,7 +167,7 @@ export function RecentList({ t, recents, activeChatId, onPickRecent }) {
     return (
       <button key={c.id} type="button" onClick={() => onPickRecent(c)} title={title}
         style={{
-          display: 'block', flexShrink: 0, width: '100%', textAlign: 'start', padding: '7px 13px', borderRadius: 0,
+          display: 'block', flexShrink: 0, width: '100%', textAlign: 'start', padding: '7px 13px', borderRadius: 9,
           background: on ? 'var(--bg-hover)' : 'transparent',
           color: on ? 'var(--text)' : 'var(--text-2)', fontSize: 12.5, lineHeight: 1.45,
           fontWeight: on ? 650 : 500,
@@ -229,7 +229,7 @@ export function Sidebar({ t, lang, page, go, recents, activeChatId, onPickRecent
         <div style={{ padding: '0 20px 8px', display: 'flex', alignItems: 'center', gap: 8 }}>
           <Eyebrow style={{ flex: 1 }}>{t.recent}</Eyebrow>
           <button type="button" onClick={onNewChat} title={t.newChat}
-            style={{ display: 'flex', alignItems: 'center', background: 'transparent', color: 'var(--text-muted)', padding: 2, borderRadius: 0 }}
+            style={{ display: 'flex', alignItems: 'center', background: 'transparent', color: 'var(--text-muted)', padding: 2, borderRadius: 7 }}
             onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; }}
           >{Icons.plusCircle}</button>
@@ -252,9 +252,9 @@ export function Sidebar({ t, lang, page, go, recents, activeChatId, onPickRecent
 
       <div style={{ padding: '6px 12px 14px' }}>
         {admin ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 9px', borderRadius: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 9px', borderRadius: 12 }}>
             <div style={{
-              width: 32, height: 32, borderRadius: 0, flexShrink: 0,
+              width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
               background: 'var(--primary)', color: 'var(--primary-ink)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>{Icons.shield}</div>
@@ -263,14 +263,14 @@ export function Sidebar({ t, lang, page, go, recents, activeChatId, onPickRecent
               <div style={{ fontSize: 10.5, color: 'var(--text-muted)', marginTop: 1 }}>{t.administrator}</div>
             </div>
             <button type="button" onClick={onSignOut} title={t.signOut}
-              style={{ display: 'flex', alignItems: 'center', color: 'var(--text-muted)', background: 'transparent', padding: 5, borderRadius: 0 }}
+              style={{ display: 'flex', alignItems: 'center', color: 'var(--text-muted)', background: 'transparent', padding: 5, borderRadius: 8 }}
               onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--danger)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; }}
             >{Icons.logout}</button>
           </div>
         ) : (
           <button type="button" onClick={() => go('/admin')}
-            style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '6px 9px', background: 'transparent', color: 'var(--text-muted)', fontSize: 11.5, fontWeight: 600, borderRadius: 0 }}
+            style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '6px 9px', background: 'transparent', color: 'var(--text-muted)', fontSize: 11.5, fontWeight: 600, borderRadius: 8 }}
             onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; }}
           >{Icons.shield}{t.adminSignIn}</button>
