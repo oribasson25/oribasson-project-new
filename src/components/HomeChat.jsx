@@ -154,7 +154,6 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
   const fieldRef = useRef(null);
   const dir = lang === 'he' ? 'rtl' : 'ltr';
   const first = firstName(lang);
-  const placeLine = [tx(profile.headline, lang), tx(profile.location, lang)].filter(Boolean).join(' · ');
   const post = currentPost(lang, t.present);
   const firstPerson = profile.voice === 'first-person';
   const offline = status.chat === 'unavailable';
@@ -253,13 +252,6 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         <svg className="hero-rule hero-rise" viewBox="0 0 88 8" width="88" height="8" aria-hidden="true" style={{ animationDelay: '0.22s' }}>
           <path className="arch-line hero-draw" d="M4 4 H84" pathLength="1" />
         </svg>
-        {placeLine && (
-          <div className="hero-rise" dir={dir} style={{
-            animationDelay: '0.26s',
-            marginTop: 10, maxWidth: 460, textAlign: 'center',
-            fontSize: stacked ? 13 : 13.5, fontWeight: 650, lineHeight: 1.45, color: 'var(--text)',
-          }}>{placeLine}</div>
-        )}
         {post && (post.company || post.when) && (
           <a className="home-post hero-rise" href="/resume#experience" dir={dir}
             aria-label={post.label} style={{ animationDelay: '0.3s' }}
