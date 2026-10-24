@@ -4,6 +4,7 @@ import questions from '../../content/questions.js';
 import { tx } from '../../shared/text.js';
 import { Pet, PetStage } from './Pet.jsx';
 import { IntroBubble } from './IntroBubble.jsx';
+import { HomeFacts } from './HomeFacts.jsx';
 import { Answer, Steps } from './Answer.jsx';
 import { architectures } from './architectures.js';
 import { diagramProjectId } from '../lib/projectDiagram.js';
@@ -198,14 +199,18 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         alignItems: 'center', justifyContent: 'center',
         padding: stacked ? '8px 18px 18px' : '0 34px 50px', overflowY: 'auto',
       }}>
-        <div className="hero-rise" style={{ animationDelay: '0.04s', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <PetStage size={stacked ? 148 : 230} mode={pending ? 'working' : 'idle'} pulse={chat.pulse} busy={pending} voice={voice} label={t.petJump}>
-            {!stacked && <IntroBubble t={t} voice={voice} transcript={introText} />}
-            {stacked && voice.heard && voice.state !== 'playing' && <IntroBubble t={t} voice={voice} stacked />}
-          </PetStage>
+        <div className="hero-rise" style={{ animationDelay: '0.04s', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center' }}>
+            {!stacked && <HomeFacts lang={lang} />}
+            <PetStage size={stacked ? 148 : 230} mode={pending ? 'working' : 'idle'} pulse={chat.pulse} busy={pending} voice={voice} label={t.petJump}>
+              {!stacked && <IntroBubble t={t} voice={voice} transcript={introText} />}
+              {stacked && voice.heard && voice.state !== 'playing' && <IntroBubble t={t} voice={voice} stacked />}
+            </PetStage>
+          </div>
           {stacked && !(voice.heard && voice.state !== 'playing') && (
             <IntroBubble t={t} voice={voice} transcript={introText} stacked />
           )}
+          {stacked && <HomeFacts lang={lang} stacked />}
         </div>
         <h1 className="hero-rise" dir={dir} style={{
           animationDelay: '0.14s',

@@ -92,6 +92,39 @@ body {
 .send-arrow { display: block; line-height: 1; transition: transform 0.18s ease; }
 .send-ready:hover .send-arrow { transform: translateY(-2px); }
 
+/* A short fact beside the figure. Same type, same quiet grey. */
+.home-fact {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  color: var(--text-2);
+}
+@keyframes factInLeft {
+  from { opacity: 0; transform: translateX(-14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes factOutLeft {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateX(-10px); }
+}
+@keyframes factInRight {
+  from { opacity: 0; transform: translateX(14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes factOutRight {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateX(10px); }
+}
+@keyframes factFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes factFadeOut { from { opacity: 1; } to { opacity: 0; } }
+.home-fact.is-in.from-left { animation: factInLeft 0.42s ease both; }
+.home-fact.is-out.from-left { animation: factOutLeft 0.34s ease forwards; }
+.home-fact.is-in.from-right { animation: factInRight 0.42s ease both; }
+.home-fact.is-out.from-right { animation: factOutRight 0.34s ease forwards; }
+.home-fact.is-in.from-fade { animation: factFade 0.42s ease both; }
+.home-fact.is-out.from-fade { animation: factFadeOut 0.34s ease forwards; }
+
 input, textarea, select {
   background: var(--bg-input);
   color: var(--text);
@@ -330,7 +363,7 @@ a { color: inherit; }
 
 @media print {
   .screen-only, .skip-link { display: none !important; }
-  .hero-rise { animation: none; opacity: 1; transform: none; }
+  .hero-rise, .home-fact { animation: none; opacity: 1; transform: none; }
   body {
     zoom: 1 !important;
     overflow: visible !important;
@@ -357,5 +390,6 @@ a { color: inherit; }
   .q-chip:hover, .q-chip:active { transform: none; }
   .send-ready:hover .send-arrow { transform: none; }
   .halo-lean { transform: none !important; }
+  .home-fact { animation: none !important; transform: none !important; opacity: 1 !important; }
   button:active { transform: none; }
 }
