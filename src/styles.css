@@ -92,6 +92,41 @@ body {
 .send-arrow { display: block; line-height: 1; transition: transform 0.18s ease; }
 .send-ready:hover .send-arrow { transform: translateY(-2px); }
 
+/* Project names under the questions. Text only, the same quiet grey. */
+.home-index {
+  width: min(460px, 100%);
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.home-index-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.home-index a {
+  color: var(--text-2);
+  font-size: 13.5px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  text-align: center;
+  text-decoration: none;
+  text-wrap: balance;
+}
+.home-index a:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--text-muted);
+}
+
 /* The figure, and one short fact beside it. On a narrow column the fact
    drops under the figure so it cannot cover him or leave the screen. */
 .home-stage {
@@ -419,6 +454,8 @@ a { color: inherit; }
      sizes the components set for desktop. */
   .m-root input, .m-root textarea, .m-root select { font-size: 16px !important; }
   .m-root button { -webkit-tap-highlight-color: transparent; }
+  .home-index { margin-top: 18px; padding-top: 14px; }
+  .home-index a { font-size: 13px; }
 }
 
 @media print {

@@ -5,6 +5,7 @@ import { tx } from '../../shared/text.js';
 import { Pet, PetStage } from './Pet.jsx';
 import { IntroBubble } from './IntroBubble.jsx';
 import { HomeFacts } from './HomeFacts.jsx';
+import { HomeIndex } from './HomeIndex.jsx';
 import { Answer, Steps } from './Answer.jsx';
 import { architectures } from './architectures.js';
 import { diagramProjectId } from '../lib/projectDiagram.js';
@@ -242,8 +243,10 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
           className="hero-rise"
           style={{ animationDelay: '0.52s', marginTop: stacked ? 14 : 18, width: stacked ? '100%' : 'min(760px, 100%)' }} />
 
+        <HomeIndex t={t} lang={lang} />
+
         <div className="hero-rise" dir={dir} style={{
-          animationDelay: '0.62s',
+          animationDelay: '0.7s',
           marginTop: stacked ? 16 : 26,
           maxWidth: 420,
           fontSize: 11.5,
