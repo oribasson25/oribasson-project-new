@@ -79,7 +79,7 @@ export function AdminLogin({ t, lang, setLang, onSignedIn, onBack, mobile }) {
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
               placeholder={L.password} aria-label={L.password} autoFocus autoComplete="current-password" dir="ltr" />
             {error && (
-              <div role="alert" style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--danger)', fontSize: 13, marginTop: 12, padding: '10px 12px', background: 'var(--danger-dim)', borderRadius: 'var(--r-sm)', border: '1px solid rgba(220,38,38,0.2)', lineHeight: 1.5 }}>
+              <div role="alert" style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--danger-ink)', fontSize: 13, marginTop: 12, padding: '10px 12px', background: 'var(--danger-dim)', borderRadius: 'var(--r-sm)', border: '1px solid rgba(220,38,38,0.2)', lineHeight: 1.5 }}>
                 {error}
               </div>
             )}

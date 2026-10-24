@@ -20,6 +20,8 @@
   --success: #16a34a;
   --danger: #dc2626;
   --danger-dim: rgba(220, 38, 38, 0.08);
+  /* The same red, darker, so it stays readable on the tinted panel. */
+  --danger-ink: #b91c1c;
   --teal: #0d9488;
   --violet: #6d5ce0;
 

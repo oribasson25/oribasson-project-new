@@ -364,7 +364,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
               <Pet pulse={chat.pulse} size={58} />
               <div role="alert" dir={dir} style={{
                 flex: 1, background: 'var(--danger-dim)', border: '1px solid rgba(220,38,38,0.25)',
-                color: 'var(--danger)', padding: '9px 13px', borderRadius: 'var(--r-md)',
+                color: 'var(--danger-ink)', padding: '9px 13px', borderRadius: 'var(--r-md)',
                 fontSize: 12.5, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 6,
               }}>
                 <span style={{ flex: 1, minWidth: 160 }}>{t.errors[error] || t.errors.error}</span>
