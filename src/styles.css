@@ -308,6 +308,22 @@ a { color: inherit; }
   .m-root button { -webkit-tap-highlight-color: transparent; }
 }
 
+@media print {
+  .screen-only, .skip-link { display: none !important; }
+  body {
+    zoom: 1 !important;
+    overflow: visible !important;
+    height: auto !important;
+    background: #fff;
+  }
+  #root, #root > div, .m-app, main, [data-scroller] {
+    height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+  .m-root main { padding: 0 !important; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

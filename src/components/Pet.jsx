@@ -184,7 +184,7 @@ export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size 
 export function PetWatermark({ size = 560, style }) {
   const w = (size * CW) / CH;
   return (
-    <div aria-hidden="true" style={{
+    <div className="screen-only" aria-hidden="true" style={{
       position: 'absolute', pointerEvents: 'none', userSelect: 'none',
       width: w, height: size, opacity: 0.035, filter: 'grayscale(1)',
       backgroundImage: `url(${SHEET})`, backgroundRepeat: 'no-repeat',

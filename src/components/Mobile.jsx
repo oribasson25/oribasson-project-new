@@ -6,7 +6,7 @@ import { BrandMark, ContactCard, ContactActions, LangSwitch, RecentList } from '
 
 export function MobileTopBar({ t, lang, setLang, go, home }) {
   return (
-    <div style={{ height: 56, display: 'flex', alignItems: 'center', gap: 8, padding: '0 12px', flexShrink: 0, borderBottom: '1px solid var(--border)', background: 'var(--bg-sidebar)' }}>
+    <div className="screen-only" style={{ height: 56, display: 'flex', alignItems: 'center', gap: 8, padding: '0 12px', flexShrink: 0, borderBottom: '1px solid var(--border)', background: 'var(--bg-sidebar)' }}>
       <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
         <BrandMark lang={lang} mark={30} text={17} onClick={() => go('/')} />
       </div>
@@ -33,7 +33,7 @@ export function MobileBottomNav({ t, page, go, onMore, moreOpen }) {
     { id: 'more', label: t.more, icon: Icons.more, onClick: onMore },
   ];
   return (
-    <nav aria-label={t.mainNav} style={{
+    <nav aria-label={t.mainNav} className="screen-only" style={{
       position: 'absolute', left: 14, right: 14, bottom: 'calc(12px + env(safe-area-inset-bottom))', zIndex: 50,
       height: 70, padding: 6, borderRadius: 999, display: 'flex', gap: 4,
       background: 'rgba(255,255,255,0.82)',
@@ -93,8 +93,8 @@ export function MobileSheet({ open, onClose, title, children, closeLabel = 'Clos
   if (!open) return null;
   return (
     <>
-      <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(13,15,20,0.35)', zIndex: 300 }} />
-      <div ref={dialogRef} className="m-sheet fade-in" role="dialog" aria-modal="true" aria-label={title} tabIndex={-1} style={{
+      <div className="screen-only" onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(13,15,20,0.35)', zIndex: 300 }} />
+      <div ref={dialogRef} className="m-sheet fade-in screen-only" role="dialog" aria-modal="true" aria-label={title} tabIndex={-1} style={{
         position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 301, display: 'flex', flexDirection: 'column',
         maxHeight: 'calc(100dvh - 28px)', background: 'var(--bg-sidebar)', borderRadius: '22px 22px 0 0',
         borderTop: '1px solid var(--border)', overflow: 'hidden', boxShadow: '0 -12px 40px rgba(13,15,20,0.18)',

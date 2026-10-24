@@ -196,7 +196,7 @@ export function Sidebar({ t, lang, page, go, recents, activeChatId, onPickRecent
   ];
 
   return (
-    <div style={{
+    <div className="screen-only" style={{
       width: 238, flexShrink: 0, background: 'var(--bg-sidebar)',
       borderRight: '1px solid var(--border)', display: 'flex', flexDirection: 'column',
       height: 'calc(100vh / var(--ui-zoom))',
