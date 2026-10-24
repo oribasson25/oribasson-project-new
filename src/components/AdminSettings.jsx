@@ -2,6 +2,26 @@ import { useEffect, useState } from 'react';
 import { tx } from '../../shared/text.js';
 import { PageHeader, Eyebrow, Btn, StatusDot, Section } from './ui.jsx';
 
+function EyeIcon({ off }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {off ? (
+        <>
+          <path d="M3 3l18 18" />
+          <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8" />
+          <path d="M9.9 5.1A10.8 10.8 0 0 1 12 5c5 0 9.3 3.1 11 7a11 11 0 0 1-2.2 3.2" />
+          <path d="M6.1 6.1C4.2 7.3 2.6 9 1 12c1.7 3.9 6 7 11 7 1.3 0 2.5-.2 3.6-.6" />
+        </>
+      ) : (
+        <>
+          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+          <circle cx="12" cy="12" r="3" />
+        </>
+      )}
+    </svg>
+  );
+}
+
 function Toggle({ on, onChange, label }) {
   return (
     <button type="button" role="switch" aria-checked={on} aria-label={label} onClick={() => onChange(!on)}
@@ -116,9 +136,11 @@ export function AdminSettings({ t, lang, onUnauthorized, onChanged, stacked }) {
                     onChange={(e) => { setApiKey(e.target.value); setMessage(null); }}
                     placeholder={settings && settings.hasKey ? S.replaceKey : S.keyPlaceholder}
                     autoComplete="off" spellCheck={false} style={{ flex: 1, fontFamily: apiKey ? 'var(--mono)' : 'inherit' }} />
-                  <button type="button" onClick={() => setShowKey((v) => !v)} title={showKey ? 'Hide' : 'Show'}
-                    style={{ background: 'var(--bg-input)', color: 'var(--text-2)', padding: '8px 12px', borderRadius: 'var(--r-md)', border: '1px solid var(--border)', fontSize: 16 }}>
-                    {showKey ? '🙈' : '👁'}
+                  <button type="button" onClick={() => setShowKey((v) => !v)}
+                    title={showKey ? S.hideKey : S.showKey} aria-label={showKey ? S.hideKey : S.showKey}
+                    aria-pressed={showKey}
+                    style={{ background: 'var(--bg-input)', color: 'var(--text-2)', padding: '8px 12px', borderRadius: 'var(--r-md)', border: '1px solid var(--border)', display: 'flex' }}>
+                    <EyeIcon off={showKey} />
                   </button>
                 </div>
               </div>
