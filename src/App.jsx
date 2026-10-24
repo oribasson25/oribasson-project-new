@@ -147,7 +147,7 @@ export default function App() {
           <main id="main" tabIndex={-1} style={{ flex: 1, minHeight: 0, display: 'flex', paddingBottom: navSpace }}>{home(true)}</main>
         ) : (
           <main id="main" tabIndex={-1} style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `18px 14px calc(28px + ${navSpace})` }}>
-            {title && <h1 dir="auto" style={{ margin: '0 0 14px', fontSize: 26, fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 'normal' }}>{title}</h1>}
+            {title && <h1 className="page-title" dir="auto">{title}</h1>}
             <div key={page} className="page-in">{view(true)}</div>
           </main>
         )}

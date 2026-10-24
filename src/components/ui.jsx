@@ -45,7 +45,7 @@ export function Eyebrow({ children, style }) {
     <div dir="auto" style={he
       ? { fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', ...style }
       : {
-          fontFamily: 'var(--mono)', fontSize: 10.5, fontWeight: 600, letterSpacing: '0.16em',
+          fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 600, letterSpacing: '0.14em',
           textTransform: 'uppercase', color: 'var(--text-muted)', ...style,
         }}>{children}</div>
   );
@@ -55,7 +55,7 @@ export function Eyebrow({ children, style }) {
 export function Crumbs({ trail, right }) {
   return (
     <div style={{
-      height: 54, flexShrink: 0, display: 'flex', alignItems: 'center', gap: 9,
+      height: 56, flexShrink: 0, display: 'flex', alignItems: 'center', gap: 10,
       padding: '0 34px', borderBottom: '1px solid var(--border)',
       background: 'var(--bg-app)', position: 'relative', zIndex: 2,
     }}>
@@ -63,7 +63,8 @@ export function Crumbs({ trail, right }) {
         <span key={i} style={{ display: 'contents' }}>
           {i > 0 && <span style={{ color: 'var(--text-muted)', fontSize: 13, opacity: 0.6 }}>/</span>}
           <span dir="auto" style={{
-            fontSize: 13, fontWeight: i === all.length - 1 ? 600 : 500,
+            fontSize: 13.5, fontWeight: i === all.length - 1 ? 650 : 500,
+            letterSpacing: i === all.length - 1 ? '-0.01em' : '0',
             color: i === all.length - 1 ? 'var(--text)' : 'var(--text-2)',
             maxWidth: 260, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
           }}>{part}</span>
@@ -74,15 +75,15 @@ export function Crumbs({ trail, right }) {
   );
 }
 
-export function PageHeader({ eyebrow, title, subtitle, actions, size = 38 }) {
+export function PageHeader({ eyebrow, title, subtitle, actions, size = 36 }) {
   return (
-    <div style={{ marginBottom: 24 }}>
-      {eyebrow && <Eyebrow style={{ marginBottom: 10 }}>{eyebrow}</Eyebrow>}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
-        <h1 dir="auto" style={{ margin: 0, fontSize: size, fontWeight: 700, letterSpacing: '-0.035em', lineHeight: 1.08, color: 'var(--text)' }}>{title}</h1>
-        {actions && <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>{actions}</div>}
+    <div style={{ marginBottom: 28 }}>
+      {eyebrow && <Eyebrow style={{ marginBottom: 12 }}>{eyebrow}</Eyebrow>}
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
+        <h1 dir="auto" style={{ margin: 0, fontSize: size, fontWeight: 750, letterSpacing: '-0.04em', lineHeight: 1.04, color: 'var(--text)' }}>{title}</h1>
+        {actions && <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', paddingBottom: 2 }}>{actions}</div>}
       </div>
-      {subtitle && <div dir="auto" style={{ color: 'var(--text-2)', fontSize: 13, marginTop: 10, fontWeight: 500 }}>{subtitle}</div>}
+      {subtitle && <div dir="auto" style={{ color: 'var(--text-2)', fontSize: 14.5, marginTop: 8, fontWeight: 500, lineHeight: 1.45 }}>{subtitle}</div>}
     </div>
   );
 }

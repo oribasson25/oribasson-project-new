@@ -178,12 +178,19 @@ body {
 
 /* The line under a phone's page title: the same subtitle the desktop header shows. */
 .page-lead {
-  margin: -6px 0 16px;
+  margin: -2px 0 18px;
   max-width: 36em;
   color: var(--text-2);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   line-height: 1.45;
+}
+.page-title {
+  margin: 0 0 16px;
+  font-size: 28px;
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
 }
 
 #experience { scroll-margin-top: 14px; }
