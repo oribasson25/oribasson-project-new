@@ -89,7 +89,8 @@ body {
   animation: archDraw 0.75s ease 0.28s forwards;
 }
 
-.q-chip:hover {
+.q-chip:hover,
+.q-chip:focus-visible {
   transform: translateY(-1px);
   box-shadow: var(--shadow);
 }
@@ -655,7 +656,7 @@ a { color: inherit; }
   .arch-line { stroke-dashoffset: 0 !important; animation: none !important; }
   .hero-draw { stroke-dashoffset: 0 !important; animation: none !important; }
   .hero-rise, .fade-in, .page-in { animation: none; opacity: 1; transform: none; }
-  .q-chip:hover, .q-chip:active { transform: none; }
+  .q-chip:hover, .q-chip:focus-visible, .q-chip:active { transform: none; }
   .project-card { transform: none !important; }
   .send-ready:hover .send-arrow { transform: none; }
   .halo-lean { transform: none !important; }
