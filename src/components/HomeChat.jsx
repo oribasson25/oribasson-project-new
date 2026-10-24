@@ -331,7 +331,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
             {t.poweredBy(status.model)}
           </div>
         </div>
-        <button type="button" onClick={chat.reset}
+        <button type="button" onClick={chat.reset} className="thread-action"
           style={{
             fontSize: 11.5, fontWeight: 650, padding: '6px 12px', borderRadius: 10, flexShrink: 0,
             background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-2)',
@@ -369,7 +369,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
               }}>
                 <span style={{ flex: 1, minWidth: 160 }}>{t.errors[error] || t.errors.error}</span>
                 {error !== 'refusal' && error !== 'unavailable' && (
-                  <button type="button" onClick={chat.retry}
+                  <button type="button" onClick={chat.retry} className="thread-action"
                     style={{ background: 'var(--bg-card)', border: '1px solid rgba(220,38,38,0.3)', color: 'var(--danger)', borderRadius: 999, padding: '5px 12px', fontSize: 12, fontWeight: 650 }}>
                     {t.retry}
                   </button>

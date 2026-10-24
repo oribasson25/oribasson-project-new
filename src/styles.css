@@ -599,6 +599,7 @@ a { color: inherit; }
   .btn-sm { min-height: 44px; }
   .recent-row { min-height: 44px; }
   .login-back { min-height: 44px; }
+  .thread-action { min-height: 44px; }
 }
 
 @media print {

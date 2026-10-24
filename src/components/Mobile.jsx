@@ -107,7 +107,7 @@ export function MobileSheet({ open, onClose, title, children, closeLabel = 'Clos
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 16px 12px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
           <div style={{ flex: 1, fontWeight: 800, fontSize: 16 }}>{title}</div>
-          <button type="button" data-sheet-close onClick={onClose} aria-label={closeLabel} style={{ width: 40, height: 40, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-2)', fontSize: 18 }}>▾</button>
+          <button type="button" data-sheet-close onClick={onClose} aria-label={closeLabel} style={{ width: 44, height: 44, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-2)', fontSize: 18 }}>▾</button>
         </div>
         <div style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>{children}</div>
       </div>
