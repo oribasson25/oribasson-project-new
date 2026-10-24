@@ -14,6 +14,20 @@ md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
   return defaultLink(tokens, idx, options, env, self);
 };
 
-export function renderMarkdown(text) {
-  return md.render(text || '');
+const defaultClose = md.renderer.rules.link_close || ((tokens, idx, options, env, self) => self.renderToken(tokens, idx, options));
+
+function escapeText(value) {
+  return String(value).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+}
+
+// The visible link text stays as the model wrote it. The note is only for
+// someone who cannot see that the link leaves the conversation.
+md.renderer.rules.link_close = (tokens, idx, options, env, self) => {
+  const note = env && env.newTab ? String(env.newTab).trim() : '';
+  const extra = note ? `<span class="sr-only"> ${escapeText(note)}</span>` : '';
+  return extra + defaultClose(tokens, idx, options, env, self);
+};
+
+export function renderMarkdown(text, env) {
+  return md.render(text || '', env || {});
 }

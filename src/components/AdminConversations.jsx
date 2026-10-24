@@ -69,7 +69,7 @@ function Thread({ id, t, lang, onBack, onDeleted, onUnauthorized }) {
                 alignSelf: 'stretch', background: 'var(--bg-card)', border: '1px solid var(--border)',
                 padding: '12px 15px', borderRadius: '16px 16px 16px 4px', fontSize: 13.5,
               }}>
-                <div className="md" dangerouslySetInnerHTML={{ __html: renderMarkdown(stripProjectMarkers(m.content)) }} />
+                <div className="md" dangerouslySetInnerHTML={{ __html: renderMarkdown(stripProjectMarkers(m.content), { newTab: t.newTab }) }} />
               </div>
             )))}
           </div>

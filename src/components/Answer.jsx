@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { renderMarkdown } from '../lib/markdown.js';
 import { stripProjectMarkers } from '../lib/projectDiagram.js';
+import { strings } from '../i18n.js';
 import { useReducedMotion } from '../lib/hooks.js';
 import { Pet } from './Pet.jsx';
 import { Architecture } from './Architecture.jsx';
@@ -137,10 +138,15 @@ export function Answer({ content, streaming, onRevealed, diagram, lang, diagramL
   const visible = shown < content.length ? content.slice(0, shown) : content;
   const html = useMemo(() => {
     const text = stripProjectMarkers(visible);
-    const out = renderMarkdown(writing ? closeOpen(text) : text);
+    const out = renderMarkdown(writing ? closeOpen(text) : text, {
+      newTab: strings(lang === 'he' ? 'he' : 'en').newTab,
+    });
     // The caret goes before the whole run of closing tags, so it follows the last word even inside a list.
-    return writing ? out.replace(/((?:<\/[a-z0-9]+>\s*)+)$/i, '<span class="caret"></span>$1') : out;
-  }, [visible, writing]);
+    // A new-tab note sits inside the link; the caret stays in front of that note.
+    return writing
+      ? out.replace(/((?:<span class="sr-only">[\s\S]*?<\/span>)?(?:<\/[a-z0-9]+>\s*)+)$/i, '<span class="caret"></span>$1')
+      : out;
+  }, [visible, writing, lang]);
 
   useLayoutEffect(() => {
     if (live && mdRef.current) animateEntrances(mdRef.current, trail.current, performance.now());
