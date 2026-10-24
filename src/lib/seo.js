@@ -147,7 +147,7 @@ export function useSeo(page, lang) {
     setMeta('name', 'twitter:description', desc);
     setMeta('property', 'og:locale', lang === 'he' ? 'he_IL' : 'en_US');
     setMeta('name', 'robots', admin ? 'noindex, nofollow' : 'index, follow');
-    setMeta('name', 'theme-color', page === 'chat' ? '#07080d' : '#f2f4f8');
+    setMeta('name', 'theme-color', '#f3efe6');
     setLink('canonical', abs(path));
     const ld = document.getElementById('site-jsonld');
     if (ld) ld.textContent = JSON.stringify(jsonLd(admin ? 'chat' : page));

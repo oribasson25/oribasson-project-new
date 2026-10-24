@@ -4,15 +4,12 @@ import { BrandMark, ContactCard, ContactActions, LangSwitch, RecentList } from '
 
 /* 8Legs' phone shell: a top bar, the screen, and four stops along the bottom. */
 
-export function MobileTopBar({ t, lang, setLang, go, home, onDark }) {
+export function MobileTopBar({ t, lang, setLang, go, home }) {
   return (
     <div style={{
       height: 56, display: 'flex', alignItems: 'center', gap: 8, padding: '0 12px', flexShrink: 0,
-      borderBottom: onDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid var(--border)',
-      background: onDark ? 'rgba(7,8,13,0.78)' : 'var(--bg-sidebar)',
-      backdropFilter: onDark ? 'blur(16px)' : undefined,
-      WebkitBackdropFilter: onDark ? 'blur(16px)' : undefined,
-      ...(onDark ? { '--text': '#f5f7fb', '--text-muted': 'rgba(245,247,251,0.62)', '--bg-card': 'rgba(255,255,255,0.08)', '--border': 'rgba(255,255,255,0.16)', color: '#f5f7fb' } : null),
+      borderBottom: '1px solid var(--border)',
+      background: 'var(--bg-app)',
     }}>
       <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
         <BrandMark lang={lang} mark={30} text={17} onClick={() => go('/')} />
