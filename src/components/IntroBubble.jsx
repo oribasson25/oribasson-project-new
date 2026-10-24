@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useReducedMotion } from '../lib/hooks.js';
 
 /*
  * The speech bubble beside Ori that offers the recorded hello, then shows
@@ -51,20 +52,22 @@ function Tail({ side }) {
 export function IntroBubble({ t, voice, transcript, stacked }) {
   const { state, heard, duration, play, stop, dismiss, levelRef, audioRef } = voice;
   const playing = state === 'playing';
+  const reduced = useReducedMotion();
   const [, setTick] = useState(0);
 
-  // Captions, waveform and progress follow the audio at ~12 frames a second.
+  // Captions and progress follow the audio. The bars only dance when motion is allowed.
   useEffect(() => {
     if (!playing) return undefined;
     let raf = 0;
     let last = 0;
+    const gap = reduced ? 250 : 80;
     const loop = (now) => {
-      if (now - last > 80) { last = now; setTick((x) => x + 1); }
+      if (now - last > gap) { last = now; setTick((x) => x + 1); }
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-  }, [playing]);
+  }, [playing, reduced]);
 
   // Escape waves the offer away, or stops the recording while it is playing.
   // An open dialog already uses Escape, so this stays out of its way.
@@ -117,7 +120,8 @@ export function IntroBubble({ t, voice, transcript, stacked }) {
             {[0.55, 1, 0.75, 0.9].map((k, i) => (
               <span key={i} style={{
                 width: 3, borderRadius: 2, background: 'var(--primary)',
-                height: 5 + Math.round(level * 20 * k * (0.75 + Math.random() * 0.25)), transition: 'height 0.08s',
+                height: reduced ? Math.round(8 + 14 * k) : 5 + Math.round(level * 20 * k * (0.75 + Math.random() * 0.25)),
+                transition: reduced ? 'none' : 'height 0.08s',
               }} />
             ))}
           </div>
