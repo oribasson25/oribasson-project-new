@@ -34,7 +34,7 @@ function Job({ job, t, lang, onAsk }) {
     <div style={{ padding: '16px 20px', borderTop: '1px solid var(--border)' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, flexWrap: 'wrap' }}>
         <div style={{ flex: 1, minWidth: 200 }}>
-          <div dir="auto" style={{ fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em' }}>{role}</div>
+          <h3 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em', lineHeight: 'inherit' }}>{role}</h3>
           <div dir="auto" style={{ fontSize: 12.5, color: 'var(--text-2)', marginTop: 4, fontWeight: 600 }}>
             {[company, tx(job.location, lang)].filter(Boolean).join(' · ')}
           </div>

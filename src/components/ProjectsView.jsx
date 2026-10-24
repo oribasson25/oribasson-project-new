@@ -49,7 +49,7 @@ function ProjectCard({ p, t, lang, onAsk }) {
             </div>
           )}
           <div>
-            <div dir="auto" style={{ fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em' }}>{name}</div>
+            <h2 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em', lineHeight: 'inherit' }}>{name}</h2>
             {tx(p.tagline, lang) && <div dir="auto" style={{ fontSize: 12.5, color: 'var(--text-2)', marginTop: 4, fontWeight: 500 }}>{tx(p.tagline, lang)}</div>}
             {meta && <div dir="auto" style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--text-muted)', marginTop: 6 }}>{meta}</div>}
           </div>

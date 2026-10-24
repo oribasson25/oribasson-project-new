@@ -191,10 +191,10 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         {stacked && !(voice.heard && voice.state !== 'playing') && (
           <IntroBubble t={t} voice={voice} transcript={introText} stacked />
         )}
-        <div dir={dir} style={{
-          fontSize: stacked ? 25 : 30, fontWeight: 800, letterSpacing: '-0.035em',
-          textAlign: 'center', marginTop: 6,
-        }}>{t.hello(first)}</div>
+        <h1 dir={dir} style={{
+          margin: 0, marginTop: 6, fontSize: stacked ? 25 : 30, fontWeight: 800, letterSpacing: '-0.035em',
+          lineHeight: 'normal', textAlign: 'center',
+        }}>{t.hello(first)}</h1>
         <div dir={dir} style={{
           fontSize: 13.5, color: 'var(--text-2)', textAlign: 'center',
           marginTop: stacked ? 6 : 9, lineHeight: 1.65, maxWidth: 520,

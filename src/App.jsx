@@ -120,7 +120,7 @@ export default function App() {
           <main id="main" style={{ flex: 1, minHeight: 0, display: 'flex', paddingBottom: navSpace }}>{home(true)}</main>
         ) : (
           <main id="main" style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `18px 14px calc(28px + ${navSpace})` }}>
-            {title && <div dir="auto" style={{ fontSize: 26, fontWeight: 800, letterSpacing: '-0.03em', marginBottom: 14 }}>{title}</div>}
+            {title && <h1 dir="auto" style={{ margin: '0 0 14px', fontSize: 26, fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 'normal' }}>{title}</h1>}
             {view(true)}
           </main>
         )}
