@@ -43,6 +43,8 @@
   /* 8Legs draws the whole interface at 72%. `zoom` scales viewport units
      too, so full-height boxes divide by it to keep filling the screen. */
   --ui-zoom: 0.72;
+
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }

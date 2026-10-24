@@ -160,6 +160,7 @@ export function useSeo(page, lang) {
     setMeta('property', 'og:locale', lang === 'he' ? 'he_IL' : 'en_US');
     setMeta('name', 'robots', admin ? 'noindex, nofollow' : 'index, follow');
     setMeta('name', 'theme-color', '#f2f4f8');
+    setMeta('name', 'color-scheme', 'light');
     setLink('canonical', abs(path));
     if (profile.contact?.linkedin) setLink('me', profile.contact.linkedin);
     const ld = document.getElementById('site-jsonld');
