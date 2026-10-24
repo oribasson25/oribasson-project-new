@@ -69,9 +69,10 @@ function ProjectCard({ p, t, lang, onAsk }) {
   );
 
   return (
-    <div className="fade-in"
+    <div id={p.id || undefined} className="fade-in"
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
       style={{
+        scrollMarginTop: 18,
         background: 'var(--bg-card)', borderRadius: 'var(--r-lg)',
         border: `1px solid ${hovered ? 'var(--primary-soft)' : 'var(--border)'}`,
         boxShadow: hovered ? '0 0 26px rgba(13,15,20,0.06), var(--shadow)' : 'var(--shadow)',

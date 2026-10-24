@@ -70,6 +70,11 @@ export default function App() {
     if (!main) return;
     main.scrollTop = 0;
     main.querySelector('[data-scroller]')?.scrollTo(0, 0);
+    const hash = window.location.hash.replace(/^#/, '');
+    if (hash) {
+      const target = main.querySelector(`[id="${CSS.escape(hash)}"]`);
+      if (target) target.scrollIntoView({ block: 'start' });
+    }
     if (firstPage.current) {
       firstPage.current = false;
       return;

@@ -125,7 +125,7 @@ export function jsonLd(page) {
         position: i + 1,
         name: tx(p.name, 'en'),
         description: tx(p.description, 'en'),
-        url: p.links?.live || undefined,
+        url: p.links?.live || (p.id ? `${ORIGIN}/projects#${p.id}` : undefined),
       })),
     });
   }
