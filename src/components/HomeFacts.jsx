@@ -44,8 +44,9 @@ const EXIT = 420;
  * the right. When the column is too narrow to hold a line beside the figure,
  * it sits under him and still arrives from the side, by a few pixels, so it
  * cannot leave the screen. A mouse hover holds the current line; a click, or
- * Enter, keeps it there. Keyboard focus holds it too. Reduced motion swaps
- * the words in place, with no slide.
+ * Enter, keeps it there. Reaching the line while it is leaving brings that
+ * same line back. Keyboard focus holds it too. Reduced motion swaps the
+ * words in place, with no slide.
  */
 export function HomeFacts({ lang, t }) {
   const reduced = useReducedMotion();
@@ -76,7 +77,12 @@ export function HomeFacts({ lang, t }) {
   }, []);
 
   useEffect(() => {
-    // A fade-out already underway is allowed to finish, then the next line waits.
+    // Caught on the way out: bring the same line back, instead of finishing
+    // the exit and holding the next one.
+    if (paused && phase === 'out') {
+      setPhase('in');
+      return undefined;
+    }
     if (paused && phase === 'in') return undefined;
     const wait = reduced ? 5600 : (phase === 'in' ? HOLD : EXIT);
     const timer = setTimeout(() => {
