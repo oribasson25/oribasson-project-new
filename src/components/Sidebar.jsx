@@ -40,7 +40,7 @@ function NavButton({ active, icon, label, onClick }) {
         color: active ? 'var(--text)' : 'var(--text-2)',
         fontWeight: active ? 650 : 500,
         fontSize: 13.5, textAlign: 'start',
-        transition: 'background 0.16s, color 0.16s',
+        transition: 'background 0.18s var(--ease), color 0.18s var(--ease), border-color 0.18s var(--ease)',
         border: `1px solid ${active ? 'var(--primary-soft)' : 'transparent'}`,
       }}
       onMouseEnter={(e) => { if (!active) { e.currentTarget.style.background = 'var(--bg-hover)'; e.currentTarget.style.color = 'var(--text)'; } }}

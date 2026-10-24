@@ -108,7 +108,7 @@ export function Btn({ variant = 'ghost', icon, children, onClick, title, disable
         position: 'relative',
         padding: pad, borderRadius: 'var(--r-md)', fontSize: font, fontWeight: 600,
         whiteSpace: 'nowrap', cursor: disabled ? 'default' : 'pointer', textDecoration: 'none',
-        opacity: disabled ? 0.45 : 1, transition: 'background 0.16s, color 0.16s, border-color 0.16s, box-shadow 0.16s',
+        opacity: disabled ? 0.45 : 1, transition: 'background 0.18s var(--ease), color 0.18s var(--ease), border-color 0.18s var(--ease), box-shadow 0.18s var(--ease)',
         ...look, ...style,
       }}>
       {icon && <span style={{ display: 'flex', alignItems: 'center' }}>{icon}</span>}
@@ -156,14 +156,12 @@ export function SegTabs({ items, value, onChange, style, small, label }) {
         return (
           <button key={it.id} type="button" onClick={() => onChange(it.id)} title={it.title} lang={it.lang}
             aria-pressed={on} aria-label={it.title || it.label}
+            className={on ? 'seg-tab is-on' : 'seg-tab'}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 6,
               padding: small ? '4px 10px' : '6px 14px', borderRadius: 8, fontSize: small ? 12 : 12.5,
               fontWeight: on ? 700 : 600,
-              background: on ? 'var(--sel)' : 'transparent',
-              color: on ? 'var(--sel-ink)' : 'var(--text-2)',
               border: '1px solid transparent',
-              transition: 'background 0.15s, color 0.15s',
             }}>{it.label}</button>
         );
       })}
