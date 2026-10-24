@@ -451,7 +451,7 @@ a { color: inherit; }
 .resume-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 22px;
+  gap: 26px;
   align-items: start;
 }
 @container (min-width: 860px) {

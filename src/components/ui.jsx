@@ -195,12 +195,12 @@ export function StatusDot({ on, size = 7 }) {
 }
 
 /** A section card: the shape 8Legs' Settings is built from. */
-export function Section({ id, title, children, right, pad = '14px 18px' }) {
+export function Section({ id, title, children, right, pad = '16px 22px' }) {
   return (
     <div id={id} style={{ background: 'var(--bg-card)', borderRadius: 'var(--r-lg)', border: '1px solid var(--border)', overflow: 'hidden' }}>
       {title && (
         <div style={{
-          padding: '16px 20px 14px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 10,
+          padding: '18px 22px 15px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 10,
           fontSize: 15, fontWeight: 700, letterSpacing: '-0.01em', color: 'var(--text)',
         }}>
           <h2 tabIndex={id ? -1 : undefined} dir="auto" style={{ flex: 1, minWidth: 0, margin: 0, fontSize: 15, fontWeight: 700, letterSpacing: '-0.01em', lineHeight: 'inherit' }}>{title}</h2>

@@ -20,7 +20,7 @@ function Bullets({ items, size = 13 }) {
   return (
     // The list takes the page's direction, not its first word's: a Hebrew
     // bullet that opens with "Pipelines" must not flip to the left.
-    <ul style={{ margin: '8px 0 0', paddingInlineStart: 18, fontSize: size, color: 'var(--text-2)', lineHeight: 1.7 }}>
+    <ul style={{ margin: '10px 0 0', paddingInlineStart: 18, fontSize: size, color: 'var(--text-2)', lineHeight: 1.65 }}>
       {items.map((item, i) => {
         const { title, text } = bullet(item);
         return <li key={i} style={{ marginBottom: 3, unicodeBidi: 'normal' }}>{title && <strong style={{ color: 'var(--text)', fontWeight: 650 }}>{title}: </strong>}{text}</li>;
@@ -40,21 +40,21 @@ function Job({ job, t, lang, onAsk }) {
   const company = tx(job.company, lang);
   const highlights = tl(job.highlights, lang);
   return (
-    <div style={{ padding: '16px 20px', borderTop: '1px solid var(--border)' }}>
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, flexWrap: 'wrap' }}>
+    <div style={{ padding: '18px 22px 20px', borderTop: '1px solid var(--border)' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap' }}>
         <div style={{ flex: 1, minWidth: 200 }}>
-          <h3 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 15, letterSpacing: '-0.01em', lineHeight: 'inherit' }}>{role}</h3>
-          <div dir="auto" style={{ fontSize: 12.5, color: 'var(--text-2)', marginTop: 4, fontWeight: 600 }}>
+          <h3 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 16, letterSpacing: '-0.02em', lineHeight: 1.3 }}>{role}</h3>
+          <div dir="auto" style={{ fontSize: 13, color: 'var(--text-2)', marginTop: 5, fontWeight: 600 }}>
             {[company, tx(job.location, lang)].filter(Boolean).join(' · ')}
           </div>
         </div>
         <div dir="ltr" style={{ fontFamily: 'var(--mono)', fontSize: 11.5, color: 'var(--text-muted)', paddingTop: 3 }}><Period start={job.start} end={job.end} present={t.present} /></div>
       </div>
       {tx(job.summary, lang) && (
-        <div dir="auto" style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.7, marginTop: 10 }}>{tx(job.summary, lang)}</div>
+        <div dir="auto" style={{ fontSize: 13.5, color: 'var(--text-2)', lineHeight: 1.65, marginTop: 12 }}>{tx(job.summary, lang)}</div>
       )}
       {highlights.length > 0 && <Bullets items={highlights} />}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginTop: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginTop: 14 }}>
         {(job.tech || []).map((x) => <Chip key={x} mono>{x}</Chip>)}
         <Btn size="sm" icon={Icons.sparkle} onClick={() => onAsk(t.askJobQuestion(role, company))} style={{ marginInlineStart: 'auto' }}>
           {t.askAboutExperience}
@@ -99,10 +99,10 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
       {stacked && lead}
       <div className="resume-wrap">
       <div className={`resume-layout${side && !stacked ? ' has-side' : ''}`}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 22, minWidth: 0 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 26, minWidth: 0 }}>
           {tx(resume.summary, lang) && (
             <Section title={t.summary}>
-              <div dir="auto" style={{ fontSize: 13.5, color: 'var(--text-2)', lineHeight: 1.75, whiteSpace: 'pre-wrap' }}>{tx(resume.summary, lang)}</div>
+              <div dir="auto" style={{ fontSize: 14.5, color: 'var(--text-2)', lineHeight: 1.65, whiteSpace: 'pre-wrap' }}>{tx(resume.summary, lang)}</div>
             </Section>
           )}
           {(resume.experience || []).length > 0 && (
@@ -116,9 +116,9 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
             <Section title={t.education} pad="0">
               <div style={{ marginTop: -1 }}>
                 {education.map((e, i) => (
-                  <div key={i} style={{ padding: '14px 20px', borderTop: '1px solid var(--border)', display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+                  <div key={i} style={{ padding: '16px 22px', borderTop: '1px solid var(--border)', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
                     <div style={{ flex: 1, minWidth: 200 }}>
-                      <h3 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 14, lineHeight: 'inherit' }}>{tx(e.degree, lang)}</h3>
+                      <h3 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 15, letterSpacing: '-0.02em', lineHeight: 1.3 }}>{tx(e.degree, lang)}</h3>
                       <div dir="auto" style={{ fontSize: 12.5, color: 'var(--text-2)', marginTop: 3, fontWeight: 600 }}>
                         {[tx(e.school, lang), tx(e.location, lang)].filter(Boolean).join(' · ')}
                       </div>
@@ -133,7 +133,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
         </div>
 
         {side ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
             {skills.length > 0 && (
               <Section id="skills" title={t.skills}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -151,7 +151,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
             {languages.length > 0 && (
               <Section title={t.languages}>
                 {languages.map((l, i) => (
-                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', gap: 10, fontSize: 13, padding: '4px 0' }}>
+                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12, fontSize: 13.5, padding: '9px 0', borderTop: i ? '1px solid var(--border)' : 'none' }}>
                     <span dir="auto" style={{ fontWeight: 600 }}>{tx(l.name, lang)}</span>
                     <span dir="auto" style={{ color: 'var(--text-2)' }}>{tx(l.level, lang)}</span>
                   </div>
