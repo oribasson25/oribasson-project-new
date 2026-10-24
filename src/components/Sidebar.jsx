@@ -51,11 +51,18 @@ function NavButton({ active, icon, label, onClick }) {
   );
 }
 
+/** 053… is the Israeli number visitors read. The link dials it with the country code. */
+function telHref(v) {
+  const digits = String(v || '').replace(/[^\d]/g, '');
+  if (!digits) return 'tel:';
+  return `tel:${digits.startsWith('0') ? `+972${digits.slice(1)}` : `+${digits}`}`;
+}
+
 const CONTACT_ROWS = [
   { key: 'email', icon: Icons.mail, href: (v) => `mailto:${v}`, label: (v) => v },
   { key: 'linkedin', icon: Icons.linkedin, href: (v) => v, label: () => 'LinkedIn' },
   { key: 'github', icon: Icons.github, href: (v) => v, label: () => 'GitHub' },
-  { key: 'phone', icon: Icons.phone, href: (v) => `tel:${v.replace(/[^\d+]/g, '')}`, label: (v) => v },
+  { key: 'phone', icon: Icons.phone, href: telHref, label: (v) => v },
   { key: 'website', icon: Icons.globe, href: (v) => v, label: (v) => v.replace(/^https?:\/\//, '').replace(/\/$/, '') },
 ];
 
@@ -92,8 +99,6 @@ export function ContactCard({ t }) {
     </div>
   );
 }
-
-const telHref = (v) => `tel:${v.replace(/[^\d+]/g, '')}`;
 
 /**
  * How to reach Ori, at the top right of the home screen where a recruiter
