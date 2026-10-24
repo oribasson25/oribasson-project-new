@@ -10,6 +10,9 @@ import { useReducedMotion } from '../lib/hooks.js';
  * left is the matching right-hand frame mirrored.
  */
 const SHEET = '/pet/ori.webp';
+// The neutral cell on its own, so a page that only shows the faint figure
+// does not download the whole sheet.
+const MARK = '/pet/ori-mark.webp';
 const CW = 192;
 const CH = 208;
 const COLS = 8;
@@ -201,9 +204,8 @@ export function PetWatermark({ size = 560, style }) {
     <div className="screen-only" aria-hidden="true" style={{
       position: 'absolute', pointerEvents: 'none', userSelect: 'none',
       width: w, height: size, opacity: 0.035, filter: 'grayscale(1)',
-      backgroundImage: `url(${SHEET})`, backgroundRepeat: 'no-repeat',
-      backgroundSize: `${w * COLS}px ${size * ROWS}px`,
-      backgroundPosition: `-${NEUTRAL.col * w}px -${NEUTRAL.row * size}px`,
+      backgroundImage: `url(${MARK})`, backgroundRepeat: 'no-repeat',
+      backgroundSize: '100% 100%',
       ...style,
     }} />
   );
