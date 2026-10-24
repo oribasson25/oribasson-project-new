@@ -123,7 +123,7 @@ export default function App() {
   const view = (stacked) => {
     switch (page) {
       case 'resume': return <ResumeView t={t} lang={lang} onAsk={ask} onOpenChat={() => go('/')} stacked={stacked} />;
-      case 'projects': return <ProjectsView t={t} lang={lang} onAsk={ask} onOpenChat={() => go('/')} stacked={stacked} />;
+      case 'projects': return <ProjectsView t={t} lang={lang} onAsk={ask} onOpenChat={() => go('/')} stacked={stacked} hash={hash} />;
       case 'settings': return <AdminSettings t={t} lang={lang} onUnauthorized={onUnauthorized} onChanged={refreshStatus} stacked={stacked} />;
       case 'conversations': return <AdminConversations t={t} lang={lang} onUnauthorized={onUnauthorized} stacked={stacked} />;
       case 'missing': return <NotFound t={t} lang={lang} stacked={stacked} onOpenChat={() => go('/')} />;

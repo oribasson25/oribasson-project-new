@@ -201,13 +201,26 @@ export function pageTitle(page) {
   return label ? `${label} · ${name}` : name;
 }
 
+/** The tab stays in English. A project address names that project. */
+export function titleFor(page, hash) {
+  if (page === 'projects' && hash) {
+    const project = (projects || []).find((p) => p.id === hash);
+    const name = project && tx(project.name, 'en');
+    if (name) return `${name} · ${tx(profile.name, 'en')}`;
+  }
+  return pageTitle(page);
+}
+
 /** Keeps the tab, share cards, canonical URL, and structured data in step with the route. */
 export function useSeo(page, lang) {
   useEffect(() => {
     const path = PATHS[page] || '/';
     const copy = DESC[lang === 'he' ? 'he' : 'en'];
     const desc = copy[page] || copy.home;
-    const title = pageTitle(page);
+    // The address bar is the source of truth: opening a card updates the
+    // hash without a navigation, and the tab should follow it.
+    const hash = page === 'projects' ? window.location.hash.replace(/^#/, '') : '';
+    const title = titleFor(page, hash);
     const admin = page === 'login' || page === 'settings' || page === 'conversations';
     const missing = page === 'missing' || !knownPath();
     const here = missing ? (window.location.pathname.replace(/\/+$/, '') || '/') : path;

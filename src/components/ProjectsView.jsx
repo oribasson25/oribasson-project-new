@@ -1,6 +1,7 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import projects from '../../content/projects.js';
 import { tx, tl, bullet } from '../../shared/text.js';
+import { titleFor } from '../lib/seo.js';
 import { Icons, PageHeader, Btn, Chip, EmptyState, Section } from './ui.jsx';
 import { Architecture } from './Architecture.jsx';
 import { architectures } from './architectures.js';
@@ -8,8 +9,23 @@ import { architectures } from './architectures.js';
 // Every card is this tall; whatever does not fit waits behind "Read more".
 const CARD_HEIGHT = 372;
 
-function ProjectCard({ p, t, lang, onAsk }) {
-  const [expanded, setExpanded] = useState(false);
+/** The address remembers the open project, so a copied link lands on the whole card. */
+function rememberProject(id, open) {
+  if (!id || typeof history === 'undefined') return;
+  const base = `${location.pathname}${location.search}`;
+  if (open) {
+    const next = `${base}#${id}`;
+    if (`${base}${location.hash}` !== next) history.replaceState(history.state, '', next);
+  } else if (location.hash === `#${id}`) {
+    history.replaceState(history.state, '', base);
+  }
+  document.title = titleFor('projects', open ? id : '');
+}
+
+function ProjectCard({ p, t, lang, onAsk, linked }) {
+  // A shared link names one project. That card starts open, so the write-up
+  // is not still folded behind Read more when the page arrives.
+  const [expanded, setExpanded] = useState(!!linked);
   const [overflows, setOverflows] = useState(false);
   const clipRef = useRef(null);
   const bodyRef = useRef(null);
@@ -21,6 +37,10 @@ function ProjectCard({ p, t, lang, onAsk }) {
     ? <time dateTime={String(p.year)}>{p.year}</time>
     : p.year;
   const spec = p.id ? architectures[p.id] : null;
+
+  useEffect(() => {
+    if (linked) setExpanded(true);
+  }, [linked]);
 
   // Measured, not guessed: the same card can fit in English and overflow in Hebrew.
   useLayoutEffect(() => {
@@ -97,7 +117,11 @@ function ProjectCard({ p, t, lang, onAsk }) {
       </div>
 
       {(overflows || expanded) && (
-        <button type="button" onClick={() => setExpanded((v) => !v)} aria-expanded={expanded}
+        <button type="button" onClick={() => {
+          const next = !expanded;
+          setExpanded(next);
+          rememberProject(p.id, next);
+        }} aria-expanded={expanded}
           aria-label={expanded ? t.showLessAbout(name) : t.readMoreAbout(name)}
           className="read-more"
           style={{
@@ -122,7 +146,7 @@ function ProjectCard({ p, t, lang, onAsk }) {
   );
 }
 
-export function ProjectsView({ t, lang, onAsk, onOpenChat, stacked }) {
+export function ProjectsView({ t, lang, onAsk, onOpenChat, stacked, hash }) {
   const dir = lang === 'he' ? 'rtl' : 'ltr';
   const list = projects || [];
   return (
@@ -137,7 +161,9 @@ export function ProjectsView({ t, lang, onAsk, onOpenChat, stacked }) {
       ) : (
         // An opened card grows on its own; the rest of its row keeps the common height.
         <div className="project-grid">
-          {list.map((p, i) => <ProjectCard key={p.id || i} p={p} t={t} lang={lang} onAsk={onAsk} />)}
+          {list.map((p, i) => (
+            <ProjectCard key={p.id || i} p={p} t={t} lang={lang} onAsk={onAsk} linked={!!p.id && hash === p.id} />
+          ))}
         </div>
       )}
     </div>
