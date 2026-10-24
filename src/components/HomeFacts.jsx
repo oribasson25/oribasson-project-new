@@ -183,13 +183,15 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
 
   return (
     <div ref={slotRef} className="home-fact-slot" role="group" aria-label={t.factsLabel} data-side={side} data-pinned={pinned ? 'true' : 'false'} dir={lang === 'he' ? 'rtl' : 'ltr'}>
-      {/* The hint stays outside the live region, so a new line is announced on its own. */}
+      {/* The hint stays off the live region. A new line is the words, and which one it is. */}
       <div className="home-fact-live" aria-live={hold ? 'off' : 'polite'} aria-atomic="true">
         <button
           type="button"
           className="home-fact-btn"
           aria-pressed={pinned}
-          aria-describedby="home-fact-hint"
+          aria-setsize={FACTS.length}
+          aria-posinset={index + 1}
+          aria-describedby={keyFocus ? 'home-fact-hint' : undefined}
           onClick={togglePin}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
