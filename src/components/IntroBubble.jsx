@@ -66,6 +66,21 @@ export function IntroBubble({ t, voice, transcript, stacked }) {
     return () => cancelAnimationFrame(raf);
   }, [playing]);
 
+  // Escape waves the offer away, or stops the recording while it is playing.
+  // An open dialog already uses Escape, so this stays out of its way.
+  useEffect(() => {
+    if (!voice.available || (heard && !playing)) return undefined;
+    const onKey = (e) => {
+      if (e.key !== 'Escape' || e.defaultPrevented) return;
+      if (document.querySelector('[role="dialog"][aria-modal="true"]')) return;
+      e.preventDefault();
+      if (playing) stop();
+      else dismiss();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [voice.available, heard, playing, stop, dismiss]);
+
   if (!voice.available) return null;
 
   // Heard before: a small round replay button on the figure's shoulder.
