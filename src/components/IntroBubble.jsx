@@ -109,7 +109,7 @@ export function IntroBubble({ t, voice, transcript, stacked }) {
 
   return (
     <div className="fade-in" style={{
-      ...place, zIndex: 3, background: 'var(--bg-card)', border: '1px solid var(--border)',
+      ...place, zIndex: 3, minWidth: 0, background: 'var(--bg-card)', border: '1px solid var(--border)',
       borderRadius: 16, boxShadow: 'var(--shadow-lg)', padding: '9px 10px 9px 9px',
       display: 'flex', alignItems: 'center', gap: 10,
     }}>
@@ -146,10 +146,10 @@ export function IntroBubble({ t, voice, transcript, stacked }) {
       ) : (
         <>
           <button type="button" onClick={play}
-            style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'transparent', padding: 0, textAlign: 'start' }}>
+            style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'transparent', padding: 0, textAlign: 'start', minWidth: 0, flex: '1 1 auto' }}>
             <span style={{ width: 30, height: 30, borderRadius: '50%', flexShrink: 0, background: 'var(--primary)', color: 'var(--primary-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11 }}>▶</span>
-            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', whiteSpace: 'nowrap' }}>{t.introOffer}</span>
-            {duration > 0 && <span style={{ fontSize: 11.5, color: 'var(--text-muted)', fontFamily: 'var(--mono)' }}>{fmt(duration)}</span>}
+            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', lineHeight: 1.35, minWidth: 0 }}>{t.introOffer}</span>
+            {duration > 0 && <span style={{ fontSize: 11.5, color: 'var(--text-muted)', fontFamily: 'var(--mono)', flexShrink: 0 }}>{fmt(duration)}</span>}
           </button>
           <button type="button" onClick={dismiss} title={t.introDismiss} aria-label={t.introDismiss}
             style={{
