@@ -100,7 +100,7 @@ body {
 .send-arrow { display: block; line-height: 1; transition: transform 0.18s ease; }
 .send-ready:hover .send-arrow { transform: translateY(-2px); }
 
-/* Project names under the questions. Text only, the same quiet grey. */
+/* Lead skills under the questions. Text only, the same quiet grey. */
 .home-index {
   width: min(460px, 100%);
   margin-top: 26px;
@@ -111,40 +111,7 @@ body {
   align-items: center;
   gap: 16px;
 }
-.home-index nav {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-.home-index-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  width: 100%;
-}
-.home-index-list a {
-  color: var(--text-2);
-  font-size: 13.5px;
-  font-weight: 650;
-  letter-spacing: -0.01em;
-  line-height: 1.35;
-  text-align: center;
-  text-decoration: none;
-  text-wrap: balance;
-  padding: 4px 8px;
-  border-radius: 8px;
-}
-.home-index-list a:hover {
-  color: var(--text);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-color: var(--text-muted);
-}
-
-/* Lead skills, one wrapping line. Same quiet type as the project names. */
+/* Lead skills, one wrapping line. Quiet type, under the questions. */
 .home-tools {
   width: 100%;
   display: flex;
@@ -186,7 +153,6 @@ body {
 
 /* A finger never sees the hover underline, so the quiet lines stay marked as links. */
 @media (hover: none) {
-  .home-index-list a,
   .home-tools a {
     text-decoration: underline;
     text-underline-offset: 3px;
@@ -578,10 +544,8 @@ a { color: inherit; }
   .m-root input, .m-root textarea, .m-root select { font-size: 16px !important; }
   .m-root button { -webkit-tap-highlight-color: transparent; }
   .home-index { margin-top: 18px; padding-top: 14px; gap: 14px; }
-  .home-index-list a,
   .home-tools a { font-size: 13px; }
   /* Quiet text, with a thumb-sized tap. Desktop keeps the tighter line. */
-  .home-index-list a,
   .home-tools a {
     min-height: 44px;
     display: flex;
