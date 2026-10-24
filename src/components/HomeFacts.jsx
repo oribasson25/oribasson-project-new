@@ -92,6 +92,8 @@ function readTime(text) {
  * `hold` freezes the cycle while the recorded hello is playing. `avoidRight`
  * keeps every line on the left while the hello bubble occupies that side.
  * The line already on screen does not jump across when the bubble goes away.
+ * A new line is already on its side in the first paint, including when motion
+ * is reduced and there is no slide to hide a late move.
  */
 export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   const reduced = useReducedMotion();
@@ -105,19 +107,16 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   const [side, setSide] = useState('left');
   const slotRef = useRef(null);
   const fromKeyboard = useRef(false);
+  const avoidRef = useRef(avoidRight);
+  avoidRef.current = avoidRight;
   const fact = FACTS[index];
   const text = fact[lang] || fact.en;
   const paused = hover || pinned || keyFocus || hidden || hold || !seen;
 
-  // A new line picks a side. While the hello bubble is on the right, every
-  // line stays on the left. Clearing the bubble does not move the line that
-  // is already up — the next one takes its own side.
-  useEffect(() => {
-    setSide(avoidRight || index % 2 === 0 ? 'left' : 'right');
-  }, [index]);
-  useEffect(() => {
-    if (avoidRight) setSide('left');
-  }, [avoidRight]);
+  // While the hello bubble is on the right, the line already up moves to the
+  // left before paint. Clearing the bubble does not send it back — the next
+  // line picks its own side, in the same render as the new words.
+  if (avoidRight && side !== 'left') setSide('left');
 
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Tab') fromKeyboard.current = true; };
@@ -157,7 +156,9 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
     const wait = phase === 'in' ? reading + (reduced ? 0 : ENTER) : EXIT;
     const timer = setTimeout(() => {
       if (reduced || phase === 'out') {
-        setIndex((n) => (n + 1) % FACTS.length);
+        const next = (index + 1) % FACTS.length;
+        setSide(avoidRef.current || next % 2 === 0 ? 'left' : 'right');
+        setIndex(next);
         setPhase('in');
       } else {
         setPhase('out');
@@ -174,8 +175,10 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   }
 
   function step(dir) {
+    const next = (index + dir + FACTS.length) % FACTS.length;
     setPhase('in');
-    setIndex((n) => (n + dir + FACTS.length) % FACTS.length);
+    setSide(avoidRight || next % 2 === 0 ? 'left' : 'right');
+    setIndex(next);
   }
 
   return (
