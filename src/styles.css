@@ -38,8 +38,11 @@
   --r-md: 12px;
   --r-lg: 16px;
   --r-xl: 20px;
-  --shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
-  --shadow-lg: 0 8px 40px rgba(15, 23, 42, 0.10);
+  /* A contact shadow, then a soft lift. Both are the paper's own blue-grey. */
+  --shadow: 0 1px 1px rgba(13, 15, 20, 0.04), 0 10px 24px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 1px 2px rgba(13, 15, 20, 0.05), 0 18px 40px rgba(15, 23, 42, 0.08);
+  /* Arrives, then settles. No bounce. */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   --mono: 'JetBrains Mono', ui-monospace, monospace;
 
@@ -68,18 +71,18 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes haloBreathe { 0%, 100% { transform: scale(0.94); opacity: 0.75; } 50% { transform: scale(1.06); opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes haloBreathe { 0%, 100% { transform: scale(0.96); opacity: 0.8; } 50% { transform: scale(1.04); opacity: 1; } }
 @keyframes caret { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-.fade-in { animation: fadeIn 0.25s ease both; }
-.hero-rise { animation: fadeIn 0.48s ease both; }
+.fade-in { animation: fadeIn 0.32s var(--ease) both; }
+.hero-rise { animation: fadeIn 0.5s var(--ease) both; }
 @keyframes pageIn { from { opacity: 0; } to { opacity: 1; } }
-.page-in { animation: pageIn 0.28s ease both; }
+.page-in { animation: pageIn 0.32s var(--ease) both; }
 
-.pet-halo { animation: haloBreathe 4.2s ease-in-out infinite; }
-.pet-halo.busy { animation-duration: 1.4s; }
-.halo-lean { transition: transform 0.45s ease; }
+.pet-halo { animation: haloBreathe 4.8s ease-in-out infinite; }
+.pet-halo.busy { animation-duration: 1.6s; }
+.halo-lean { transition: transform 0.5s var(--ease); }
 
 /* The same hairline the project diagrams draw, under the greeting.
    A flex column shrinks an SVG to nothing once the welcome screen scrolls,
@@ -88,7 +91,7 @@ body {
 .hero-draw {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
-  animation: archDraw 0.75s ease 0.28s forwards;
+  animation: archDraw 0.7s var(--ease) 0.28s forwards;
 }
 
 .q-chip:hover,
