@@ -23,7 +23,7 @@ function rememberProject(id, open) {
   document.title = titleFor('projects', open ? id : '');
 }
 
-function ProjectCard({ p, t, lang, onAsk, linked }) {
+function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
   // A shared link names one project. That card starts open, so the write-up
   // is not still folded behind Read more when the page arrives.
   const [expanded, setExpanded] = useState(!!linked);
@@ -140,6 +140,7 @@ function ProjectCard({ p, t, lang, onAsk, linked }) {
     <div id={p.id || undefined} className="project-card fade-in"
       style={{
         scrollMarginTop: 18,
+        animationDelay: `${Math.min(index, 7) * 70}ms`,
         padding: '20px 20px 16px', display: 'flex', flexDirection: 'column', gap: 14,
         height: spec ? 'auto' : (expanded || held != null ? 'auto' : CARD_HEIGHT), minHeight: spec ? 0 : CARD_HEIGHT,
       }}>
@@ -216,7 +217,7 @@ export function ProjectsView({ t, lang, onAsk, onOpenChat, stacked, hash }) {
         // An opened card grows on its own; the rest of its row keeps the common height.
         <div className="project-grid">
           {list.map((p, i) => (
-            <ProjectCard key={p.id || i} p={p} t={t} lang={lang} onAsk={onAsk} linked={!!p.id && hash === p.id} />
+            <ProjectCard key={p.id || i} p={p} t={t} lang={lang} onAsk={onAsk} index={i} linked={!!p.id && hash === p.id} />
           ))}
         </div>
       )}
