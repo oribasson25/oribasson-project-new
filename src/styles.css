@@ -266,23 +266,32 @@ body {
   height: 1.5px;
   background: var(--text);
 }
-.home-fact-slot[data-side="left"] .home-fact::after { right: 0; }
-.home-fact-slot[data-side="right"] .home-fact::before { left: 0; }
+.home-fact-slot[data-side="left"] .home-fact::after { right: 0; transform-origin: right center; }
+.home-fact-slot[data-side="right"] .home-fact::before { left: 0; transform-origin: left center; }
+/* The tick reaches toward the figure once the words have started in. */
+.home-fact.is-in.from-left::after,
+.home-fact.is-in.from-right::before {
+  animation: tickGrow 0.34s var(--ease) 0.2s both;
+}
 @keyframes factInLeft {
-  from { opacity: 0; transform: translateX(-14px); }
+  from { opacity: 0; transform: translateX(-22px); }
   to { opacity: 1; transform: none; }
 }
 @keyframes factOutLeft {
   from { opacity: 1; transform: none; }
-  to { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 0; transform: translateX(-14px); }
 }
 @keyframes factInRight {
-  from { opacity: 0; transform: translateX(14px); }
+  from { opacity: 0; transform: translateX(22px); }
   to { opacity: 1; transform: none; }
 }
 @keyframes factOutRight {
   from { opacity: 1; transform: none; }
-  to { opacity: 0; transform: translateX(10px); }
+  to { opacity: 0; transform: translateX(14px); }
+}
+@keyframes tickGrow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 @keyframes factFade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes factFadeOut { from { opacity: 1; } to { opacity: 0; } }
@@ -684,5 +693,7 @@ a { color: inherit; }
   .send-ready:hover .send-arrow { transform: none; }
   .halo-lean { transform: none !important; }
   .home-fact { animation: none !important; transform: none !important; opacity: 1 !important; }
+  .home-fact::before,
+  .home-fact::after { animation: none !important; transform: none !important; }
   button:active { transform: none; }
 }
