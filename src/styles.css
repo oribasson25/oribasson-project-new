@@ -83,6 +83,12 @@ body {
   animation: archDraw 0.75s ease 0.28s forwards;
 }
 
+.q-chip:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+.q-chip:active { transform: translateY(0) scale(0.97); }
+
 input, textarea, select {
   background: var(--bg-input);
   color: var(--text);
@@ -345,5 +351,6 @@ a { color: inherit; }
   .arch-line { stroke-dashoffset: 0 !important; animation: none !important; }
   .hero-draw { stroke-dashoffset: 0 !important; animation: none !important; }
   .hero-rise { animation: none; opacity: 1; transform: none; }
+  .q-chip:hover, .q-chip:active { transform: none; }
   button:active { transform: none; }
 }

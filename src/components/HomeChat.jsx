@@ -87,7 +87,7 @@ function QuestionChips({ items, onPick, disabled, dir, style, grid, className, l
       ...style,
     }}>
       {items.map((text) => (
-        <button key={text} type="button" onClick={() => onPick(text)} disabled={disabled}
+        <button key={text} type="button" className="q-chip" onClick={() => onPick(text)} disabled={disabled}
           style={{
             background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-2)',
             fontWeight: 600,
