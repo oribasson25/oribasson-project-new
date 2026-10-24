@@ -40,9 +40,9 @@
 
   --mono: 'JetBrains Mono', ui-monospace, monospace;
 
-  /* 8Legs draws the whole interface at 72%. `zoom` scales viewport units
-     too, so full-height boxes divide by it to keep filling the screen. */
-  --ui-zoom: 0.72;
+  /* Full size on every screen. Full-height boxes still divide by this so a
+     future scale keeps filling the viewport. */
+  --ui-zoom: 1;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -139,6 +139,26 @@ a { color: inherit; }
   background: linear-gradient(90deg, var(--text-muted) 35%, var(--text) 50%, var(--text-muted) 65%) 0 0 / 200% 100%;
   -webkit-background-clip: text; background-clip: text; color: transparent;
   animation: shimmer 1.6s linear infinite;
+}
+
+/* Resume side column only when the content pane is wide enough to hold it.
+   The phone breakpoint is not enough: a 900px window still has a sidebar. */
+.resume-wrap { container-type: inline-size; }
+.resume-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+@container (min-width: 920px) {
+  .resume-layout.has-side { grid-template-columns: minmax(0, 1fr) 300px; }
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 16px;
+  align-items: start;
 }
 
 /* ── phones ── */
