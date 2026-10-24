@@ -9,33 +9,43 @@ import { useReducedMotion } from '../lib/hooks.js';
  * 2. projects claims-voice-agent: Hebrew claim intake and status, live CRM.
  * 3. resume.experience[1] claims call-center supervisor; that role's summary
  *    says the AI platform now automates the workflow he supervised.
- * 4. resume.summary and the Languages & Code skill group: TypeScript, Python, SQL.
- * 5. resume.experience[0] highlight "API Reverse-Engineering": undocumented CRM
+ * 4. resume.experience[1] highlight: trained representatives and handled escalations.
+ * 5. resume.summary and the Languages & Code skill group: TypeScript, Python, SQL.
+ * 6. resume.experience[0] highlight "API Reverse-Engineering": undocumented CRM
  *    APIs from network traffic, written up as Postman collections.
- * 6. resume.summary and the roadmap highlight: HITL boundaries set before development.
- * 7. projects hr-recruitment: each uploaded resume is scored against every open job.
- * 8. projects 8legs tagline and description: a plain description becomes a chatbot, no code.
- * 9. resume.languages Hebrew native; skill "Voice & Chat agents (Hebrew)".
- * 10. resume.experience[2] IDF network administrator: Active Directory and Cisco.
- * 11. projects live-call-intelligence: writes a CRM event while the call is in progress.
- * 12. projects 8legs highlight "Privacy": card and Israeli ID numbers are masked
+ * 7. resume.summary and the roadmap highlight: HITL boundaries set before development.
+ * 8. resume.experience[0] "Multi-Agent System Architecture": error recovery.
+ * 9. resume.experience[0] "Production Incident Debugging": pilot to full live launch.
+ * 10. projects hr-recruitment: each uploaded resume is scored against every open job.
+ * 11. projects hr-recruitment highlight "Reads real resumes": PDF and Word, Hebrew and English.
+ * 12. projects 8legs tagline and description: a plain description becomes a chatbot, no code.
+ * 13. projects 8legs description: answers from the business's documents and website.
+ * 14. resume.languages Hebrew native; skill "Voice & Chat agents (Hebrew)".
+ * 15. resume.experience[2] IDF network administrator: Active Directory and Cisco.
+ * 16. projects live-call-intelligence: writes a CRM event while the call is in progress.
+ * 17. projects 8legs highlight "Privacy": card and Israeli ID numbers are masked
  *     before they reach the model.
- * 13. projects back-office-agent: incoming mail, documents filed on the claim.
- * 14. projects policy-documents: authenticates, then sends the policy in chat.
- * 15. resume.experience[0] highlight "Automated Eval & QA Pipelines": a judge
+ * 18. projects back-office-agent: incoming mail, documents filed on the claim.
+ * 19. projects policy-documents: authenticates, then sends the policy in chat.
+ * 20. resume.experience[0] highlight "Automated Eval & QA Pipelines": a judge
  *     model scores Hebrew transcripts.
- * 16. resume.education[0]: cybersecurity certificate at Kernelios.
- * 17. resume.languages English, professional working proficiency, beside native Hebrew.
+ * 21. resume.education[0]: cybersecurity certificate at Kernelios.
+ * 22. resume.languages English, professional working proficiency, beside native Hebrew.
  */
 const FACTS = [
   { en: 'Live LLM agents at Libra Insurance.', he: 'סוכני LLM בפרודקשן, בליברה ביטוח.' },
   { en: 'A Hebrew voice agent opens the claim and checks the status.', he: 'סוכן קולי בעברית פותח תביעה ובודק סטטוס.' },
   { en: 'Ran the claims desk. Then built the agents for it.', he: 'ניהל את מוקד התביעות. אחר כך בנה לו את הסוכנים.' },
+  { en: 'Trained the reps, and took the calls they escalated.', he: 'הכשיר את הנציגים, וטיפל בשיחות שהוסלמו.' },
   { en: 'The agent tools are TypeScript, Python, and SQL.', he: 'הכלים לסוכן: TypeScript, ‏Python ו-SQL.' },
   { en: 'Undocumented CRM APIs, read off the wire, filed in Postman.', he: 'API לא מתועד של ה-CRM, מהרשת אל Postman.' },
   { en: 'A person still has to say yes before it ships.', he: 'לפני שזה עולה, מישהו עדיין צריך לאשר.' },
+  { en: 'If a step fails, the agent recovers and carries on.', he: 'אם שלב נכשל, הסוכן מתאושש וממשיך את השיחה.' },
+  { en: 'Took the agents from a pilot to a full live launch.', he: 'ליווה את הסוכנים מפיילוט עד עלייה מלאה לאוויר.' },
   { en: 'One resume, a score for each open job.', he: 'קו״ח אחד, ציון לכל משרה פתוחה.' },
+  { en: 'PDF and Word resumes, read in Hebrew and in English.', he: 'קורות חיים ב-PDF וב-Word, בעברית ובאנגלית.' },
   { en: '8Legs turns a plain description into a chatbot. No code.', he: '8Legs הופך תיאור פשוט לצ׳טבוט. בלי קוד.' },
+  { en: '8Legs answers from the company\'s documents and site.', he: '8Legs עונה מתוך המסמכים והאתר של העסק.' },
   { en: 'Native Hebrew. The voice agents speak it too.', he: 'עברית שפת אם. גם הסוכנים הקוליים מדברים אותה.' },
   { en: 'IDF network admin — Active Directory and Cisco.', he: 'ניהול רשת בצה״ל — Active Directory ו-Cisco.' },
   { en: 'The live-call agent writes the CRM event mid-call.', he: 'סוכן השיחה כותב ל-CRM עוד בזמן השיחה.' },
