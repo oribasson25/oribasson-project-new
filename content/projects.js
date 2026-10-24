@@ -18,10 +18,6 @@ export default [
       en: 'End-to-end claim intake and status inquiry agent in Hebrew with live CRM read/write, validation, and error recovery.',
       he: 'סוכן בעברית שמטפל מקצה לקצה בפתיחת תביעות ובבירורי סטטוס, עם קריאה וכתיבה חיות ב-CRM, ולידציה ושחזור משגיאות.',
     },
-    highlights: {
-      en: ['~10,000 calls a month', '~70% deflection from human agents'],
-      he: ['כ-10,000 שיחות בחודש', 'כ-70% מהשיחות מטופלות בלי נציג אנושי'],
-    },
   },
   {
     id: 'back-office-agent',
