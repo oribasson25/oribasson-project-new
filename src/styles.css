@@ -104,6 +104,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 16px;
+}
+.home-index nav {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 10px;
 }
 .home-index-list {
@@ -113,7 +120,7 @@ body {
   gap: 0;
   width: 100%;
 }
-.home-index a {
+.home-index-list a {
   color: var(--text-2);
   font-size: 13.5px;
   font-weight: 650;
@@ -125,12 +132,40 @@ body {
   padding: 4px 8px;
   border-radius: 8px;
 }
-.home-index a:hover {
+.home-index-list a:hover {
   color: var(--text);
   text-decoration: underline;
   text-underline-offset: 3px;
   text-decoration-color: var(--text-muted);
 }
+
+/* Lead skills, one wrapping line. Same quiet type as the project names. */
+.home-tools {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.home-tools a {
+  max-width: 420px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.55;
+  text-align: center;
+  text-decoration: none;
+  text-wrap: balance;
+}
+.home-tools a:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--text-muted);
+}
+#skills { scroll-margin-top: 14px; }
 
 /* The current post, one quiet line under the headline. Years match the resume. */
 .home-post {
@@ -523,8 +558,9 @@ a { color: inherit; }
      sizes the components set for desktop. */
   .m-root input, .m-root textarea, .m-root select { font-size: 16px !important; }
   .m-root button { -webkit-tap-highlight-color: transparent; }
-  .home-index { margin-top: 18px; padding-top: 14px; }
-  .home-index a { font-size: 13px; }
+  .home-index { margin-top: 18px; padding-top: 14px; gap: 14px; }
+  .home-index-list a,
+  .home-tools a { font-size: 13px; }
 }
 
 @media print {

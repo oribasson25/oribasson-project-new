@@ -131,7 +131,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
         {side ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
             {skills.length > 0 && (
-              <Section title={t.skills}>
+              <Section id="skills" title={t.skills}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                   {skills.map((g, i) => (
                     <div key={i}>
