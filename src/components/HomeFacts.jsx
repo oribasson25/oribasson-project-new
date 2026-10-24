@@ -36,6 +36,10 @@ import { useReducedMotion } from '../lib/hooks.js';
  * 25. projects 8legs description: live as a website widget or on WhatsApp.
  * 26. projects hr-recruitment highlight: drag-and-drop Kanban.
  * 27. resume.experience[0] eval highlight: quality dashboards for the business.
+ * 28. resume.experience[0] "Production Incident Debugging": WebSocket audio / ASR.
+ * 29. resume.experience[0] roadmap highlight: volume, cost, and feasibility.
+ * 30. resume.experience[1] highlight: claim lifecycle and regulatory constraints.
+ * 31. resume.experience[0] "Multi-Agent System Architecture": cross-turn state.
  */
 const FACTS = [
   { en: 'Live LLM agents at Libra Insurance.', he: 'סוכני LLM בפרודקשן, בליברה ביטוח.' },
@@ -65,6 +69,10 @@ const FACTS = [
   { en: '8Legs can sit on the site itself, or inside WhatsApp.', he: '8Legs יושב באתר עצמו, או בתוך WhatsApp.' },
   { en: 'Candidates are moved by hand across a Kanban board.', he: 'את המועמדים מזיזים ביד על לוח Kanban.' },
   { en: 'The call scores land on a dashboard the business reads.', he: 'ציוני השיחות עולים לדשבורד שהעסק קורא.' },
+  { en: 'A voice fault in production, traced along the audio wire.', he: 'תקלת קול בפרודקשן, דרך האודיו על הקו.' },
+  { en: 'The next workflow is chosen by volume, cost, and feasibility.', he: 'מה לבנות אחר כך נקבע לפי נפח, עלות, והאם זה ישים.' },
+  { en: 'Claim rules, learned on the desk, decide what an agent is allowed to do.', he: 'כללי התביעה, מהמוקד, קובעים מה מותר לסוכן.' },
+  { en: 'The conversation carries from one turn to the next.', he: 'השיחה נשמרת מתור לתור.' },
 ];
 
 const EXIT = 420;
