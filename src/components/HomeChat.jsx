@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import profile from '../../content/profile.js';
 import resume from '../../content/resume.js';
+import projects from '../../content/projects.js';
 import questions from '../../content/questions.js';
 import { tx } from '../../shared/text.js';
 import { Pet, PetStage } from './Pet.jsx';
+import { Eyebrow } from './ui.jsx';
 import { IntroBubble } from './IntroBubble.jsx';
 import { Answer, Steps } from './Answer.jsx';
 import { architectures } from './architectures.js';
@@ -12,6 +14,41 @@ import { useIntroVoice } from '../lib/useIntroVoice.js';
 
 function firstName(lang) {
   return tx(profile.name, lang).split(' ')[0] || 'Ori';
+}
+
+function openInApp(href, event) {
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+  event.preventDefault();
+  window.history.pushState({}, '', href);
+  window.dispatchEvent(new PopStateEvent('popstate'));
+}
+
+function HomeProjects({ t, lang, stacked }) {
+  const items = (projects || []).filter((p) => p.id && tx(p.name, lang));
+  if (!items.length) return null;
+  return (
+    <section className="hero-rise home-index" dir={lang === 'he' ? 'rtl' : 'ltr'} aria-label={t.projectsTitle} style={{
+      animationDelay: '0.58s',
+      width: 'min(560px, 100%)',
+      marginTop: stacked ? 28 : 36,
+    }}>
+      <Eyebrow style={{ marginBottom: 4, textAlign: 'center' }}>{t.projectsTitle}</Eyebrow>
+      {items.map((p) => {
+        const name = tx(p.name, lang);
+        const line = tx(p.tagline, lang);
+        return (
+          <a key={p.id} href={`/projects#${p.id}`} onClick={(e) => openInApp(`/projects#${p.id}`, e)}
+            style={{
+              display: 'block', padding: '11px 0', borderTop: '1px solid var(--border)',
+              textDecoration: 'none', color: 'inherit',
+            }}>
+            <span className="home-name" dir="auto" style={{ display: 'block', fontSize: 14, fontWeight: 700, letterSpacing: '-0.01em', lineHeight: 1.4, color: 'var(--text)' }}>{name}</span>
+            {line && <span dir="auto" style={{ display: 'block', marginTop: 3, fontSize: 12.5, lineHeight: 1.5, color: 'var(--text-2)' }}>{line}</span>}
+          </a>
+        );
+      })}
+    </section>
+  );
 }
 
 /** The published headline, then the current employer. Both already live in the content. */
@@ -249,6 +286,8 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         <QuestionChips items={chips} onPick={submit} disabled={pending || offline} dir={dir} grid={stacked} label={t.suggestions}
           className="hero-rise"
           style={{ animationDelay: '0.52s', marginTop: stacked ? 14 : 18, width: stacked ? '100%' : 'min(760px, 100%)' }} />
+
+        <HomeProjects t={t} lang={lang} stacked={stacked} />
 
         {!stacked && (
           <div className="hero-rise" dir={dir} style={{ animationDelay: '0.62s', marginTop: 26, fontSize: 11.5, color: 'var(--text-muted)', textAlign: 'center' }}>{t.foot(first)}</div>
