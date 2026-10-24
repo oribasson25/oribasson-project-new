@@ -1,0 +1,15 @@
+{
+  "name": "Ori Basson",
+  "short_name": "Ori Basson",
+  "description": "Ori Basson — AI Solutions Engineer. Production LLM agents, a resume, projects, and an AI chat that answers from the published work.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f2f4f8",
+  "theme_color": "#f2f4f8",
+  "lang": "en",
+  "icons": [
+    { "src": "/favicon.png", "sizes": "64x64", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
