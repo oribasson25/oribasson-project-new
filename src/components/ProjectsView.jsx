@@ -115,7 +115,7 @@ export function ProjectsView({ t, lang, onAsk, onOpenChat, stacked }) {
         </Section>
       ) : (
         // An opened card grows on its own; the rest of its row keeps the common height.
-        <div className="project-grid">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16, alignItems: 'start' }}>
           {list.map((p, i) => <ProjectCard key={p.id || i} p={p} t={t} lang={lang} onAsk={onAsk} />)}
         </div>
       )}
