@@ -11,6 +11,7 @@ import { Answer, Steps } from './Answer.jsx';
 import { architectures } from './architectures.js';
 import { diagramProjectId } from '../lib/projectDiagram.js';
 import { useIntroVoice } from '../lib/useIntroVoice.js';
+import { loadMarkdown } from '../lib/loadMarkdown.js';
 
 function firstName(lang) {
   return tx(profile.name, lang).split(' ')[0] || 'Ori';
@@ -50,7 +51,7 @@ function questionBefore(messages, index) {
   return '';
 }
 
-export function Composer({ value, onChange, onSend, disabled, placeholder, dir, width = 720, fieldRef, autoFocus, sendLabel = 'Send', sendHint, large }) {
+export function Composer({ value, onChange, onSend, disabled, placeholder, dir, width = 720, fieldRef, autoFocus, sendLabel = 'Send', sendHint, large, onFieldFocus }) {
   const [focus, setFocus] = useState(false);
   const own = useRef(null);
   const ref = fieldRef || own;
@@ -76,7 +77,7 @@ export function Composer({ value, onChange, onSend, disabled, placeholder, dir, 
         ref={ref}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        onFocus={() => setFocus(true)}
+        onFocus={() => { setFocus(true); if (onFieldFocus) onFieldFocus(); }}
         onBlur={() => setFocus(false)}
         onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); onSend(); } }}
         dir="auto"
@@ -159,6 +160,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
   const offline = status.chat === 'unavailable';
   const { messages, pending, streamingId, error } = chat;
   const started = messages.length > 0;
+  if (started) loadMarkdown();
   const chips = (questions[lang] || questions.en || []);
   const intro = profile.intro || {};
   const voice = useIntroVoice(tx(intro.audio, lang));
@@ -171,6 +173,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
   // Something elsewhere on the site asked a question ("Ask about this project").
   useEffect(() => {
     if (seed && seed.text) {
+      loadMarkdown();
       chat.send(seed.text);
       onSeedUsed();
     }
@@ -216,6 +219,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
   function submit(text) {
     const body = (text ?? input).trim();
     if (!body) return;
+    loadMarkdown();
     chat.send(body);
     setInput('');
   }
@@ -281,6 +285,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         <div className="hero-rise" style={{ animationDelay: '0.42s', width: '100%', marginTop: stacked ? 20 : 24 }}>
           {offlineNote}
           <Composer value={input} onChange={setInput} onSend={() => submit()} fieldRef={fieldRef}
+            onFieldFocus={loadMarkdown}
             disabled={pending || offline} dir={dir} sendLabel={t.send} sendHint={t.sendHint} large={stacked}
             placeholder={stacked ? t.placeholderShort : t.placeholder} />
         </div>
@@ -388,6 +393,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
       <div className="screen-only" style={{ flexShrink: 0, padding: stacked ? '6px 16px 14px' : '6px 30px 20px' }}>
         {offlineNote}
         <Composer value={input} onChange={setInput} onSend={() => submit()} dir={dir}
+          onFieldFocus={loadMarkdown}
           disabled={pending || offline} placeholder={t.answer} autoFocus={!stacked} sendLabel={t.send} sendHint={t.sendHint} large={stacked} />
       </div>
     </div>

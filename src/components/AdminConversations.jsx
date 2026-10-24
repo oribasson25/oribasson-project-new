@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { timeAgo } from '../i18n.js';
-import { renderMarkdown } from '../lib/markdown.js';
+import { loadMarkdown, renderMarkdownSync, plainHtml } from '../lib/loadMarkdown.js';
 import { stripProjectMarkers } from '../lib/projectDiagram.js';
 import { Icons, PageHeader, Btn, Chip, EmptyState, Section } from './ui.jsx';
 
@@ -15,11 +15,24 @@ function device(ua) {
   return [browser, os].filter(Boolean).join(' · ') || '—';
 }
 
+function messageHtml(content, newTab, mdReady) {
+  const text = stripProjectMarkers(content);
+  const render = mdReady ? renderMarkdownSync() : null;
+  return render ? render(text, { newTab }) : plainHtml(text);
+}
+
 function Thread({ id, t, lang, onBack, onDeleted, onUnauthorized }) {
   const C = t.convos;
   const [convo, setConvo] = useState(null);
   const [failed, setFailed] = useState(false);
   const [confirming, setConfirming] = useState(false);
+  const [mdReady, setMdReady] = useState(() => !!renderMarkdownSync());
+
+  useEffect(() => {
+    let on = true;
+    loadMarkdown().then(() => { if (on) setMdReady(true); });
+    return () => { on = false; };
+  }, []);
 
   useEffect(() => {
     fetch(`/api/admin/conversations?id=${encodeURIComponent(id)}`)
@@ -69,7 +82,7 @@ function Thread({ id, t, lang, onBack, onDeleted, onUnauthorized }) {
                 alignSelf: 'stretch', background: 'var(--bg-card)', border: '1px solid var(--border)',
                 padding: '12px 15px', borderRadius: '16px 16px 16px 4px', fontSize: 13.5,
               }}>
-                <div className="md" dangerouslySetInnerHTML={{ __html: renderMarkdown(stripProjectMarkers(m.content), { newTab: t.newTab }) }} />
+                <div className="md" dangerouslySetInnerHTML={{ __html: messageHtml(m.content, t.newTab, mdReady) }} />
               </div>
             )))}
           </div>
