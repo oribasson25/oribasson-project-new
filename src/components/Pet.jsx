@@ -331,9 +331,9 @@ export function PetStage({ size = 220, mode, pulse, busy, voice, label, children
         }} />
       </div>
       <div style={{
-        position: 'absolute', left: '50%', bottom: size * 0.025, width: size * 0.42, height: size * 0.06,
-        marginLeft: -(size * 0.21), borderRadius: '50%', pointerEvents: 'none',
-        background: 'radial-gradient(ellipse, rgba(13,15,20,0.16) 0%, rgba(13,15,20,0) 70%)',
+        position: 'absolute', left: '50%', bottom: size * 0.02, width: size * 0.58, height: size * 0.045,
+        marginLeft: -(size * 0.29), borderRadius: '50%', pointerEvents: 'none',
+        background: 'radial-gradient(ellipse, rgba(13,15,20,0.14) 0%, rgba(13,15,20,0) 72%)',
       }} />
       {fx.scan > 0 && (
         <div aria-hidden="true" style={{
