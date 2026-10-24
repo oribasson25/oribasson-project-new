@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { strings } from './i18n.js';
-import { usePath, useIsMobile, useViewportHeight, useTyping } from './lib/hooks.js';
+import { usePath, useIsMobile, useViewportHeight, useTyping, useReducedMotion } from './lib/hooks.js';
 import { useSeo } from './lib/seo.js';
 import { savedLang, saveLang, loadChats, clearChats } from './lib/store.js';
 import { useChat } from './lib/useChat.js';
@@ -31,6 +31,7 @@ export default function App() {
   const t = strings(lang);
   const [path, go] = usePath();
   const mobile = useIsMobile();
+  const reduced = useReducedMotion();
   useViewportHeight(mobile);
   const typing = useTyping(mobile);
   const [admin, setAdmin] = useState(null);           // null until the server has answered
@@ -66,6 +67,8 @@ export default function App() {
   // A new page starts at the top. The shell keeps one scroller, so the previous page's position would otherwise stick.
   // After a button opened the page, the keyboard follows it. A text field keeps focus, so "ask about this" still lands in the composer.
   const firstPage = useRef(true);
+  const reducedRef = useRef(reduced);
+  reducedRef.current = reduced;
   useEffect(() => {
     const main = document.getElementById('main');
     if (!main) return;
@@ -74,7 +77,7 @@ export default function App() {
     const hash = window.location.hash.replace(/^#/, '');
     if (hash) {
       const target = main.querySelector(`[id="${CSS.escape(hash)}"]`);
-      if (target) target.scrollIntoView({ block: 'start' });
+      if (target) target.scrollIntoView({ block: 'start', behavior: reducedRef.current ? 'auto' : 'smooth' });
     }
     if (firstPage.current) {
       firstPage.current = false;
