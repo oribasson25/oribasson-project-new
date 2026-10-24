@@ -6,6 +6,7 @@
 const STRINGS = {
   en: {
     portfolio: 'Portfolio',
+    language: 'Language',
     nav: { chat: 'Chat', resume: 'Resume', projects: 'Projects', settings: 'Settings', conversations: 'Conversations' },
     adminEyebrow: 'Admin',
     recent: 'Recent questions',
@@ -143,6 +144,7 @@ const STRINGS = {
 
   he: {
     portfolio: 'פורטפוליו',
+    language: 'שפה',
     nav: { chat: 'צ׳אט', resume: 'קורות חיים', projects: 'פרויקטים', settings: 'הגדרות', conversations: 'שיחות' },
     adminEyebrow: 'ניהול',
     recent: 'שאלות אחרונות',

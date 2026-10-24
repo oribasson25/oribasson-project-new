@@ -1,5 +1,6 @@
 import profile from '../../content/profile.js';
 import { tx } from '../../shared/text.js';
+import { strings } from '../i18n.js';
 import { Icons, Eyebrow, SegTabs, Btn } from './ui.jsx';
 import { Pet } from './Pet.jsx';
 import { chatTitle } from '../lib/store.js';
@@ -140,8 +141,9 @@ export function ContactActions({ t, compact }) {
 /** One button that flips the language — the phone top bar has no room for two. */
 export function LangSwitch({ lang, setLang }) {
   const other = lang === 'he' ? 'en' : 'he';
+  const name = other === 'he' ? 'עברית' : 'English';
   return (
-    <button type="button" onClick={() => setLang(other)} title={other === 'he' ? 'עברית' : 'English'}
+    <button type="button" onClick={() => setLang(other)} title={name} aria-label={name}
       style={{
         height: 34, minWidth: 40, padding: '0 10px', borderRadius: 10, flexShrink: 0,
         background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-2)',
@@ -152,7 +154,7 @@ export function LangSwitch({ lang, setLang }) {
 
 export function LangToggle({ lang, setLang, small = true }) {
   return (
-    <SegTabs small={small} value={lang} onChange={setLang}
+    <SegTabs small={small} value={lang} onChange={setLang} label={strings(lang).language}
       items={[{ id: 'en', label: 'EN', title: 'English' }, { id: 'he', label: 'עב', title: 'עברית' }]} />
   );
 }
@@ -165,7 +167,7 @@ export function RecentList({ t, recents, activeChatId, onPickRecent }) {
     const on = c.id === activeChatId;
     const title = chatTitle(c.messages) || '…';
     return (
-      <button key={c.id} type="button" onClick={() => onPickRecent(c)} title={title}
+      <button key={c.id} type="button" onClick={() => onPickRecent(c)} title={title} aria-current={on ? 'true' : undefined}
         style={{
           display: 'block', flexShrink: 0, width: '100%', textAlign: 'start', padding: '7px 13px', borderRadius: 9,
           background: on ? 'var(--bg-hover)' : 'transparent',
@@ -228,7 +230,7 @@ export function Sidebar({ t, lang, page, go, recents, activeChatId, onPickRecent
       <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', marginTop: 18 }}>
         <div style={{ padding: '0 20px 8px', display: 'flex', alignItems: 'center', gap: 8 }}>
           <Eyebrow style={{ flex: 1 }}>{t.recent}</Eyebrow>
-          <button type="button" onClick={onNewChat} title={t.newChat}
+          <button type="button" onClick={onNewChat} title={t.newChat} aria-label={t.newChat}
             style={{ display: 'flex', alignItems: 'center', background: 'transparent', color: 'var(--text-muted)', padding: 2, borderRadius: 7 }}
             onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; }}
@@ -262,7 +264,7 @@ export function Sidebar({ t, lang, page, go, recents, activeChatId, onPickRecent
               <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)' }}>{t.adminSignIn}</div>
               <div style={{ fontSize: 10.5, color: 'var(--text-muted)', marginTop: 1 }}>{t.administrator}</div>
             </div>
-            <button type="button" onClick={onSignOut} title={t.signOut}
+            <button type="button" onClick={onSignOut} title={t.signOut} aria-label={t.signOut}
               style={{ display: 'flex', alignItems: 'center', color: 'var(--text-muted)', background: 'transparent', padding: 5, borderRadius: 8 }}
               onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--danger)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; }}

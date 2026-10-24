@@ -140,9 +140,9 @@ export function Chip({ children, mono, style, title }) {
   );
 }
 
-export function SegTabs({ items, value, onChange, style, small }) {
+export function SegTabs({ items, value, onChange, style, small, label }) {
   return (
-    <div style={{
+    <div role="group" aria-label={label} style={{
       display: 'inline-flex', gap: 3, padding: 3, borderRadius: 'var(--r-md)',
       background: 'var(--bg-panel)', border: '1px solid var(--border)', ...style,
     }}>
@@ -150,6 +150,7 @@ export function SegTabs({ items, value, onChange, style, small }) {
         const on = value === it.id;
         return (
           <button key={it.id} type="button" onClick={() => onChange(it.id)} title={it.title}
+            aria-pressed={on} aria-label={it.title || it.label}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 6,
               padding: small ? '4px 10px' : '6px 14px', borderRadius: 8, fontSize: small ? 12 : 12.5,
