@@ -7,10 +7,10 @@ import { Pet } from './Pet.jsx';
 import { chatTitle } from '../lib/store.js';
 
 /** The lock-up: the face in its badge, then the name. */
-export function BrandMark({ lang, mark = 34, text = 19, onClick }) {
+export function BrandMark({ lang, mark = 34, text = 19, onClick, style }) {
   const [first, ...rest] = tx(profile.name, lang).split(' ');
   return (
-    <button type="button" onClick={onClick} style={{ display: 'flex', alignItems: 'center', gap: 11, background: 'transparent', padding: 0, textAlign: 'start' }}>
+    <button type="button" onClick={onClick} style={{ display: 'flex', alignItems: 'center', gap: 11, background: 'transparent', padding: 0, textAlign: 'start', ...style }}>
       <div style={{
         width: mark, height: mark, borderRadius: 11, flexShrink: 0, overflow: 'hidden',
         background: 'var(--bg-card)', border: '1px solid var(--border)',
@@ -123,7 +123,7 @@ export function ContactActions({ t, compact }) {
           <a key={it.key} href={it.href} title={it.title} aria-label={it.external ? `${it.title}. ${t.newTab}` : it.title}
             target={it.external ? '_blank' : undefined} rel={it.external ? 'noopener noreferrer' : undefined}
             style={{
-              width: 40, height: 40, borderRadius: '50%', flexShrink: 0,
+              width: 44, height: 44, borderRadius: '50%', flexShrink: 0,
               background: 'var(--primary)', color: 'var(--primary-ink)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               boxShadow: '0 2px 10px var(--primary-glow)',
@@ -153,7 +153,7 @@ export function LangSwitch({ lang, setLang }) {
   return (
     <button type="button" onClick={() => setLang(other)} title={name} aria-label={name} lang={other}
       style={{
-        height: 40, minWidth: 44, padding: '0 11px', borderRadius: 10, flexShrink: 0,
+        height: 44, minWidth: 44, padding: '0 11px', borderRadius: 10, flexShrink: 0,
         background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-2)',
         fontSize: 12.5, fontWeight: 700,
       }}>{other === 'he' ? 'עב' : 'EN'}</button>

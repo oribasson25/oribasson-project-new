@@ -8,7 +8,7 @@ export function MobileTopBar({ t, lang, setLang, go, home }) {
   return (
     <div className="screen-only m-top" style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0, borderBottom: '1px solid var(--border)', background: 'var(--bg-sidebar)' }}>
       <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
-        <BrandMark lang={lang} mark={30} text={17} onClick={() => go('/')} />
+        <BrandMark lang={lang} mark={30} text={17} onClick={() => go('/')} style={{ minHeight: 44, minWidth: 44 }} />
       </div>
       {home && <ContactActions t={t} compact />}
       <LangSwitch lang={lang} setLang={setLang} />
