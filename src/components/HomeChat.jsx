@@ -91,15 +91,9 @@ function QuestionChips({ items, onPick, disabled, dir, style, grid, className, l
     }}>
       {items.map((text) => (
         <button key={text} type="button" className="q-chip" onClick={() => onPick(text)} disabled={disabled}
-          style={{
-            background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-2)',
-            fontWeight: 600,
-            ...(grid
-              ? { borderRadius: 14, padding: '9px 12px', fontSize: 12.5, lineHeight: 1.35, minHeight: 50, textAlign: 'start', display: 'flex', alignItems: 'center' }
-              : { borderRadius: 999, padding: '8px 15px', fontSize: 12.5 }),
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--primary)'; e.currentTarget.style.color = 'var(--text)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-2)'; }}
+          style={grid
+            ? { borderRadius: 14, padding: '10px 12px', fontSize: 13, lineHeight: 1.35, minHeight: 52, textAlign: 'start', display: 'flex', alignItems: 'center' }
+            : { borderRadius: 999, padding: '8px 14px', fontSize: 13, lineHeight: 1.35 }}
         >{text}</button>
       ))}
     </div>
