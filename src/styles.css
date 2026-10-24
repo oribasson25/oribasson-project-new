@@ -601,6 +601,16 @@ a { color: inherit; }
   .home-index { margin-top: 18px; padding-top: 14px; gap: 14px; }
   .home-index-list a,
   .home-tools a { font-size: 13px; }
+  /* Quiet text, with a thumb-sized tap. Desktop keeps the tighter line. */
+  .home-index-list a,
+  .home-tools a,
+  .home-post {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .home-post { width: min(460px, 100%); }
   /* The quiet rows stay looking like text. The extra height is the tap. */
   .contact-row { min-height: 44px; }
   .read-more { min-height: 44px; }
