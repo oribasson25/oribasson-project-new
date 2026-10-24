@@ -161,6 +161,16 @@ a { color: inherit; }
 /* Resume side column only when the content pane is wide enough to hold it.
    The phone breakpoint is not enough: a 900px window still has a sidebar. */
 .resume-wrap { container-type: inline-size; }
+.resume-summary {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(18px, 1.7vw, 22px);
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+  color: var(--text);
+  max-width: 62ch;
+  white-space: pre-wrap;
+}
 .resume-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
