@@ -102,7 +102,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
             </Section>
           )}
           {(resume.experience || []).length > 0 && (
-            <Section title={t.experience} pad="0">
+            <Section id="experience" title={t.experience} pad="0">
               <div style={{ marginTop: -1 }}>
                 {resume.experience.map((job, i) => <Job key={i} job={job} t={t} lang={lang} onAsk={onAsk} />)}
               </div>
