@@ -76,8 +76,10 @@ body {
 .pet-halo.busy { animation-duration: 1.4s; }
 .halo-lean { transition: transform 0.45s ease; }
 
-/* The same hairline the project diagrams draw, under the greeting. */
-.hero-rule { display: block; margin: 8px auto 0; }
+/* The same hairline the project diagrams draw, under the greeting.
+   A flex column shrinks an SVG to nothing once the welcome screen scrolls,
+   which is what happens on a phone. The rule keeps its own height. */
+.hero-rule { display: block; flex: none; width: 88px; height: 8px; margin: 8px auto 0; overflow: visible; }
 .hero-draw {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
