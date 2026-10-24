@@ -52,6 +52,7 @@ export function Composer({ value, onChange, onSend, disabled, placeholder, dir, 
         dir="auto"
         rows={1}
         maxLength={2000}
+        enterKeyHint="send"
         autoFocus={autoFocus}
         disabled={disabled}
         placeholder={placeholder}
