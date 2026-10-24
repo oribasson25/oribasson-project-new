@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { renderMarkdown } from '../lib/markdown.js';
+import { stripProjectMarkers } from '../lib/projectDiagram.js';
 import { useReducedMotion } from '../lib/hooks.js';
 import { Pet } from './Pet.jsx';
 
@@ -134,7 +135,8 @@ export function Answer({ content, streaming, onRevealed }) {
   const writing = streaming || (live && shown < content.length);
   const visible = shown < content.length ? content.slice(0, shown) : content;
   const html = useMemo(() => {
-    const out = renderMarkdown(writing ? closeOpen(visible) : visible);
+    const text = stripProjectMarkers(visible);
+    const out = renderMarkdown(writing ? closeOpen(text) : text);
     // The caret goes before the whole run of closing tags, so it follows the last word even inside a list.
     return writing ? out.replace(/((?:<\/[a-z0-9]+>\s*)+)$/i, '<span class="caret"></span>$1') : out;
   }, [visible, writing]);

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { timeAgo } from '../i18n.js';
 import { renderMarkdown } from '../lib/markdown.js';
+import { stripProjectMarkers } from '../lib/projectDiagram.js';
 import { Icons, PageHeader, Btn, Chip, EmptyState, Section } from './ui.jsx';
 
 function place(c) {
@@ -68,7 +69,7 @@ function Thread({ id, t, lang, onBack, onDeleted, onUnauthorized }) {
                 alignSelf: 'stretch', background: 'var(--bg-card)', border: '1px solid var(--border)',
                 padding: '12px 15px', borderRadius: '16px 16px 16px 4px', fontSize: 13.5,
               }}>
-                <div className="md" dangerouslySetInnerHTML={{ __html: renderMarkdown(m.content) }} />
+                <div className="md" dangerouslySetInnerHTML={{ __html: renderMarkdown(stripProjectMarkers(m.content)) }} />
               </div>
             )))}
           </div>
