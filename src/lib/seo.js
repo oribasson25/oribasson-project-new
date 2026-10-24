@@ -103,6 +103,23 @@ function personNode() {
   };
 }
 
+function projectList() {
+  const items = (projects || []).filter((p) => p.id && tx(p.name, 'en'));
+  if (!items.length) return null;
+  return {
+    '@type': 'ItemList',
+    '@id': `${ORIGIN}/projects#list`,
+    name: DESC.en.projects,
+    itemListElement: items.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: tx(p.name, 'en'),
+      description: tx(p.description, 'en') || undefined,
+      url: `${ORIGIN}/projects#${p.id}`,
+    })),
+  };
+}
+
 function crumbs(page) {
   const en = strings('en');
   const name = tx(profile.name, 'en');
@@ -130,6 +147,10 @@ export function jsonLd(page) {
     },
     personNode(),
   ];
+  if (page === 'chat' || page === 'resume') {
+    const list = projectList();
+    if (list) graph.push(list);
+  }
   if (page === 'resume' || page === 'projects') graph.push(crumbs(page));
   if (page === 'projects') {
     graph.push({
