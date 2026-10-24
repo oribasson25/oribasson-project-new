@@ -202,9 +202,12 @@ body {
 .home-fact.is-out.from-fade { animation: factFadeOut 0.34s ease forwards; }
 .home-fact.from-still { animation: none; }
 
-/* Beside the figure only while both lines fit. Otherwise, under him. */
+/* Beside the figure only while both lines fit. Otherwise, under him.
+   The side rules are more specific than the slot, so they are reset here too. */
 @container home-stage (max-width: 780px) {
-  .home-fact-slot {
+  .home-fact-slot,
+  .home-fact-slot[data-side="left"],
+  .home-fact-slot[data-side="right"] {
     position: relative;
     top: auto;
     left: auto;
@@ -212,7 +215,7 @@ body {
     width: min(280px, 100%);
     margin-top: 10px;
     text-align: center;
-    min-height: 4.4em;
+    min-height: 2.9em;
   }
   .home-fact.is-in.from-left,
   .home-fact.is-in.from-right { animation-name: factFade; }
@@ -461,7 +464,9 @@ a { color: inherit; }
 @media print {
   .screen-only, .skip-link { display: none !important; }
   .hero-rise, .home-fact { animation: none; opacity: 1; transform: none; }
-  .home-fact-slot {
+  .home-fact-slot,
+  .home-fact-slot[data-side="left"],
+  .home-fact-slot[data-side="right"] {
     position: relative;
     top: auto;
     left: auto;
