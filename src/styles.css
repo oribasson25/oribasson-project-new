@@ -480,6 +480,8 @@ a { color: inherit; }
 }
 @container (min-width: 860px) {
   .resume-layout.has-side { grid-template-columns: minmax(0, 1fr) 320px; }
+  /* The jobs are the long part. The skills stay in view beside them. */
+  .resume-side { position: sticky; top: 18px; align-self: start; z-index: 1; }
 }
 .project-grid {
   display: grid;

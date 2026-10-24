@@ -133,7 +133,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
         </div>
 
         {side ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+          <div className="resume-side" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
             {skills.length > 0 && (
               <Section id="skills" title={t.skills}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
