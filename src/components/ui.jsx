@@ -79,7 +79,7 @@ export function PageHeader({ eyebrow, title, subtitle, actions, size = 38 }) {
     <div style={{ marginBottom: 24 }}>
       {eyebrow && <Eyebrow style={{ marginBottom: 10 }}>{eyebrow}</Eyebrow>}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
-        <h1 dir="auto" style={{ margin: 0, fontSize: size, fontWeight: 700, letterSpacing: '-0.035em', lineHeight: 1.08, color: 'var(--text)' }}>{title}</h1>
+        <h1 dir="auto" style={{ margin: 0, fontFamily: 'var(--display)', fontSize: size, fontWeight: 500, letterSpacing: '-0.03em', lineHeight: 0.96, color: 'var(--text)' }}>{title}</h1>
         {actions && <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>{actions}</div>}
       </div>
       {subtitle && <div dir="auto" style={{ color: 'var(--text-2)', fontSize: 13, marginTop: 10, fontWeight: 500 }}>{subtitle}</div>}
@@ -94,7 +94,7 @@ export function Btn({ variant = 'ghost', icon, children, onClick, title, disable
   const font = size === 'sm' ? 12.5 : 13;
   const primary = variant === 'primary';
   const look = primary
-    ? { background: hot ? 'var(--primary-hover)' : 'var(--primary)', color: 'var(--primary-ink)', border: '1px solid transparent', boxShadow: hot ? '0 4px 18px var(--primary-glow)' : '0 2px 10px var(--primary-glow)' }
+    ? { background: hot ? 'var(--primary-hover)' : 'var(--primary)', color: 'var(--primary-ink)', border: '1px solid var(--primary)' }
     : { background: hot ? 'var(--bg-hover)' : 'var(--bg-card)', color: danger ? 'var(--danger)' : (hot ? 'var(--text)' : 'var(--text-2)'), border: `1px solid ${hot && !danger ? 'var(--primary-soft)' : 'var(--border)'}` };
   const Tag = href ? 'a' : 'button';
   return (
@@ -104,7 +104,7 @@ export function Btn({ variant = 'ghost', icon, children, onClick, title, disable
       onMouseEnter={() => !disabled && setHot(true)} onMouseLeave={() => setHot(false)}
       style={{
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 7,
-        padding: pad, borderRadius: 'var(--r-md)', fontSize: font, fontWeight: 600,
+        padding: pad, borderRadius: 0, fontSize: font, fontWeight: 600,
         whiteSpace: 'nowrap', cursor: disabled ? 'default' : 'pointer', textDecoration: 'none',
         opacity: disabled ? 0.45 : 1, transition: 'background 0.16s, color 0.16s, border-color 0.16s, box-shadow 0.16s',
         ...look, ...style,
@@ -121,7 +121,7 @@ export function IconBtn({ onClick, title, children, danger, style, disabled }) {
     <button type="button" onClick={onClick} title={title} aria-label={title} disabled={disabled}
       onMouseEnter={() => setHot(true)} onMouseLeave={() => setHot(false)}
       style={{
-        width: 30, height: 30, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        width: 30, height: 30, borderRadius: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
         background: hot ? 'var(--bg-hover)' : 'transparent',
         color: hot ? (danger ? 'var(--danger)' : 'var(--text)') : 'var(--text-muted)',
         ...style,
@@ -132,10 +132,10 @@ export function IconBtn({ onClick, title, children, danger, style, disabled }) {
 export function Chip({ children, mono, style, title }) {
   return (
     <span title={title} style={{
-      display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 11px',
-      borderRadius: 999, fontSize: 11.5, fontWeight: 600, lineHeight: 1.5,
-      background: 'var(--bg-hover)', color: 'var(--text-2)', border: '1px solid var(--border)',
-      fontFamily: mono ? 'var(--mono)' : 'inherit', whiteSpace: 'nowrap', ...style,
+      display: 'inline-flex', alignItems: 'center', marginInlineEnd: 12, marginBottom: 4,
+      padding: 0, borderRadius: 0, fontSize: 12.5, fontWeight: 500, lineHeight: 1.6,
+      background: 'transparent', color: 'var(--text-2)', border: 'none',
+      fontFamily: mono ? 'var(--mono)' : 'inherit', ...style,
     }}>{children}</span>
   );
 }
@@ -143,8 +143,8 @@ export function Chip({ children, mono, style, title }) {
 export function SegTabs({ items, value, onChange, style, small }) {
   return (
     <div style={{
-      display: 'inline-flex', gap: 3, padding: 3, borderRadius: 'var(--r-md)',
-      background: 'var(--bg-panel)', border: '1px solid var(--border)', ...style,
+      display: 'inline-flex', gap: 0, padding: 0, borderRadius: 0,
+      background: 'transparent', borderBottom: '1px solid var(--text)', ...style,
     }}>
       {items.map((it) => {
         const on = value === it.id;
@@ -152,11 +152,11 @@ export function SegTabs({ items, value, onChange, style, small }) {
           <button key={it.id} type="button" onClick={() => onChange(it.id)} title={it.title}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 6,
-              padding: small ? '4px 10px' : '6px 14px', borderRadius: 8, fontSize: small ? 12 : 12.5,
-              fontWeight: on ? 700 : 600,
+              padding: small ? '4px 10px' : '6px 14px', borderRadius: 0, fontSize: small ? 12 : 12.5,
+              fontWeight: on ? 700 : 500,
               background: on ? 'var(--sel)' : 'transparent',
               color: on ? 'var(--sel-ink)' : 'var(--text-2)',
-              border: '1px solid transparent',
+              border: 'none',
               transition: 'background 0.15s, color 0.15s',
             }}>{it.label}</button>
         );
@@ -169,7 +169,7 @@ export function EmptyState({ icon, title, subtitle, action }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, padding: '40px 48px' }}>
       <div style={{
-        width: 48, height: 48, borderRadius: 14,
+        width: 48, height: 48, borderRadius: 0,
         background: 'var(--bg-hover)', border: '1px solid var(--border)',
         display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)',
       }}>{icon}</div>
@@ -186,24 +186,23 @@ export function StatusDot({ on, size = 7 }) {
   return <span style={{
     width: size, height: size, borderRadius: '50%', flexShrink: 0, display: 'inline-block',
     background: on ? 'var(--success)' : 'var(--text-muted)',
-    boxShadow: on ? '0 0 8px rgba(34,197,94,0.6)' : 'none',
   }} />;
 }
 
 /** A section card: the shape 8Legs' Settings is built from. */
 export function Section({ id, title, children, right, pad = '14px 18px' }) {
   return (
-    <div id={id} style={{ background: 'var(--bg-card)', borderRadius: 'var(--r-lg)', border: '1px solid var(--border)', overflow: 'hidden' }}>
+    <section id={id} style={{ borderTop: '1px solid var(--text)' }}>
       {title && (
         <div style={{
-          padding: '16px 20px 14px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 10,
-          fontSize: 15, fontWeight: 700, letterSpacing: '-0.01em', color: 'var(--text)',
+          padding: '14px 0 10px', display: 'flex', alignItems: 'baseline', gap: 10,
+          color: 'var(--text)',
         }}>
-          <h2 dir="auto" style={{ flex: 1, minWidth: 0, margin: 0, fontSize: 'inherit', fontWeight: 'inherit', letterSpacing: 'inherit', lineHeight: 'inherit' }}>{title}</h2>
+          <h2 dir="auto" style={{ flex: 1, minWidth: 0, margin: 0, fontFamily: 'var(--display)', fontSize: 26, fontWeight: 500, letterSpacing: '-0.02em', lineHeight: 1.1 }}>{title}</h2>
           {right}
         </div>
       )}
-      <div style={{ padding: pad }}>{children}</div>
-    </div>
+      <div style={{ padding: pad === '14px 18px' ? '4px 0 8px' : pad }}>{children}</div>
+    </section>
   );
 }
