@@ -55,7 +55,7 @@ export function Eyebrow({ children, style }) {
 export function Crumbs({ trail, right }) {
   return (
     <div className="screen-only" style={{
-      height: 56, flexShrink: 0, display: 'flex', alignItems: 'center', gap: 10,
+      minHeight: 56, height: 'auto', minWidth: 0, flexShrink: 0, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 10,
       padding: '0 34px', borderBottom: '1px solid var(--border)',
       background: 'var(--bg-app)', position: 'relative', zIndex: 2,
     }}>
@@ -70,7 +70,7 @@ export function Crumbs({ trail, right }) {
           }}>{part}</span>
         </span>
       ))}
-      <div style={{ marginInlineStart: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>{right}</div>
+      <div style={{ marginInlineStart: 'auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'flex-end', gap: 10, minWidth: 0 }}>{right}</div>
     </div>
   );
 }

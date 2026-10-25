@@ -10,7 +10,7 @@ import { chatTitle } from '../lib/store.js';
 export function BrandMark({ lang, mark = 34, text = 19, onClick, style }) {
   const [first, ...rest] = tx(profile.name, lang).split(' ');
   return (
-    <button type="button" onClick={onClick} style={{ display: 'flex', alignItems: 'center', gap: 11, background: 'transparent', padding: 0, textAlign: 'start', ...style }}>
+    <button type="button" onClick={onClick} style={{ display: 'flex', alignItems: 'center', gap: 11, minWidth: 0, maxWidth: '100%', background: 'transparent', padding: 0, textAlign: 'start', ...style }}>
       <div style={{
         width: mark, height: mark, borderRadius: 11, flexShrink: 0, overflow: 'hidden',
         background: 'var(--bg-card)', border: '1px solid var(--border)',
@@ -22,7 +22,7 @@ export function BrandMark({ lang, mark = 34, text = 19, onClick, style }) {
           leaves this line with no strong letter of its own: it falls back to
           left-to-right and reads "בסון אורי". The line takes the language's
           direction and the two parts stay in it. */}
-      <div dir={lang === 'he' ? 'rtl' : 'ltr'} style={{ fontSize: text, fontWeight: 800, letterSpacing: '-0.03em', whiteSpace: 'nowrap', unicodeBidi: 'isolate' }}>
+      <div dir={lang === 'he' ? 'rtl' : 'ltr'} style={{ fontSize: text, fontWeight: 800, letterSpacing: '-0.03em', whiteSpace: 'nowrap', unicodeBidi: 'isolate', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis' }}>
         <span style={{ color: 'var(--text)', unicodeBidi: 'normal' }}>{first}</span>
         {rest.length > 0 && <>{' '}<span style={{ color: 'var(--text-muted)', unicodeBidi: 'normal' }}>{rest.join(' ')}</span></>}
       </div>
