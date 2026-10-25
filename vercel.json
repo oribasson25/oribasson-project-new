@@ -5,6 +5,10 @@
     "api/chat.js": { "maxDuration": 60 }
   },
   "rewrites": [
+    { "source": "/resume", "destination": "/resume.html" },
+    { "source": "/resume/", "destination": "/resume.html" },
+    { "source": "/projects", "destination": "/projects.html" },
+    { "source": "/projects/", "destination": "/projects.html" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ],
   "headers": [

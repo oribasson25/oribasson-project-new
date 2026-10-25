@@ -187,6 +187,17 @@ export function jsonLd(page) {
   return { '@context': 'https://schema.org', '@graph': graph };
 }
 
+/** English head for a crawler that does not run the script. The tab stays English either way. */
+export function staticHead(page) {
+  const path = PATHS[page] || '/';
+  return {
+    title: pageTitle(page),
+    description: DESC.en[page] || DESC.en.home,
+    url: abs(path),
+    jsonLd: jsonLd(page),
+  };
+}
+
 export function pageTitle(page) {
   const en = strings('en');
   const name = tx(profile.name, 'en');
