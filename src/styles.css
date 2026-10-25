@@ -164,8 +164,9 @@ body {
   align-items: center;
   justify-content: center;
 }
-.send-ready:hover { background: var(--primary-hover); }
+.send-btn:hover:not(:disabled) { background: var(--primary-hover); }
 .send-arrow { display: block; line-height: 1; transition: transform 0.22s var(--ease); }
+.send-mark { width: 10px; height: 10px; border-radius: 2px; background: currentColor; display: block; }
 .send-ready:hover .send-arrow { transform: translateY(-2px); }
 .bubble-user {
   align-self: flex-end;

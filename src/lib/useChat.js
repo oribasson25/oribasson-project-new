@@ -18,6 +18,9 @@ export function useChat({ lang, onSaved }) {
   const [streamingId, setStreamingId] = useState(null);
   const [error, setError] = useState(null);
   const [pulse, setPulse] = useState({ name: null, n: 0 });
+  // A stop before any words puts the question back. `n` changes even when the text does not.
+  const [held, setHeld] = useState(null);
+  const holdN = useRef(0);
   const abortRef = useRef(null);
   const messagesRef = useRef(messages);
   messagesRef.current = messages;
@@ -69,7 +72,22 @@ export function useChat({ lang, onSaved }) {
       setMessages(done);
       onSaved(upsertChat({ id, messages: done }));
     } catch (err) {
-      if (err.name === 'AbortError') return;
+      if (err.name === 'AbortError') {
+        const text = answer.trim();
+        if (text) {
+          const done = [...list, { id: answerId, role: 'assistant', content: text }];
+          setMessages(done);
+          onSaved(upsertChat({ id, messages: done }));
+        } else {
+          const last = list[list.length - 1];
+          setMessages(list.slice(0, -1));
+          if (last && last.role === 'user') {
+            holdN.current += 1;
+            setHeld({ text: last.content, n: holdN.current });
+          }
+        }
+        return;
+      }
       // A half-written answer is not an answer: take it back and offer a retry.
       setMessages(list);
       setError(err instanceof ChatError ? err.code : 'error');
@@ -87,9 +105,20 @@ export function useChat({ lang, onSaved }) {
   function send(text) {
     const body = String(text || '').trim();
     if (!body || pending) return;
+    setHeld(null);
     const list = [...messagesRef.current, { id: uuid(), role: 'user', content: body }];
     setMessages(list);
     run(list);
+  }
+
+  function stop() {
+    const controller = abortRef.current;
+    if (!controller) return;
+    controller.abort();
+  }
+
+  function takeHeld() {
+    setHeld(null);
   }
 
   function retry() {
@@ -104,6 +133,7 @@ export function useChat({ lang, onSaved }) {
     setPending(false);
     setStreamingId(null);
     setError(null);
+    setHeld(null);
     setMessages([]);
     setChatId(uuid());
   }
@@ -114,9 +144,10 @@ export function useChat({ lang, onSaved }) {
     setPending(false);
     setStreamingId(null);
     setError(null);
+    setHeld(null);
     setChatId(chat.id);
     setMessages(chat.messages.map((m) => ({ id: m.id || uuid(), role: m.role, content: m.content })));
   }
 
-  return { chatId, messages, pending, streamingId, error, pulse, react, send, retry, reset, open };
+  return { chatId, messages, pending, streamingId, error, pulse, held, react, send, stop, takeHeld, retry, reset, open };
 }

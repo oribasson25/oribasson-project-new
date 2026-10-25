@@ -23,7 +23,7 @@ function questionBefore(messages, index) {
   return '';
 }
 
-export function Composer({ value, onChange, onSend, disabled, placeholder, dir, width = 720, fieldRef, autoFocus, sendLabel = 'Send', sendHint, large, onFieldFocus }) {
+export function Composer({ value, onChange, onSend, onStop, busy, disabled, placeholder, dir, width = 720, fieldRef, autoFocus, sendLabel = 'Send', sendHint, stopLabel, stopHint, large, onFieldFocus }) {
   const [focus, setFocus] = useState(false);
   const own = useRef(null);
   const ref = fieldRef || own;
@@ -61,19 +61,24 @@ export function Composer({ value, onChange, onSend, disabled, placeholder, dir, 
         disabled={disabled}
         placeholder={placeholder}
         aria-label={placeholder}
-        aria-describedby={sendHint ? 'chat-composer-hint' : undefined}
+        aria-describedby={sendHint || (busy && stopHint) ? 'chat-composer-hint' : undefined}
         style={{
           flex: 1, resize: 'none', border: 'none', background: 'transparent', outline: 'none',
           boxShadow: 'none', fontSize: 15, lineHeight: 1.55, padding: '12px 10px', maxHeight: 150,
         }}
       />
-      <button type="button" onClick={onSend} disabled={disabled || empty} title={sendLabel} aria-label={sendLabel}
-        className={disabled || empty ? 'send-btn' : 'send-btn send-ready'}
+      <button type="button" onClick={busy ? onStop : onSend} disabled={busy ? false : (disabled || empty)}
+        title={busy ? stopLabel : sendLabel} aria-label={busy ? stopLabel : sendLabel}
+        aria-keyshortcuts={busy ? 'Escape' : undefined}
+        className={busy || disabled || empty ? 'send-btn' : 'send-btn send-ready'}
         style={{
           width: large ? 44 : 40, height: large ? 44 : 40, borderRadius: '50%', flexShrink: 0, marginBottom: 3,
-          opacity: disabled || empty ? 0.35 : 1,
-        }}><span className="send-arrow" aria-hidden="true">↑</span></button>
-      {sendHint && <span id="chat-composer-hint" className="sr-only">{sendHint}</span>}
+          opacity: busy || !(disabled || empty) ? 1 : 0.35,
+        }}>{busy
+          ? <span className="send-mark" aria-hidden="true" />
+          : <span className="send-arrow" aria-hidden="true">↑</span>}
+      </button>
+      {(sendHint || (busy && stopHint)) && <span id="chat-composer-hint" className="sr-only">{busy && stopHint ? stopHint : sendHint}</span>}
     </div>
   );
 }
@@ -121,6 +126,8 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
   const threadRef = useRef(null);
   const stick = useRef(true);
   const fieldRef = useRef(null);
+  const focusAfterStop = useRef(false);
+  const [halted, setHalted] = useState(false);
   const dir = lang === 'he' ? 'rtl' : 'ltr';
   const short = useShortScreen();
   const tight = useTightScreen();
@@ -194,9 +201,42 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
     const body = (text ?? input).trim();
     if (!body) return;
     loadMarkdown();
+    setHalted(false);
     chat.send(body);
     setInput('');
   }
+
+  function halt() {
+    focusAfterStop.current = true;
+    chat.stop();
+  }
+
+  // A stop before the first word puts that question back in the box.
+  useEffect(() => {
+    if (!chat.held) return;
+    setInput(chat.held.text);
+    setHalted(true);
+    chat.takeHeld();
+  }, [chat.held]);
+
+  useEffect(() => {
+    if (pending || !focusAfterStop.current) return;
+    focusAfterStop.current = false;
+    setHalted(true);
+    fieldRef.current?.focus();
+  }, [pending]);
+
+  useEffect(() => {
+    if (!pending) return undefined;
+    const onKey = (e) => {
+      if (e.key !== 'Escape' || e.repeat || e.altKey || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      if (document.querySelector('[role="dialog"]')) return;
+      e.preventDefault();
+      halt();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [pending]);
 
   const offlineNote = offline && <Notice dir={dir}>{t.unavailable}</Notice>;
 
@@ -207,6 +247,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'safe center', overflowY: 'auto',
       }}>
+        <div className="sr-only" aria-live="polite">{halted ? t.stopped : ''}</div>
         <div className="home-stage hero-rise" style={{ animationDelay: '0.04s' }}>
           <PetStage size={stacked ? (tight ? 96 : short ? 112 : 148) : 230} mode={pending ? 'working' : 'idle'} pulse={chat.pulse} busy={pending} voice={voice} label={t.petJump} onHover={setFigureHot}>
             {!stacked && <IntroBubble t={t} voice={voice} transcript={introText} />}
@@ -227,9 +268,10 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
 
         <div className="hero-rise home-ask" style={{ animationDelay: '0.4s', width: '100%' }}>
           {offlineNote}
-          <Composer value={input} onChange={setInput} onSend={() => submit()} fieldRef={fieldRef}
+          <Composer value={input} onChange={setInput} onSend={() => submit()} onStop={halt} busy={pending} fieldRef={fieldRef}
             onFieldFocus={loadMarkdown}
-            disabled={pending || offline} dir={dir} sendLabel={t.send} sendHint={t.sendHint} large={stacked}
+            disabled={pending || offline} dir={dir} sendLabel={t.send} sendHint={t.sendHint}
+            stopLabel={t.stop} stopHint={t.stopHint} large={stacked}
             placeholder={stacked ? t.placeholderShort : t.placeholder} />
         </div>
 
@@ -331,9 +373,11 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
 
       <div className="screen-only" style={{ flexShrink: 0, padding: stacked ? '6px 16px 14px' : '6px 30px 20px' }}>
         {offlineNote}
-        <Composer value={input} onChange={setInput} onSend={() => submit()} dir={dir}
+        <div className="sr-only" aria-live="polite">{halted ? t.stopped : ''}</div>
+        <Composer value={input} onChange={setInput} onSend={() => submit()} onStop={halt} busy={pending} fieldRef={fieldRef} dir={dir}
           onFieldFocus={loadMarkdown}
-          disabled={pending || offline} placeholder={t.answer} autoFocus={!stacked} sendLabel={t.send} sendHint={t.sendHint} large={stacked} />
+          disabled={pending || offline} placeholder={t.answer} autoFocus={!stacked} sendLabel={t.send} sendHint={t.sendHint}
+          stopLabel={t.stop} stopHint={t.stopHint} large={stacked} />
       </div>
     </div>
   );
