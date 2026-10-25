@@ -52,6 +52,16 @@ function Rail({ delay }) {
   );
 }
 
+/** Two short parts sit side by side. A long label or note needs the card's width. */
+function needsRoom(nodes, lang) {
+  if (nodes.length < 2) return false;
+  return nodes.some((node) => {
+    const label = tx(node.label, lang).length;
+    const sub = node.sub ? tx(node.sub, lang).length : 0;
+    return label > 34 || sub > 36;
+  });
+}
+
 function Node({ node, lang, delay }) {
   return (
     <div className="arch-node" dir="auto" style={{ animationDelay: `${delay}ms` }}>
@@ -82,7 +92,7 @@ export function Architecture({ spec, lang, label }) {
               <div key={si} className={`arch-step${step.join === false ? ' arch-step-gap' : ''}`}>
                 {linked && <Stem delay={at} />}
                 {linked && nodes.length === 2 && <Rail delay={at} />}
-                <div className={`arch-row${nodes.length > 2 ? ' arch-row-stack' : ''}`}>
+                <div className={`arch-row${nodes.length > 2 || needsRoom(nodes, lang) ? ' arch-row-stack' : ''}`}>
                   {nodes.map((node, ni) => (
                     <Node key={ni} node={node} lang={lang} delay={at + (linked ? 50 : 0) + ni * 40} />
                   ))}
