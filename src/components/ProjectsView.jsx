@@ -152,7 +152,7 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
   );
 
   return (
-    <li id={p.id || undefined} className="project-card fade-in"
+    <li id={p.id || undefined} className={`project-card fade-in${linked ? ' is-linked' : ''}`}
       style={{
         scrollMarginTop: 18,
         animationDelay: `${Math.min(index, 7) * 70}ms`,

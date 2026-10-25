@@ -720,6 +720,18 @@ a { color: inherit; }
     transform: translateY(-2px);
   }
 }
+/* The address opened this card. A hairline on the start edge, so the
+   lift on hover does not wipe the mark. */
+.project-card.is-linked,
+.project-card.is-linked:hover,
+.project-card.is-linked:focus-within {
+  box-shadow: inset 3px 0 0 var(--text), var(--shadow-lg);
+}
+[dir="rtl"] .project-card.is-linked,
+[dir="rtl"] .project-card.is-linked:hover,
+[dir="rtl"] .project-card.is-linked:focus-within {
+  box-shadow: inset -3px 0 0 var(--text), var(--shadow-lg);
+}
 
 /* Architecture figures on the project cards. Same paper, same type. */
 .arch {
