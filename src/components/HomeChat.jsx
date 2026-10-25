@@ -6,7 +6,7 @@ import { Pet, PetStage } from './Pet.jsx';
 import { IntroBubble } from './IntroBubble.jsx';
 import { HomeFacts } from './HomeFacts.jsx';
 import { Answer, Steps } from './Answer.jsx';
-import { messageBidi } from './ui.jsx';
+import { bidiParts, messageBidi } from './ui.jsx';
 import { architectures } from './architectures.js';
 import { diagramProjectId } from '../lib/projectDiagram.js';
 import { useReducedMotion, useShortScreen, useTightScreen } from '../lib/hooks.js';
@@ -292,7 +292,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         <svg className="hero-rule hero-rise" viewBox="0 0 72 8" width="72" height="8" aria-hidden="true" style={{ animationDelay: '0.22s' }}>
           <path className="arch-line hero-draw" d="M2 4 H70" pathLength="1" />
         </svg>
-        <div className="hero-sub hero-rise" dir={dir} style={{ animationDelay: '0.3s' }}>{stacked ? t.helloSubShort(firstPerson) : t.helloSub(first, firstPerson)}</div>
+        <div className="hero-sub hero-rise" dir={dir} style={{ animationDelay: '0.3s', unicodeBidi: 'isolate' }}>{bidiParts(stacked ? t.helloSubShort(firstPerson) : t.helloSub(first, firstPerson), lang)}</div>
 
         <div className="hero-rise home-ask" style={{ animationDelay: '0.4s', width: '100%' }}>
           {offlineNote}
@@ -306,7 +306,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         <QuestionChips items={chips} onPick={submit} disabled={pending || offline} dir={dir} grid={stacked} label={t.suggestions}
           className="home-chips" stagger dense={stacked && short} />
 
-        <div className="hero-foot hero-rise" dir={dir} style={{ animationDelay: '0.74s' }}>{t.foot(first)}</div>
+        <div className="hero-foot hero-rise" dir={dir} style={{ animationDelay: '0.74s', unicodeBidi: 'isolate' }}>{bidiParts(t.foot(first), lang)}</div>
       </div>
     );
   }
