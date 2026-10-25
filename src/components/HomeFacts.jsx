@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '../lib/hooks.js';
 
 /*
@@ -114,6 +114,7 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   const [seen, setSeen] = useState(true);
   const [side, setSide] = useState('left');
   const slotRef = useRef(null);
+  const lineRef = useRef(null);
   const fromKeyboard = useRef(false);
   const avoidRef = useRef(avoidRight);
   avoidRef.current = avoidRight;
@@ -178,6 +179,17 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   const motion = reduced ? 'still' : side;
   const fineHover = typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches;
 
+  // The words stay one node. Replacing them to replay the slide made a reader
+  // hear the same line again as it left. Clearing the animation before paint
+  // starts it over, and the text only changes when the line does.
+  useLayoutEffect(() => {
+    const el = lineRef.current;
+    if (!el || reduced) return;
+    el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.animation = '';
+  }, [index, phase, side, reduced]);
+
   function togglePin() {
     setPinned((v) => !v);
   }
@@ -191,7 +203,7 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
 
   return (
     <div ref={slotRef} className="home-fact-slot" role="group" aria-label={t.factsLabel} data-side={side} data-pinned={pinned ? 'true' : 'false'} dir={lang === 'he' ? 'rtl' : 'ltr'}>
-      {/* The hint stays off the live region. A new line is the words, and which one it is. */}
+      {/* The hint stays off the live region. A new line is the words. */}
       <div className="home-fact-live" aria-live={hold ? 'off' : 'polite'} aria-atomic="true">
         <button
           type="button"
@@ -219,7 +231,7 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
           onFocus={() => { if (fromKeyboard.current) setKeyFocus(true); }}
           onBlur={() => setKeyFocus(false)}
         >
-          <span key={`${index}-${phase}`} className={`home-fact is-${phase} from-${motion}`}>{text}</span>
+          <span ref={lineRef} className={`home-fact is-${phase} from-${motion}`}>{text}</span>
         </button>
       </div>
       <span id="home-fact-hint" className="sr-only">{pinned ? t.factsResume : t.factsPause}</span>
