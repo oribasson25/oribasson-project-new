@@ -219,7 +219,11 @@ body {
      52% is his middle. The shift keeps a long line centered there, so it
      does not sink into the name. */
   top: 52%;
-  width: 210px;
+  /* 210px when the column is only just wide enough for a line beside him.
+     Up to 340px once the stage has the room, so a long sentence stays two
+     lines instead of a narrow stack. 186px is the gap to his side plus the
+     22px slide, so the entrance still finishes inside the stage. */
+  width: max(210px, min(340px, calc(50% - 186px)));
   z-index: 1;
   margin: 0;
   transform: translateY(-50%);
