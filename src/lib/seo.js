@@ -130,13 +130,56 @@ function projectList() {
     '@type': 'ItemList',
     '@id': `${ORIGIN}/projects#list`,
     name: DESC.en.projects,
-    itemListElement: items.map((p, i) => ({
+    itemListElement: items.map((p, i) => {
+      const name = tx(p.name, 'en');
+      const description = tx(p.description, 'en') || undefined;
+      const url = `${ORIGIN}/projects#${p.id}`;
+      const keywords = (p.tech || []).filter(Boolean).join(', ');
+      return {
+        '@type': 'ListItem',
+        position: i + 1,
+        name,
+        description,
+        url,
+        item: {
+          '@type': 'CreativeWork',
+          name,
+          description,
+          url,
+          creator: { '@id': `${ORIGIN}/#person` },
+          dateCreated: p.year || undefined,
+          keywords: keywords || undefined,
+        },
+      };
+    }),
+  };
+}
+
+function experienceList() {
+  const jobs = (resume.experience || []).map((job, i) => {
+    const role = tx(job.role, 'en');
+    const company = tx(job.company, 'en');
+    if (!role) return null;
+    const summary = tx(job.summary, 'en');
+    return {
       '@type': 'ListItem',
       position: i + 1,
-      name: tx(p.name, 'en'),
-      description: tx(p.description, 'en') || undefined,
-      url: `${ORIGIN}/projects#${p.id}`,
-    })),
+      name: company ? `${role}, ${company}` : role,
+      item: {
+        '@type': 'OrganizationRole',
+        roleName: role,
+        startDate: job.start || undefined,
+        endDate: job.end || undefined,
+        description: summary || undefined,
+      },
+    };
+  }).filter(Boolean);
+  if (!jobs.length) return null;
+  return {
+    '@type': 'ItemList',
+    '@id': `${ORIGIN}/resume#experience`,
+    name: strings('en').experience,
+    itemListElement: jobs,
   };
 }
 
@@ -172,6 +215,10 @@ function pageNode(page, mainEntity) {
 
 export function jsonLd(page) {
   const list = page === 'chat' || page === 'resume' || page === 'projects' ? projectList() : null;
+  const roles = page === 'resume' ? experienceList() : null;
+  const main = page === 'projects' && list ? { '@id': list['@id'] }
+    : page === 'resume' && roles ? { '@id': roles['@id'] }
+      : undefined;
   const graph = [
     {
       '@type': 'WebSite',
@@ -183,8 +230,9 @@ export function jsonLd(page) {
       publisher: { '@id': `${ORIGIN}/#person` },
     },
     personNode(),
-    pageNode(page, page === 'projects' && list ? { '@id': list['@id'] } : undefined),
+    pageNode(page, main),
   ];
+  if (roles) graph.push(roles);
   if (list) graph.push(list);
   if (page === 'resume' || page === 'projects') graph.push(crumbs(page));
   return { '@context': 'https://schema.org', '@graph': graph };
