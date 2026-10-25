@@ -29,6 +29,11 @@
   <meta name="twitter:image:alt" content="Ori Basson — AI Solutions Engineer" />
   <meta name="theme-color" content="#f2f4f8" />
   <meta name="color-scheme" content="light" />
+  <!-- The bundled stylesheet arrives with the script. This is the paper, so the first paint is not white. -->
+  <style>
+    html, body { background: #f2f4f8; margin: 0; }
+    body { color: #0d0f14; font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif; }
+  </style>
   <script>
     try {
       if (JSON.parse(localStorage.getItem('ob_lang')) === 'he') {
