@@ -73,7 +73,14 @@ export function Composer({ value, onChange, onSend, onStop, busy, disabled, plac
         onChange={(e) => onChange(e.target.value)}
         onFocus={() => { setFocus(true); if (onFieldFocus) onFieldFocus(); }}
         onBlur={() => setFocus(false)}
-        onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); onSend(); } }}
+        onKeyDown={(e) => {
+          if (e.key !== 'Enter' || e.shiftKey || e.nativeEvent.isComposing) return;
+          // While an answer is still arriving the button stops it. Enter must
+          // not send the line being written, and must not throw that line away.
+          if (busy || disabled) return;
+          e.preventDefault();
+          onSend();
+        }}
         dir="auto"
         rows={1}
         maxLength={2000}
@@ -235,7 +242,8 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
 
   function submit(text) {
     const body = (text ?? input).trim();
-    if (!body) return;
+    // Offline, or still writing the previous answer: leave the words in the box.
+    if (!body || pending || offline) return;
     loadMarkdown();
     setHalted(false);
     chat.send(body);
@@ -307,7 +315,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
           {offlineNote}
           <Composer value={input} onChange={setInput} onSend={() => submit()} onStop={halt} busy={pending} fieldRef={fieldRef}
             onFieldFocus={loadMarkdown}
-            disabled={pending || offline} dir={dir} sendLabel={t.send} sendHint={t.sendHint}
+            disabled={offline} dir={dir} sendLabel={t.send} sendHint={t.sendHint}
             stopLabel={t.stop} stopHint={t.stopHint} countLabel={t.charsLeft} large={stacked}
             placeholder={stacked ? t.placeholderShort : t.placeholder} />
         </div>
@@ -422,7 +430,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         <div className="sr-only" aria-live="polite">{halted ? t.stopped : ''}</div>
         <Composer value={input} onChange={setInput} onSend={() => submit()} onStop={halt} busy={pending} fieldRef={fieldRef} dir={dir}
           onFieldFocus={loadMarkdown}
-          disabled={pending || offline} placeholder={t.answer} autoFocus={!stacked} sendLabel={t.send} sendHint={t.sendHint}
+          disabled={offline} placeholder={t.answer} autoFocus={!stacked} sendLabel={t.send} sendHint={t.sendHint}
           stopLabel={t.stop} stopHint={t.stopHint} countLabel={t.charsLeft} large={stacked} />
       </div>
     </div>
