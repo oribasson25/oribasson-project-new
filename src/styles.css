@@ -215,10 +215,14 @@ body {
 }
 .home-fact-slot {
   position: absolute;
-  top: 54%;
+  /* The figure stands at the bottom of a stage a little taller than he is.
+     52% is his middle. The shift keeps a long line centered there, so it
+     does not sink into the name. */
+  top: 52%;
   width: 210px;
   z-index: 1;
   margin: 0;
+  transform: translateY(-50%);
 }
 .home-fact-slot[data-side="left"] { right: calc(50% + 156px); text-align: right; }
 .home-fact-slot[data-side="right"] { left: calc(50% + 156px); text-align: left; }
@@ -269,7 +273,8 @@ body {
 .home-fact-slot[data-side="right"] .home-fact::before {
   content: "";
   position: absolute;
-  top: 0.62em;
+  top: 50%;
+  margin-top: -0.75px;
   width: 8px;
   height: 1.5px;
   background: var(--text);
@@ -342,6 +347,7 @@ body {
     right: auto;
     width: min(280px, 100%);
     margin-top: 10px;
+    transform: none;
     text-align: center;
     /* Two lines, centered, so a short line and a long one leave the name where it is. */
     min-height: 44px;
@@ -794,6 +800,7 @@ a { color: inherit; }
     left: auto;
     right: auto;
     width: auto;
+    transform: none;
     text-align: center;
   }
   body {
