@@ -116,13 +116,14 @@ function removeLink(rel) {
 }
 
 /** The lines the resume actually shows, so a crawler does not stop at the job title. */
-function jobDescription(job) {
+function jobDescription(job, { tech = true } = {}) {
   const summary = tx(job.summary, 'en');
   const highlights = tl(job.highlights, 'en').map((item) => {
     const { title, text } = bullet(item);
     return title ? `${title}: ${text}` : text;
   }).filter(Boolean);
   const parts = [summary, ...highlights].filter(Boolean);
+  if (tech && (job.tech || []).length) parts.push(`Tech: ${job.tech.join(', ')}.`);
   return parts.length ? parts.join(' ') : undefined;
 }
 
@@ -131,7 +132,23 @@ function personNode() {
   const company = job ? tx(job.company, 'en') : '';
   const occupations = (resume.experience || []).map((item) => {
     const name = tx(item.role, 'en');
-    return name ? { '@type': 'Occupation', name } : null;
+    if (!name) return null;
+    const employer = tx(item.company, 'en');
+    const when = item.start && item.end && String(item.start) === String(item.end)
+      ? String(item.start)
+      : item.start
+        ? `${item.start}–${item.end || 'present'}`
+        : (item.end || '');
+    const where = [employer, when].filter(Boolean).join(', ');
+    const body = jobDescription(item, { tech: false });
+    const description = [where, body].filter(Boolean).join('. ') || undefined;
+    const skills = (item.tech || []).filter(Boolean).join(', ') || undefined;
+    return {
+      '@type': 'Occupation',
+      name,
+      description,
+      skills,
+    };
   }).filter(Boolean);
   const schools = (resume.education || []).map((e) => tx(e.school, 'en')).filter(Boolean);
   const credentials = (resume.education || []).map((e) => {
