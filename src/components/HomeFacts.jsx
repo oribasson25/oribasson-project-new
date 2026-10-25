@@ -247,7 +247,9 @@ function readTime(text) {
  *
  * `hold` freezes the cycle while the recorded hello is playing, and while
  * the pointer rests on the figure, so a line is not swapped out from under
- * that look. `avoidRight`
+ * that look. An open sheet covers the line, and the cycle waits for that
+ * too — the line is still on screen geometrically, so being in view is not
+ * enough to know it can be read. `avoidRight`
  * keeps every line on the left while the hello bubble occupies that side.
  * The line already on screen does not jump across when the bubble goes away.
  * A new line is already on its side in the first paint, including when motion
@@ -266,6 +268,7 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   const [hidden, setHidden] = useState(() => document.hidden);
   const [seen, setSeen] = useState(true);
   const [composing, setComposing] = useState(false);
+  const [covered, setCovered] = useState(false);
   const [side, setSide] = useState('left');
   const slotRef = useRef(null);
   const lineRef = useRef(null);
@@ -279,7 +282,7 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   avoidRef.current = avoidRight;
   const fact = FACTS[index];
   const text = fact[lang] || fact.en;
-  const paused = hover || pinned || (keyFocus && keyHold) || hidden || hold || !seen || composing;
+  const paused = hover || pinned || (keyFocus && keyHold) || hidden || hold || !seen || composing || covered;
 
   // While the hello bubble is on the right, the line already up moves to the
   // left before paint. Clearing the bubble does not send it back — the next
@@ -298,11 +301,23 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
     window.addEventListener('pointerdown', onPointer);
     document.addEventListener('visibilitychange', onVis);
     document.addEventListener('focusin', onFocus);
+    // The more sheet covers the welcome screen. The line is still inside the
+    // viewport, so merely being in view would keep rotating it unseen.
+    let coveredNow = false;
+    const syncCovered = () => {
+      const next = !!document.querySelector('[role="dialog"][aria-modal="true"]');
+      if (next === coveredNow) return;
+      coveredNow = next;
+      setCovered(next);
+    };
+    const coverObs = new MutationObserver(syncCovered);
+    coverObs.observe(document.body, { childList: true, subtree: true });
     return () => {
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('pointerdown', onPointer);
       document.removeEventListener('visibilitychange', onVis);
       document.removeEventListener('focusin', onFocus);
+      coverObs.disconnect();
     };
   }, []);
 
