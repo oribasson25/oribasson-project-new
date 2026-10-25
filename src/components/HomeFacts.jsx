@@ -40,6 +40,19 @@ import { useReducedMotion } from '../lib/hooks.js';
  * 29. resume.experience[0] roadmap highlight: volume, cost, and feasibility.
  * 30. resume.experience[1] highlight: claim lifecycle and regulatory constraints.
  * 31. resume.experience[0] "Multi-Agent System Architecture": cross-turn state.
+ * 32. projects back-office-agent: structured tasks created in the core systems.
+ * 33. projects hr-recruitment highlight "AI CV matching": a one-line explanation.
+ * 34. projects hr-recruitment highlight "Everyday HR work": notes, reminders, Excel.
+ * 35. projects 8legs highlight "Autopilot": questions about the business, then the chatbot.
+ * 36. projects 8legs description: email sent from a real Gmail inbox.
+ * 37. projects 8legs description: Claude, GPT, or a local model through Ollama.
+ * 38. projects 8legs highlight "Knowledge (RAG)": a whole-site crawl, and a
+ *     Hebrew–English keyword bridge.
+ * 39. projects 8legs highlight "Chatbots as code": a private repo, and A/B tests
+ *     on live traffic.
+ * 40. resume.education[0] details: segmentation, endpoint hardening, log analysis.
+ * 41. resume.experience[0] "Production Incident Debugging": the launch alongside
+ *     engineering, IT, cybersecurity, SOC, and ops.
  */
 const FACTS = [
   { en: 'Live LLM agents at Libra Insurance.', he: 'סוכני LLM בפרודקשן, בליברה ביטוח.' },
@@ -73,6 +86,16 @@ const FACTS = [
   { en: 'The next workflow is chosen by volume, cost, and feasibility.', he: 'מה לבנות אחר כך נקבע לפי נפח, עלות, והאם זה ישים.' },
   { en: 'Claim rules, learned on the desk, decide what an agent is allowed to do.', he: 'כללי התביעה, מהמוקד, קובעים מה מותר לסוכן.' },
   { en: 'The conversation carries from one turn to the next.', he: 'השיחה נשמרת מתור לתור.' },
+  { en: 'The back office opens a task in the core system.', he: 'הבק-אופיס פותח משימה במערכת הליבה.' },
+  { en: 'Every match score comes with one line on why.', he: 'כל ציון התאמה מגיע עם שורה שמסבירה למה.' },
+  { en: 'Notes, reminders, and an Excel export sit beside the board.', he: 'הערות, תזכורות וייצוא לאקסל יושבים ליד הלוח.' },
+  { en: '8Legs asks about the business, then builds the chatbot.', he: '8Legs שואל על העסק, ואז בונה את הצ׳טבוט.' },
+  { en: 'The mail leaves from a real Gmail inbox.', he: 'המייל יוצא מתיבת Gmail אמיתית.' },
+  { en: 'The running model can be Claude, GPT, or Ollama.', he: 'המודל שרץ יכול להיות Claude, ‏GPT או Ollama.' },
+  { en: 'A whole site is crawled, and Hebrew search finds the English.', he: 'אתר שלם נסרק, וחיפוש בעברית מוצא את האנגלית.' },
+  { en: 'Each 8Legs chatbot has its own repo, and a live A/B test.', he: 'לכל צ׳טבוט ב-8Legs יש ריפו משלו, וניסוי A/B חי.' },
+  { en: 'The certificate covered segmentation, hardening, and reading logs.', he: 'ההסמכה כללה סגמנטציה, הקשחת עמדות וניתוח לוגים.' },
+  { en: 'The launch ran with engineering, IT, cyber, the SOC, and ops.', he: 'ההשקה רצה עם פיתוח, IT, סייבר, ה-SOC ותפעול.' },
 ];
 
 const EXIT = 420;
