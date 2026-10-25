@@ -133,9 +133,9 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
         </ul>
       )}
       {(p.tech || []).length > 0 && (
-        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-          {p.tech.map((x) => <Chip key={x} mono>{x}</Chip>)}
-        </div>
+        <ul className="plain-list" style={{ display: 'flex', gap: 6, flexWrap: 'wrap', margin: 0, padding: 0 }}>
+          {p.tech.map((x) => <li key={x}><Chip mono>{x}</Chip></li>)}
+        </ul>
       )}
     </>
   );

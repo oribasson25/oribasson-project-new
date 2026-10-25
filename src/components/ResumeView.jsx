@@ -64,7 +64,11 @@ function Job({ job, t, lang, onAsk }) {
       )}
       {highlights.length > 0 && <Bullets items={highlights} />}
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginTop: 14 }}>
-        {(job.tech || []).map((x) => <Chip key={x} mono>{x}</Chip>)}
+        {(job.tech || []).length > 0 && (
+          <ul className="plain-list" style={{ display: 'flex', flexWrap: 'wrap', gap: 6, margin: 0, padding: 0, minWidth: 0 }}>
+            {job.tech.map((x) => <li key={x}><Chip mono>{x}</Chip></li>)}
+          </ul>
+        )}
         <span className="print-hide" style={{ display: 'contents' }}>
           <Btn size="sm" icon={Icons.sparkle} name={t.askAboutRole(role, company)} onClick={() => onAsk(t.askJobQuestion(role, company))} style={{ marginInlineStart: 'auto' }}>
             {t.askAboutExperience}
@@ -155,9 +159,9 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
                   {skills.map((g, i) => (
                     <div key={i}>
                       {tx(g.group, lang) && <Eyebrow style={{ marginBottom: 8 }}>{tx(g.group, lang)}</Eyebrow>}
-                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                        {(g.items || []).map((x) => <Chip key={x}>{x}</Chip>)}
-                      </div>
+                      <ul className="plain-list" style={{ display: 'flex', gap: 6, flexWrap: 'wrap', margin: 0, padding: 0 }}>
+                        {(g.items || []).map((x) => <li key={x}><Chip>{x}</Chip></li>)}
+                      </ul>
                     </div>
                   ))}
                 </div>
