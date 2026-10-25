@@ -32,6 +32,9 @@ export function usePath() {
 }
 
 const PHONE = '(max-width: 768px)';
+/* A phone this short cannot hold the figure, the hello, the side line, and
+   every question above the bar. The home screen draws a little smaller. */
+const SHORT = '(max-height: 820px)';
 
 export function useIsMobile() {
   const [mobile, setMobile] = useState(() => window.matchMedia(PHONE).matches);
@@ -42,6 +45,17 @@ export function useIsMobile() {
     return () => mq.removeEventListener('change', on);
   }, []);
   return mobile;
+}
+
+export function useShortScreen() {
+  const [short, setShort] = useState(() => window.matchMedia(SHORT).matches);
+  useEffect(() => {
+    const mq = window.matchMedia(SHORT);
+    const on = () => setShort(mq.matches);
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return short;
 }
 
 export function useReducedMotion() {

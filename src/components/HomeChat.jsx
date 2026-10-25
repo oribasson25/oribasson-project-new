@@ -8,6 +8,7 @@ import { HomeFacts } from './HomeFacts.jsx';
 import { Answer, Steps } from './Answer.jsx';
 import { architectures } from './architectures.js';
 import { diagramProjectId } from '../lib/projectDiagram.js';
+import { useShortScreen } from '../lib/hooks.js';
 import { useIntroVoice } from '../lib/useIntroVoice.js';
 import { loadMarkdown } from '../lib/loadMarkdown.js';
 
@@ -79,11 +80,11 @@ export function Composer({ value, onChange, onSend, disabled, placeholder, dir, 
 
 /* On a phone every question stays in view, as a two-column grid of small
    cards: six pills wrapped one per line filled half the screen. */
-function QuestionChips({ items, onPick, disabled, dir, style, grid, className, label, stagger }) {
+function QuestionChips({ items, onPick, disabled, dir, style, grid, className, label, stagger, dense }) {
   return (
     <div role="group" aria-label={label} dir={dir} className={className} style={{
       ...(grid
-        ? { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }
+        ? { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: dense ? 6 : 8 }
         : { display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }),
       ...style,
     }}>
@@ -91,7 +92,7 @@ function QuestionChips({ items, onPick, disabled, dir, style, grid, className, l
         <button key={text} type="button" className={stagger ? 'q-chip hero-rise' : 'q-chip'} onClick={() => onPick(text)} disabled={disabled}
           style={{
             ...(grid
-              ? { borderRadius: 14, padding: '10px 12px', fontSize: 13, lineHeight: 1.35, minHeight: 52, textAlign: 'start', display: 'flex', alignItems: 'center' }
+              ? { borderRadius: 14, padding: dense ? '6px 10px' : '10px 12px', fontSize: dense ? 12 : 13, lineHeight: 1.35, minHeight: dense ? 44 : 52, textAlign: 'start', display: 'flex', alignItems: 'center' }
               : { borderRadius: 999, padding: '8px 14px', fontSize: 13, lineHeight: 1.35 }),
             ...(stagger ? { animationDelay: `${0.42 + i * 0.05}s` } : null),
           }}
@@ -120,6 +121,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
   const stick = useRef(true);
   const fieldRef = useRef(null);
   const dir = lang === 'he' ? 'rtl' : 'ltr';
+  const short = useShortScreen();
   const first = firstName(lang);
   const firstPerson = profile.voice === 'first-person';
   const offline = status.chat === 'unavailable';
@@ -199,12 +201,12 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         alignItems: 'center', justifyContent: 'safe center', overflowY: 'auto',
       }}>
         <div className="home-stage hero-rise" style={{ animationDelay: '0.04s' }}>
-          <PetStage size={stacked ? 148 : 230} mode={pending ? 'working' : 'idle'} pulse={chat.pulse} busy={pending} voice={voice} label={t.petJump} onHover={setFigureHot}>
+          <PetStage size={stacked ? (short ? 112 : 148) : 230} mode={pending ? 'working' : 'idle'} pulse={chat.pulse} busy={pending} voice={voice} label={t.petJump} onHover={setFigureHot}>
             {!stacked && <IntroBubble t={t} voice={voice} transcript={introText} />}
             {stacked && voice.heard && voice.state !== 'playing' && <IntroBubble t={t} voice={voice} stacked />}
           </PetStage>
           {stacked && !(voice.heard && voice.state !== 'playing') && (
-            <IntroBubble t={t} voice={voice} transcript={introText} stacked />
+            <IntroBubble t={t} voice={voice} transcript={introText} stacked dense={short} />
           )}
           <HomeFacts lang={lang} t={t} hold={voice.state === 'playing' || figureHot}
             avoidRight={voice.available && (!voice.heard || voice.state === 'playing')} />
@@ -224,7 +226,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         </div>
 
         <QuestionChips items={chips} onPick={submit} disabled={pending || offline} dir={dir} grid={stacked} label={t.suggestions}
-          className="home-chips" stagger />
+          className="home-chips" stagger dense={stacked && short} />
 
         <div className="hero-foot hero-rise" dir={dir} style={{ animationDelay: '0.74s' }}>{t.foot(first)}</div>
       </div>

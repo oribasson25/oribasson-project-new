@@ -49,7 +49,7 @@ function Tail({ side }) {
   return <span aria-hidden="true" style={{ position: 'absolute', width: 12, height: 12, background: 'var(--bg-card)', transform: 'rotate(45deg)', ...at }} />;
 }
 
-export function IntroBubble({ t, voice, transcript, stacked }) {
+export function IntroBubble({ t, voice, transcript, stacked, dense }) {
   const { state, heard, duration, play, stop, dismiss, levelRef, audioRef } = voice;
   const playing = state === 'playing';
   const reduced = useReducedMotion();
@@ -110,7 +110,7 @@ export function IntroBubble({ t, voice, transcript, stacked }) {
   return (
     <div className="fade-in" style={{
       ...place, zIndex: 3, minWidth: 0, background: 'var(--bg-card)', border: '1px solid var(--border)',
-      borderRadius: 16, boxShadow: 'var(--shadow-lg)', padding: '9px 10px 9px 9px',
+      borderRadius: 16, boxShadow: 'var(--shadow-lg)', padding: dense ? '2px 6px 2px 4px' : '9px 10px 9px 9px',
       display: 'flex', alignItems: 'center', gap: 10,
     }}>
       <Tail side={stacked ? 'top' : 'left'} />

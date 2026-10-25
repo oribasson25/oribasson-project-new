@@ -113,11 +113,11 @@ body {
 }
 /* The welcome column: desktop padding, and the phone's. */
 .home-welcome { padding: 0 34px 50px; }
-.home-welcome.is-phone { padding: 8px 18px 18px; }
+.home-welcome.is-phone { padding: 6px 18px 12px; }
 .home-ask { margin-top: 28px; }
-.home-welcome.is-phone .home-ask { margin-top: 22px; }
+.home-welcome.is-phone .home-ask { margin-top: 14px; }
 .home-chips { margin-top: 20px; width: min(720px, 100%); }
-.home-welcome.is-phone .home-chips { margin-top: 16px; width: 100%; }
+.home-welcome.is-phone .home-chips { margin-top: 10px; width: 100%; }
 
 .hero-foot {
   margin-top: 32px;
@@ -848,10 +848,14 @@ a { color: inherit; }
      sizes the components set for desktop. */
   .m-root input, .m-root textarea, .m-root select { font-size: 16px !important; }
   .m-root button { -webkit-tap-highlight-color: transparent; }
-  .hero-title { font-size: 28px; letter-spacing: -0.038em; margin-top: 12px; }
-  .hero-sub { font-size: 14.5px; margin-top: 10px; }
-  .hero-rule { margin-top: 12px; }
-  .hero-foot { margin-top: 20px; }
+  .hero-title { font-size: 28px; letter-spacing: -0.038em; margin-top: 8px; }
+  .hero-sub { font-size: 14.5px; margin-top: 6px; }
+  .hero-rule { margin-top: 8px; }
+  .hero-foot { margin-top: 12px; }
+  /* The slot's own margin is for the desktop column. On a phone it sits in the stack. */
+  .home-welcome.is-phone .home-fact-slot,
+  .home-welcome.is-phone .home-fact-slot[data-side="left"],
+  .home-welcome.is-phone .home-fact-slot[data-side="right"] { margin-top: 6px; }
   .md .rv-w { animation-name: wordInFlat; }
   /* The quiet rows stay looking like text. The extra height is the tap. */
   .contact-row { min-height: 44px; }
@@ -861,17 +865,25 @@ a { color: inherit; }
   .login-back { min-height: 44px; }
   .login-field,
   .login-submit { min-height: 44px; }
-  /* 667px of height, after the top bar and the floating bar, left the
-     question half under the bar. The same screen, pulled in a little. */
-  @media (max-height: 720px) {
-    .home-welcome.is-phone { padding-top: 2px; padding-bottom: 10px; }
-    .home-welcome.is-phone .hero-title { margin-top: 6px; }
-    .home-welcome.is-phone .hero-rule { margin-top: 6px; }
-    .home-welcome.is-phone .hero-sub { margin-top: 6px; }
-    .home-welcome.is-phone .home-ask { margin-top: 12px; }
-    .home-welcome.is-phone .home-chips { margin-top: 10px; }
-    .home-welcome.is-phone .home-fact-slot { margin-top: 4px; }
-    .home-welcome.is-phone .hero-foot { margin-top: 14px; }
+  /* Below the common phone, the hello and the side line had pushed the last
+     questions under the bar. The line stays, in a shorter slot. */
+  @media (max-height: 820px) {
+    .home-welcome.is-phone { padding-top: 2px; padding-bottom: 8px; }
+    .home-welcome.is-phone .hero-title { margin-top: 4px; }
+    .home-welcome.is-phone .hero-rule { margin-top: 4px; }
+    .home-welcome.is-phone .hero-sub { margin-top: 4px; }
+    .home-welcome.is-phone .home-ask { margin-top: 6px; }
+    .home-welcome.is-phone .home-chips { margin-top: 4px; }
+    .home-welcome.is-phone .hero-foot { margin-top: 8px; }
+    .home-welcome.is-phone .home-fact-slot,
+    .home-welcome.is-phone .home-fact-slot[data-side="left"],
+    .home-welcome.is-phone .home-fact-slot[data-side="right"] {
+      /* Wide enough that the longest line stays two lines. A third line
+         would push the last question under the bar. */
+      width: min(340px, calc(100% - 4px));
+      min-height: 44px;
+      margin-top: 4px;
+    }
   }
   .seg-tab { min-height: 44px; }
   .key-eye { min-width: 44px; min-height: 44px; }
