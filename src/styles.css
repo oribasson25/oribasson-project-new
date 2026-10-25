@@ -390,6 +390,9 @@ input:focus, textarea:focus, select:focus {
   border-color: var(--border-focus);
   box-shadow: 0 0 0 3px var(--primary-dim);
 }
+/* The browser's own grey is lighter than the quiet lines, and it fails to
+   match them. The empty question uses the same ink as a date. */
+::placeholder { color: var(--text-muted); opacity: 1; }
 select option { background: var(--bg-input); }
 
 button {
