@@ -384,6 +384,7 @@ export function useSeo(page, lang, hash) {
       setMeta('name', 'twitter:image:alt', imageAlt);
       setMeta('property', 'og:image:type', 'image/png');
       setMeta('property', 'og:locale', lang === 'he' ? 'he_IL' : 'en_US');
+      setMeta('property', 'og:locale:alternate', lang === 'he' ? 'en_US' : 'he_IL');
       setMeta('name', 'robots', admin || missing ? 'noindex, nofollow' : 'index, follow, max-image-preview:large');
       setMeta('name', 'theme-color', '#f2f4f8');
       setMeta('name', 'color-scheme', 'light');
