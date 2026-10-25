@@ -39,6 +39,22 @@ export function Composer({ value, onChange, onSend, onStop, busy, disabled, plac
   const empty = !value.trim();
   const left = 2000 - value.length;
   const showCount = !!countLabel && value.length >= 1700;
+  // The visible count updates on every key. A reader only needs to hear it
+  // twice: when it first appears, and when the last forty turn red.
+  const band = !showCount ? 'off' : left <= 40 ? 'short' : 'near';
+  const bandRef = useRef(band);
+  const leftRef = useRef(left);
+  leftRef.current = left;
+  const [countNote, setCountNote] = useState('');
+  useEffect(() => {
+    if (band === bandRef.current) return undefined;
+    const prev = bandRef.current;
+    bandRef.current = band;
+    if (!countLabel || band === 'off') { setCountNote(''); return undefined; }
+    if (band === 'short' || prev === 'off') setCountNote(countLabel(leftRef.current));
+    else setCountNote('');
+    return undefined;
+  }, [band, countLabel]);
   const hintId = sendHint || (busy && stopHint) ? 'chat-composer-hint' : '';
   const describedBy = [hintId, showCount ? 'composer-count' : ''].filter(Boolean).join(' ');
   return (
@@ -83,6 +99,7 @@ export function Composer({ value, onChange, onSend, onStop, busy, disabled, plac
           : <span className="send-arrow" aria-hidden="true">↑</span>}
       </button>
       {(sendHint || (busy && stopHint)) && <span id="chat-composer-hint" className="sr-only">{busy && stopHint ? stopHint : sendHint}</span>}
+      <span className="sr-only" aria-live="polite">{countNote}</span>
     </div>
     {showCount && (
       <div id="composer-count" dir={dir} className={left <= 40 ? 'composer-count is-short screen-only' : 'composer-count screen-only'}>
