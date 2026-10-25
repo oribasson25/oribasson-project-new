@@ -9,11 +9,17 @@ function yearTime(value) {
   return <time dateTime={text}>{text}</time>;
 }
 
-/** Same letters as span(): "2023 – 2024", one year when both ends match, "2024 – Present". */
+/**
+ * Same letters as the page: "2023 – 2024", one year when both ends match,
+ * "2024 – Present". The Hebrew word for now is a strong right-to-left run.
+ * Left in the line, it pulls the dash over and the year swaps sides. The
+ * word stays its own unit, so the year stays on the start side.
+ */
 function Period({ start, end, present }) {
   if (!start && !end) return null;
   if (start && end && String(start) === String(end)) return yearTime(start);
-  return <>{yearTime(start || '?')}{' – '}{end ? yearTime(end) : present}</>;
+  const tail = end ? yearTime(end) : <bdi>{present}</bdi>;
+  return <>{yearTime(start || '?')}{' – '}{tail}</>;
 }
 
 function Bullets({ items, size = 13, lang }) {
