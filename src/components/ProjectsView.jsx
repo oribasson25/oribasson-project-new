@@ -137,7 +137,7 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
   );
 
   return (
-    <div id={p.id || undefined} className="project-card fade-in"
+    <li id={p.id || undefined} className="project-card fade-in"
       style={{
         scrollMarginTop: 18,
         animationDelay: `${Math.min(index, 7) * 70}ms`,
@@ -197,7 +197,7 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
           </Btn>
         </span>
       </div>
-    </div>
+    </li>
   );
 }
 
@@ -215,11 +215,11 @@ export function ProjectsView({ t, lang, onAsk, onOpenChat, stacked, hash }) {
         </Section>
       ) : (
         // An opened card grows on its own; the rest of its row keeps the common height.
-        <div className="project-grid">
+        <ul className="project-grid">
           {list.map((p, i) => (
             <ProjectCard key={p.id || i} p={p} t={t} lang={lang} onAsk={onAsk} index={i} linked={!!p.id && hash === p.id} />
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );

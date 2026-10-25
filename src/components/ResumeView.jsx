@@ -49,7 +49,7 @@ function Job({ job, t, lang, onAsk }) {
   const company = tx(job.company, lang);
   const highlights = tl(job.highlights, lang);
   return (
-    <div className="resume-job" style={{ padding: '18px 22px 20px', borderTop: '1px solid var(--border)' }}>
+    <li className="resume-job" style={{ padding: '18px 22px 20px', borderTop: '1px solid var(--border)' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap' }}>
         <div style={{ flex: 1, minWidth: 200 }}>
           <h3 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 16, letterSpacing: '-0.02em', lineHeight: 1.3 }}>{role}</h3>
@@ -71,7 +71,7 @@ function Job({ job, t, lang, onAsk }) {
           </Btn>
         </span>
       </div>
-    </div>
+    </li>
   );
 }
 
@@ -122,16 +122,16 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
           )}
           {(resume.experience || []).length > 0 && (
             <Section id="experience" title={t.experience} pad="0">
-              <div style={{ marginTop: -1 }}>
+              <ul className="plain-list" style={{ marginTop: -1 }}>
                 {resume.experience.map((job, i) => <Job key={i} job={job} t={t} lang={lang} onAsk={onAsk} />)}
-              </div>
+              </ul>
             </Section>
           )}
           {education.length > 0 && (
             <Section title={t.education} pad="0">
-              <div style={{ marginTop: -1 }}>
+              <ul className="plain-list" style={{ marginTop: -1 }}>
                 {education.map((e, i) => (
-                  <div key={i} style={{ padding: '16px 22px', borderTop: '1px solid var(--border)', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+                  <li key={i} className="resume-edu" style={{ padding: '16px 22px', borderTop: '1px solid var(--border)', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
                     <div style={{ flex: 1, minWidth: 200 }}>
                       <h3 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 15, letterSpacing: '-0.02em', lineHeight: 1.3 }}>{tx(e.degree, lang)}</h3>
                       <div dir="auto" style={{ fontSize: 12.5, color: 'var(--text-2)', marginTop: 3, fontWeight: 600 }}>
@@ -140,9 +140,9 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
                       {tx(e.details, lang) && <div dir="auto" style={{ fontSize: 12.5, color: 'var(--text-2)', marginTop: 6, lineHeight: 1.6 }}>{tx(e.details, lang)}</div>}
                     </div>
                     <div dir="ltr" style={{ fontFamily: 'var(--mono)', fontSize: 11.5, color: 'var(--text-muted)', paddingTop: 3 }}><Period start={e.start} end={e.end} present={t.present} /></div>
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </Section>
           )}
         </div>
@@ -165,12 +165,14 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
             )}
             {languages.length > 0 && (
               <Section title={t.languages}>
-                {languages.map((l, i) => (
-                  <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12, fontSize: 13.5, padding: '9px 0', borderTop: i ? '1px solid var(--border)' : 'none' }}>
-                    <span dir="auto" style={{ fontWeight: 600 }}>{tx(l.name, lang)}</span>
-                    <span dir="auto" style={{ color: 'var(--text-2)' }}>{tx(l.level, lang)}</span>
-                  </div>
-                ))}
+                <ul className="plain-list">
+                  {languages.map((l, i) => (
+                    <li key={i} className="resume-lang" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12, fontSize: 13.5, padding: '9px 0', borderTop: i ? '1px solid var(--border)' : 'none' }}>
+                      <span dir="auto" style={{ fontWeight: 600 }}>{tx(l.name, lang)}</span>
+                      <span dir="auto" style={{ color: 'var(--text-2)' }}>{tx(l.level, lang)}</span>
+                    </li>
+                  ))}
+                </ul>
               </Section>
             )}
             {certs.length > 0 && (

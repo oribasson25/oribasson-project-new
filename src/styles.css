@@ -579,7 +579,9 @@ a { color: inherit; }
   /* The jobs are the long part. The skills stay in view beside them. */
   .resume-side { position: sticky; top: 18px; align-self: start; z-index: 1; }
 }
+.plain-list { list-style: none; }
 .project-grid {
+  list-style: none;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
   gap: 18px;
