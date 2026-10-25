@@ -79,7 +79,10 @@ function removeLink(rel) {
 function personNode() {
   const job = (resume.experience || [])[0];
   const company = job ? tx(job.company, 'en') : '';
-  const role = job ? tx(job.role, 'en') : '';
+  const occupations = (resume.experience || []).map((item) => {
+    const name = tx(item.role, 'en');
+    return name ? { '@type': 'Occupation', name } : null;
+  }).filter(Boolean);
   const schools = (resume.education || []).map((e) => tx(e.school, 'en')).filter(Boolean);
   const credentials = (resume.education || []).map((e) => {
     const name = tx(e.degree, 'en');
@@ -109,7 +112,7 @@ function personNode() {
       : undefined,
     sameAs: sameAs.length ? sameAs : undefined,
     worksFor: company ? { '@type': 'Organization', name: company } : undefined,
-    hasOccupation: role ? { '@type': 'Occupation', name: role } : undefined,
+    hasOccupation: occupations.length > 1 ? occupations : (occupations[0] || undefined),
     alumniOf: schools.length === 1
       ? { '@type': 'EducationalOrganization', name: schools[0] }
       : (schools.length ? schools.map((name) => ({ '@type': 'EducationalOrganization', name })) : undefined),
