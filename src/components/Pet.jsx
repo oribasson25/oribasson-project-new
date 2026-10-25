@@ -11,8 +11,38 @@ import { useReducedMotion } from '../lib/hooks.js';
  */
 const SHEET = '/pet/ori.webp';
 // The neutral cell on its own, so a page that only shows the faint figure
-// does not download the whole sheet.
+// does not download the whole sheet. The home figure paints this first: it
+// is the same pose as the idle rest, and the sheet follows for the motion.
 const MARK = '/pet/ori-mark.webp';
+
+let sheetDecoded = false;
+let sheetPromise = null;
+
+/** One fetch, shared by every figure. The mark is already on screen by then. */
+function loadSheet() {
+  if (sheetDecoded) return Promise.resolve(true);
+  if (typeof Image === 'undefined') return Promise.resolve(false);
+  if (!sheetPromise) {
+    sheetPromise = new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => { sheetDecoded = true; resolve(true); };
+      img.onerror = () => resolve(false);
+      img.src = SHEET;
+    });
+  }
+  return sheetPromise;
+}
+
+function useSheet() {
+  const [ready, setReady] = useState(sheetDecoded);
+  useEffect(() => {
+    if (sheetDecoded) { setReady(true); return undefined; }
+    let live = true;
+    loadSheet().then((ok) => { if (live && ok) setReady(true); });
+    return () => { live = false; };
+  }, []);
+  return ready;
+}
 const CW = 192;
 const CH = 208;
 const COLS = 8;
@@ -47,6 +77,7 @@ const rand = ([a, b]) => a + Math.random() * (b - a);
  */
 export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size = 200, onClick, title, label, style, glitch, decorative = false }) {
   const reduced = useReducedMotion();
+  const sheetReady = useSheet();
   const base = mode === 'working' || mode === 'talking' ? mode : 'idle';
   const [override, setOverride] = useState(null);
   const [frame, setFrame] = useState(0);
@@ -60,7 +91,9 @@ export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size 
   useEffect(() => {
     const a = ANIMS[current];
     if (!a) return undefined;
-    if (reduced) { setFrame(0); return undefined; }
+    // Hold the rest pose until the sheet has decoded, so the first blink is
+    // not a jump from the portrait onto a frame that is already mid-move.
+    if (!sheetReady || reduced) { setFrame(0); return undefined; }
     let timer = 0;
     let i = 0;
     let cycle = 0;
@@ -103,12 +136,12 @@ export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size 
       clearTimeout(timer);
       document.removeEventListener('visibilitychange', onVis);
     };
-  }, [current, reduced, pulse && pulse.n]);
+  }, [current, reduced, pulse && pulse.n, sheetReady]);
 
   /* Looking at the cursor: only while idle, and only while the cursor is
      moving — after a pause the figure goes back to its own idle loop. */
   useEffect(() => {
-    if (!follow || reduced) {
+    if (!follow || reduced || !sheetReady) {
       setLook(null);
       return undefined;
     }
@@ -139,7 +172,7 @@ export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size 
       cancelAnimationFrame(raf);
       clearTimeout(settle);
     };
-  }, [follow, reduced]);
+  }, [follow, reduced, sheetReady]);
 
   let row;
   let col;
@@ -157,26 +190,30 @@ export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size 
     col = a.cols ? (a.cols[frame] ?? a.cols[0]) : frame;
   }
 
+  // Until the sheet is here, the portrait is one cell: the rest pose.
+  const posed = sheetReady
+    ? { url: SHEET, cols: COLS, rows: ROWS, col, row }
+    : { url: MARK, cols: 1, rows: 1, col: 0, row: 0 };
   let box;
   if (crop === 'head') {
     const k = size / HEAD.size;
     box = {
       width: size, height: size,
-      backgroundSize: `${CW * COLS * k}px ${CH * ROWS * k}px`,
-      backgroundPosition: `-${(col * CW + HEAD.x) * k}px -${(row * CH + HEAD.y) * k}px`,
+      backgroundSize: `${CW * posed.cols * k}px ${CH * posed.rows * k}px`,
+      backgroundPosition: `-${(posed.col * CW + HEAD.x) * k}px -${(posed.row * CH + HEAD.y) * k}px`,
     };
   } else {
     const w = (size * CW) / CH;
     box = {
       width: w, height: size,
-      backgroundSize: `${w * COLS}px ${size * ROWS}px`,
-      backgroundPosition: `-${col * w}px -${row * size}px`,
+      backgroundSize: `${w * posed.cols}px ${size * posed.rows}px`,
+      backgroundPosition: `-${posed.col * w}px -${posed.row * size}px`,
     };
   }
 
   const rgb = glitch && glitch.rgb > 0.4 ? glitch.rgb : 0;
   const slices = (glitch && glitch.slices) || [];
-  const sprite = { backgroundImage: `url(${SHEET})`, backgroundRepeat: 'no-repeat', backgroundSize: box.backgroundSize, backgroundPosition: box.backgroundPosition };
+  const sprite = { backgroundImage: `url(${posed.url})`, backgroundRepeat: 'no-repeat', backgroundSize: box.backgroundSize, backgroundPosition: box.backgroundPosition };
 
   const interactive = typeof onClick === 'function';
   const onKeyDown = interactive
