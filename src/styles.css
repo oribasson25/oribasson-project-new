@@ -524,6 +524,7 @@ button:active { transform: scale(0.985); }
   .recent-row[data-on="false"]:hover { background: var(--bg-hover); }
   .contact-row:hover,
   .read-more:hover,
+  .copy-answer:hover,
   .quiet:hover { color: var(--text); }
   .quiet.is-armed:hover,
   .quiet.is-danger:hover { color: var(--danger); }
@@ -873,6 +874,17 @@ a { color: inherit; }
 }
 .thread-latest:active { transform: translateX(-50%) scale(0.985); }
 .read-more { min-height: 32px; }
+.copy-answer {
+  margin-top: 10px;
+  padding: 2px 0;
+  min-height: 32px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
 
 /* ── phones ── */
 @media (max-width: 768px) {
@@ -908,7 +920,7 @@ a { color: inherit; }
   .md .rv-w { animation-name: wordInFlat; }
   /* The quiet rows stay looking like text. The extra height is the tap. */
   .contact-row { min-height: 44px; }
-  .read-more { min-height: 44px; }
+  .read-more, .copy-answer { min-height: 44px; }
   .btn-sm { min-height: 44px; }
   .recent-row { min-height: 44px; }
   .login-back { min-height: 44px; }

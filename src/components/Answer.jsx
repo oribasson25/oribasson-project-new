@@ -26,6 +26,56 @@ const MIN_RATE = 70;           // characters a second, however short the backlog
 const STEP_AT = [700, 1600];   // when the second and third steps begin, in ms
 const BLOCKS = ':scope > p, :scope > h1, :scope > h2, :scope > h3, :scope > h4, :scope > blockquote, :scope > pre, :scope > table, li';
 
+/** The words on screen, without the note that a link opens in a new tab. */
+function answerText(root) {
+  const clone = root.cloneNode(true);
+  clone.querySelectorAll('.sr-only, .caret').forEach((el) => el.remove());
+  clone.querySelectorAll('p, li, h1, h2, h3, h4, pre, blockquote, tr').forEach((el) => {
+    el.append('\n');
+  });
+  return (clone.textContent || '').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+
+function CopyAnswer({ rootRef, lang }) {
+  const t = strings(lang === 'he' ? 'he' : 'en');
+  const [copied, setCopied] = useState(false);
+  const timer = useRef(0);
+  useEffect(() => () => clearTimeout(timer.current), []);
+  async function copy() {
+    const root = rootRef.current;
+    const value = root ? answerText(root) : '';
+    if (!value) return;
+    let ok = false;
+    try {
+      await navigator.clipboard.writeText(value);
+      ok = true;
+    } catch {
+      const area = document.createElement('textarea');
+      area.value = value;
+      area.setAttribute('readonly', '');
+      area.style.position = 'fixed';
+      area.style.insetInlineStart = '-9999px';
+      document.body.appendChild(area);
+      area.select();
+      try { ok = document.execCommand('copy'); } catch { ok = false; }
+      area.remove();
+    }
+    if (!ok) return;
+    setCopied(true);
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setCopied(false), 1600);
+  }
+  return (
+    <>
+      <button type="button" className="copy-answer screen-only" onClick={copy}
+        aria-label={copied ? t.copied : t.copyAnswerName}>
+        {copied ? t.copied : t.copyAnswer}
+      </button>
+      <span className="sr-only" aria-live="polite">{copied ? t.copied : ''}</span>
+    </>
+  );
+}
+
 function diagramName(diagram, lang) {
   if (!diagram) return '';
   const id = Object.keys(architectures).find((key) => architectures[key] === diagram);
@@ -175,19 +225,21 @@ export function Answer({ content, streaming, onRevealed, diagram, lang, diagramL
   }, [html]);
 
   return (
-    <div dir="auto" className={live ? 'bubble-assistant fade-in' : 'bubble-assistant'}
-      aria-busy={writing ? 'true' : undefined}
-      aria-live={fresh ? (writing ? 'off' : 'polite') : undefined}
-      aria-atomic={fresh ? 'true' : undefined}>
-      {speaker && <span className="sr-only">{speaker}: </span>}
-      {/* Hidden while the words are still arriving, so a reader hears the
-          finished answer once instead of every new word. */}
-      <div ref={mdRef} className="md" aria-hidden={writing ? true : undefined} dangerouslySetInnerHTML={{ __html: html }} />
-      {diagram && !writing && (
-        <div dir={lang === 'he' ? 'rtl' : 'ltr'} style={{ marginTop: 12 }}>
-          <Architecture spec={diagram} lang={lang} label={diagramLabel} name={diagramName(diagram, lang)} />
-        </div>
-      )}
+    <div dir="auto" className={live ? 'bubble-assistant fade-in' : 'bubble-assistant'}>
+      <div aria-busy={writing ? 'true' : undefined}
+        aria-live={fresh ? (writing ? 'off' : 'polite') : undefined}
+        aria-atomic={fresh ? 'true' : undefined}>
+        {speaker && <span className="sr-only">{speaker}: </span>}
+        {/* Hidden while the words are still arriving, so a reader hears the
+            finished answer once instead of every new word. */}
+        <div ref={mdRef} className="md" aria-hidden={writing ? true : undefined} dangerouslySetInnerHTML={{ __html: html }} />
+        {diagram && !writing && (
+          <div dir={lang === 'he' ? 'rtl' : 'ltr'} style={{ marginTop: 12 }}>
+            <Architecture spec={diagram} lang={lang} label={diagramLabel} name={diagramName(diagram, lang)} />
+          </div>
+        )}
+      </div>
+      {!writing && content.trim() && <CopyAnswer rootRef={mdRef} lang={lang} />}
     </div>
   );
 }

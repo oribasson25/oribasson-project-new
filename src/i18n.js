@@ -65,6 +65,9 @@ const STRINGS = {
     },
     retry: 'Try again',
     latest: 'Latest',
+    copyAnswer: 'Copy',
+    copyAnswerName: 'Copy this answer',
+    copied: 'Copied',
 
     resumeTitle: 'Resume',
     projectsTitle: 'Projects',
@@ -227,6 +230,9 @@ const STRINGS = {
     },
     retry: 'נסו שוב',
     latest: 'לסוף השיחה',
+    copyAnswer: 'העתקה',
+    copyAnswerName: 'העתקת התשובה',
+    copied: 'הועתק',
 
     resumeTitle: 'קורות חיים',
     projectsTitle: 'פרויקטים',
