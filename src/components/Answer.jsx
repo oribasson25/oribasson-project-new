@@ -38,7 +38,7 @@ function answerText(root) {
 
 function CopyAnswer({ rootRef, lang }) {
   const t = strings(lang === 'he' ? 'he' : 'en');
-  const [copied, setCopied] = useState(false);
+  const [note, setNote] = useState('');
   const timer = useRef(0);
   useEffect(() => () => clearTimeout(timer.current), []);
   async function copy() {
@@ -60,18 +60,20 @@ function CopyAnswer({ rootRef, lang }) {
       try { ok = document.execCommand('copy'); } catch { ok = false; }
       area.remove();
     }
-    if (!ok) return;
-    setCopied(true);
+    setNote(ok ? 'copied' : 'failed');
     clearTimeout(timer.current);
-    timer.current = setTimeout(() => setCopied(false), 1600);
+    timer.current = setTimeout(() => setNote(''), 1600);
   }
+  const label = note === 'copied' ? t.copied : note === 'failed' ? t.copyFailedName : t.copyAnswerName;
+  const visible = note === 'copied' ? t.copied : note === 'failed' ? t.copyFailed : t.copyAnswer;
+  const spoken = note === 'copied' ? t.copied : note === 'failed' ? t.copyFailed : '';
   return (
     <>
       <button type="button" className="copy-answer screen-only fade-in" onClick={copy}
-        aria-label={copied ? t.copied : t.copyAnswerName}>
-        {copied ? t.copied : t.copyAnswer}
+        aria-label={label}>
+        {visible}
       </button>
-      <span className="sr-only" aria-live="polite">{copied ? t.copied : ''}</span>
+      <span className="sr-only" aria-live="polite">{spoken}</span>
     </>
   );
 }

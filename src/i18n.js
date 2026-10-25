@@ -69,6 +69,8 @@ const STRINGS = {
     copyAnswer: 'Copy',
     copyAnswerName: 'Copy this answer',
     copied: 'Copied',
+    copyFailed: 'Couldn\'t copy',
+    copyFailedName: 'Couldn\'t copy this answer',
 
     resumeTitle: 'Resume',
     projectsTitle: 'Projects',
@@ -237,6 +239,8 @@ const STRINGS = {
     copyAnswer: 'העתקה',
     copyAnswerName: 'העתקת התשובה',
     copied: 'הועתק',
+    copyFailed: 'לא הועתק',
+    copyFailedName: 'ההעתקה לא הצליחה',
 
     resumeTitle: 'קורות חיים',
     projectsTitle: 'פרויקטים',
