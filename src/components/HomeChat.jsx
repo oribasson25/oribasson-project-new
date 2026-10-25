@@ -332,7 +332,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         height: '100%', minHeight: 0, overflowY: 'auto',
         padding: stacked ? '4px 16px 8px' : '6px 30px 10px',
       }}>
-        <div ref={threadRef} role="log" aria-relevant="additions" aria-label={t.threadTitle(first)}
+        <div ref={threadRef} role="log" dir={dir} aria-relevant="additions" aria-label={t.threadTitle(first)}
           style={{ width: 'min(720px, 100%)', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 14 }}>
           {messages.map((msg, i) => (msg.role === 'user' ? (
             <div key={msg.id} dir="auto" className="bubble-user"><span className="sr-only">{t.you}: </span>{msg.content}</div>
