@@ -495,6 +495,7 @@ button:active { transform: scale(0.985); }
   .quiet.is-danger:hover { color: var(--danger); }
   .convo-row:hover { background: var(--bg-panel); }
 }
+::selection { background: var(--primary-glow); color: var(--text); }
 :focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
 .skip-link {
   position: absolute;
