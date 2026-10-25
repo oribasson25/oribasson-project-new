@@ -32,9 +32,11 @@ export function usePath() {
 }
 
 const PHONE = '(max-width: 768px)';
-/* A phone this short cannot hold the figure, the hello, the side line, and
-   every question above the bar. The home screen draws a little smaller. */
-const SHORT = '(max-height: 820px)';
+/* The taller figure and the looser gaps need roughly 780px of shell before
+   the last question clears the bar. 844 is the common height of a 390-wide
+   phone, and 932 a large one — both still cut that row off. The shorter
+   home covers them. */
+const SHORT = '(max-height: 960px)';
 
 export function useIsMobile() {
   const [mobile, setMobile] = useState(() => window.matchMedia(PHONE).matches);

@@ -910,9 +910,10 @@ a { color: inherit; }
   .login-back { min-height: 44px; }
   .login-field,
   .login-submit { min-height: 44px; }
-  /* Below the common phone, the hello and the side line had pushed the last
-     questions under the bar. The line stays, in a shorter slot. */
-  @media (max-height: 820px) {
+  /* A common phone is 844 tall, a large one 932. The looser home cuts the
+     last questions off on both, so this shorter one covers them. The line
+     stays, in a shorter slot. */
+  @media (max-height: 960px) {
     .home-welcome.is-phone { padding-top: 2px; padding-bottom: 8px; }
     .home-welcome.is-phone .hero-title { margin-top: 4px; }
     .home-welcome.is-phone .hero-rule { margin-top: 4px; }
