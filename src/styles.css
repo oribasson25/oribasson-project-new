@@ -521,7 +521,8 @@ button:active { transform: scale(0.985); }
 .quiet.is-armed:focus-visible { color: var(--danger); }
 .quiet.is-danger:focus-visible { color: var(--danger); }
 @media (hover: hover) {
-  .resume-job:hover { background: var(--bg-panel); }
+  .resume-job:hover,
+  .resume-edu:hover { background: var(--bg-panel); }
   .nav-btn[data-on="false"]:hover { background: var(--bg-hover); color: var(--text); }
   .btn:hover:not(:disabled) { background: var(--bg-hover); color: var(--text); border-color: var(--primary-soft); }
   .btn.is-danger:hover:not(:disabled) { color: var(--danger); border-color: var(--border); }
@@ -702,10 +703,13 @@ a { color: inherit; }
 /* The resume's side column only when the content pane can hold it.
    A window that still shows the sidebar can be too narrow for 320px beside the jobs. */
 .resume-wrap { container-type: inline-size; }
-/* A job is something you can ask about. The row warms, the way a project card lifts. */
-.resume-job { transition: background-color 0.18s var(--ease), box-shadow 0.22s var(--ease); }
-.resume-job, .resume-edu { scroll-margin-top: 18px; }
-.resume-job:focus-within { background: var(--bg-panel); }
+/* A job or a certificate is something you can ask about. The row warms, the way a project card lifts. */
+.resume-job, .resume-edu {
+  transition: background-color 0.18s var(--ease), box-shadow 0.22s var(--ease);
+  scroll-margin-top: 18px;
+}
+.resume-job:focus-within,
+.resume-edu:focus-within { background: var(--bg-panel); }
 /* A shared link named this entry. The same hairline a linked project card uses. */
 .resume-job.is-linked,
 .resume-edu.is-linked { box-shadow: inset 3px 0 0 var(--text); }
