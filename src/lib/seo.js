@@ -244,7 +244,9 @@ export function useSeo(page, lang) {
     setMeta('name', 'twitter:title', title);
     setMeta('name', 'twitter:description', desc);
     setMeta('name', 'twitter:url', abs(here));
-    setMeta('name', 'twitter:image:alt', `${tx(profile.name, 'en')} — AI Solutions Engineer`);
+    const imageAlt = `${tx(profile.name, 'en')} — AI Solutions Engineer`;
+    setMeta('property', 'og:image:alt', imageAlt);
+    setMeta('name', 'twitter:image:alt', imageAlt);
     setMeta('property', 'og:image:type', 'image/png');
     setMeta('property', 'og:locale', lang === 'he' ? 'he_IL' : 'en_US');
     setMeta('name', 'robots', admin || missing ? 'noindex, nofollow' : 'index, follow, max-image-preview:large');
