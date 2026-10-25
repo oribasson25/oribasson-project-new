@@ -94,8 +94,9 @@ function readTime(text) {
  * Enter, keeps it there. Arrow keys, while the line is focused, show the
  * next or the previous one. Reaching the line while it is leaving brings
  * that same line back. Keyboard focus holds it too, and so does scrolling it
- * off the screen. Reduced motion swaps the words in place, with no slide,
- * and leaves each line up a little longer.
+ * off the screen. A text field holds it as well, so the words stay put
+ * while a question is typed. Reduced motion swaps the words in place, with
+ * no slide, and leaves each line up a little longer.
  *
  * `hold` freezes the cycle while the recorded hello is playing. `avoidRight`
  * keeps every line on the left while the hello bubble occupies that side.
@@ -112,6 +113,7 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   const [keyFocus, setKeyFocus] = useState(false);
   const [hidden, setHidden] = useState(() => document.hidden);
   const [seen, setSeen] = useState(true);
+  const [composing, setComposing] = useState(false);
   const [side, setSide] = useState('left');
   const slotRef = useRef(null);
   const lineRef = useRef(null);
@@ -120,7 +122,7 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   avoidRef.current = avoidRight;
   const fact = FACTS[index];
   const text = fact[lang] || fact.en;
-  const paused = hover || pinned || keyFocus || hidden || hold || !seen;
+  const paused = hover || pinned || keyFocus || hidden || hold || !seen || composing;
 
   // While the hello bubble is on the right, the line already up moves to the
   // left before paint. Clearing the bubble does not send it back — the next
@@ -131,13 +133,19 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
     const onKey = (e) => { if (e.key === 'Tab') fromKeyboard.current = true; };
     const onPointer = () => { fromKeyboard.current = false; };
     const onVis = () => setHidden(document.hidden);
+    // A question being typed should not lose the line it was read against.
+    const isField = (el) => !!el && (el.tagName === 'TEXTAREA'
+      || (el.tagName === 'INPUT' && !['button', 'submit', 'checkbox', 'radio', 'file'].includes(el.type)));
+    const onFocus = (e) => setComposing(isField(e.target));
     window.addEventListener('keydown', onKey);
     window.addEventListener('pointerdown', onPointer);
     document.addEventListener('visibilitychange', onVis);
+    document.addEventListener('focusin', onFocus);
     return () => {
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('pointerdown', onPointer);
       document.removeEventListener('visibilitychange', onVis);
+      document.removeEventListener('focusin', onFocus);
     };
   }, []);
 
