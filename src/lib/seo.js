@@ -51,6 +51,45 @@ function schemaPhone(phone) {
   return raw.startsWith('+') ? `+${digits}` : raw;
 }
 
+/** A share card stays one or two lines. The cut is on a word, from real copy. */
+function clipShare(text) {
+  const value = String(text || '').replace(/\s+/g, ' ').trim();
+  const max = 180;
+  if (value.length <= max) return value;
+  const head = value.slice(0, max);
+  const stop = head.lastIndexOf('. ');
+  if (stop >= 80) return head.slice(0, stop + 1);
+  const space = head.lastIndexOf(' ');
+  return `${head.slice(0, space > 80 ? space : max).trim()}…`;
+}
+
+/** The line a shared role or project should carry. The page line is the fallback. */
+function shareDescription(page, hash, lang) {
+  const language = lang === 'he' ? 'he' : 'en';
+  const copy = DESC[language];
+  if (page === 'projects' && hash) {
+    const project = (projects || []).find((p) => p.id === hash);
+    const line = project && (tx(project.tagline, language) || tx(project.description, language));
+    if (line) return clipShare(line);
+  }
+  if (page === 'resume' && hash) {
+    const job = (resume.experience || []).find((item) => item.id === hash);
+    if (job) {
+      const summary = tx(job.summary, language);
+      if (summary) return clipShare(summary);
+      const first = tl(job.highlights, language)[0];
+      if (first) {
+        const { title, text } = bullet(first);
+        return clipShare(title ? `${title}. ${text}` : text);
+      }
+    }
+    const school = (resume.education || []).find((item) => item.id === hash);
+    const details = school && tx(school.details, language);
+    if (details) return clipShare(details);
+  }
+  return copy[page] || copy.home;
+}
+
 function setMeta(attr, key, content) {
   if (!content) return;
   let el = document.head.querySelector(`meta[${attr}="${key}"]`);
@@ -299,50 +338,62 @@ export function titleFor(page, hash) {
 /** Keeps the tab, share cards, canonical URL, and structured data in step with the route. */
 export function useSeo(page, lang, hash) {
   useEffect(() => {
-    const path = PATHS[page] || '/';
-    const copy = DESC[lang === 'he' ? 'he' : 'en'];
-    const desc = copy[page] || copy.home;
-    // The address bar is the source of truth: opening a card updates the
-    // hash without a navigation, and the tab should follow it.
-    const liveHash = page === 'projects' || page === 'resume'
-      ? window.location.hash.replace(/^#/, '')
-      : '';
-    const title = titleFor(page, liveHash);
-    const admin = page === 'login' || page === 'settings' || page === 'conversations';
-    const missing = page === 'missing' || !knownPath();
-    const here = missing ? (window.location.pathname.replace(/\/+$/, '') || '/') : path;
-    document.title = title;
-    setMeta('name', 'description', desc);
-    setMeta('property', 'og:title', title);
-    setMeta('property', 'og:description', desc);
-    setMeta('property', 'og:url', abs(here));
-    setMeta('property', 'og:site_name', tx(profile.name, 'en'));
-    setMeta('name', 'twitter:title', title);
-    setMeta('name', 'twitter:description', desc);
-    setMeta('name', 'twitter:url', abs(here));
-    const imageAlt = `${tx(profile.name, 'en')} — AI Solutions Engineer`;
-    setMeta('property', 'og:image:alt', imageAlt);
-    setMeta('name', 'twitter:image:alt', imageAlt);
-    setMeta('property', 'og:image:type', 'image/png');
-    setMeta('property', 'og:locale', lang === 'he' ? 'he_IL' : 'en_US');
-    setMeta('name', 'robots', admin || missing ? 'noindex, nofollow' : 'index, follow, max-image-preview:large');
-    setMeta('name', 'theme-color', '#f2f4f8');
-    setMeta('name', 'color-scheme', 'light');
-    // A missing address is not the homepage. A canonical pointing there would
-    // ask a crawler to treat the typo as the front page.
-    if (missing) removeLink('canonical');
-    else setLink('canonical', abs(path));
-    if (profile.contact?.linkedin) setLink('me', profile.contact.linkedin);
-    const ld = document.getElementById('site-jsonld');
-    if (ld) {
-      ld.textContent = JSON.stringify(missing
-        ? {
-            '@context': 'https://schema.org',
-            '@type': 'WebPage',
-            name: strings('en').notFoundTitle,
-            isPartOf: { '@id': `${ORIGIN}/#website` },
-          }
-        : jsonLd(admin ? 'chat' : page));
+    function apply() {
+      const path = PATHS[page] || '/';
+      // The address bar is the source of truth: opening a card updates the
+      // hash without a navigation, and the tab should follow it.
+      const liveHash = page === 'projects' || page === 'resume'
+        ? window.location.hash.replace(/^#/, '')
+        : '';
+      const desc = shareDescription(page, liveHash, lang);
+      const title = titleFor(page, liveHash);
+      const admin = page === 'login' || page === 'settings' || page === 'conversations';
+      const missing = page === 'missing' || !knownPath();
+      const here = missing ? (window.location.pathname.replace(/\/+$/, '') || '/') : path;
+      document.title = title;
+      setMeta('name', 'description', desc);
+      setMeta('property', 'og:title', title);
+      setMeta('property', 'og:description', desc);
+      setMeta('property', 'og:url', abs(here));
+      setMeta('property', 'og:site_name', tx(profile.name, 'en'));
+      setMeta('name', 'twitter:title', title);
+      setMeta('name', 'twitter:description', desc);
+      setMeta('name', 'twitter:url', abs(here));
+      const imageAlt = `${tx(profile.name, 'en')} — AI Solutions Engineer`;
+      setMeta('property', 'og:image:alt', imageAlt);
+      setMeta('name', 'twitter:image:alt', imageAlt);
+      setMeta('property', 'og:image:type', 'image/png');
+      setMeta('property', 'og:locale', lang === 'he' ? 'he_IL' : 'en_US');
+      setMeta('name', 'robots', admin || missing ? 'noindex, nofollow' : 'index, follow, max-image-preview:large');
+      setMeta('name', 'theme-color', '#f2f4f8');
+      setMeta('name', 'color-scheme', 'light');
+      // A missing address is not the homepage. A canonical pointing there would
+      // ask a crawler to treat the typo as the front page.
+      if (missing) removeLink('canonical');
+      else setLink('canonical', abs(path));
+      if (profile.contact?.linkedin) setLink('me', profile.contact.linkedin);
+      const ld = document.getElementById('site-jsonld');
+      if (ld) {
+        const data = missing
+          ? {
+              '@context': 'https://schema.org',
+              '@type': 'WebPage',
+              name: strings('en').notFoundTitle,
+              isPartOf: { '@id': `${ORIGIN}/#website` },
+            }
+          : jsonLd(admin ? 'chat' : page);
+        // The graph stays in English, like the rest of the structured data.
+        if (!missing && data['@graph'] && liveHash) {
+          const node = data['@graph'].find((item) => item['@type'] === 'WebPage');
+          const line = shareDescription(page, liveHash, 'en');
+          if (node && line) node.description = line;
+        }
+        ld.textContent = JSON.stringify(data);
+      }
     }
+    apply();
+    // Opening or closing a card writes the address without a navigation.
+    window.addEventListener('ob-address', apply);
+    return () => window.removeEventListener('ob-address', apply);
   }, [page, lang, hash]);
 }
