@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 /* The 8Legs.ai design primitives — eyebrow, page header, crumbs, two button
    weights, chips, segmented tabs — redrawn in graphite. */
@@ -146,16 +146,35 @@ export function Chip({ children, mono, style, title }) {
 }
 
 export function SegTabs({ items, value, onChange, style, small, label }) {
+  const refs = useRef([]);
+  // One tab stop for the pair. Arrow keys move within it, the way a
+  // two-choice control does, and the chosen language is the one that stays
+  // in the tab order.
+  function move(from, dir) {
+    const next = (from + dir + items.length) % items.length;
+    onChange(items[next].id);
+    refs.current[next]?.focus();
+  }
   return (
-    <div role="group" aria-label={label} style={{
+    <div role="radiogroup" aria-label={label} style={{
       display: 'inline-flex', gap: 3, padding: 3, borderRadius: 'var(--r-md)',
       background: 'var(--bg-panel)', border: '1px solid var(--border)', ...style,
     }}>
-      {items.map((it) => {
+      {items.map((it, i) => {
         const on = value === it.id;
         return (
-          <button key={it.id} type="button" onClick={() => onChange(it.id)} title={it.title} lang={it.lang}
-            aria-pressed={on} aria-label={it.title || it.label}
+          <button key={it.id} ref={(el) => { refs.current[i] = el; }} type="button" role="radio" aria-checked={on}
+            tabIndex={on ? 0 : -1}
+            onClick={() => onChange(it.id)} title={it.title} lang={it.lang}
+            aria-label={it.title || it.label}
+            onKeyDown={(e) => {
+              if (e.altKey || e.metaKey || e.ctrlKey || e.shiftKey) return;
+              const forward = e.key === 'ArrowRight' || e.key === 'ArrowDown';
+              const back = e.key === 'ArrowLeft' || e.key === 'ArrowUp';
+              if (!forward && !back) return;
+              e.preventDefault();
+              move(i, forward ? 1 : -1);
+            }}
             className={on ? 'seg-tab is-on' : 'seg-tab'}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 6,
