@@ -21,10 +21,24 @@ export function renderMarkdownSync() {
   return render;
 }
 
-/** A safe stand-in for the moment before the formatter arrives. */
+const HEBREW = /[\u0590-\u05FF]/;
+
+/**
+ * A safe stand-in for the moment before the formatter arrives.
+ * The paragraph takes the answer's language. A Hebrew reply that opens
+ * with a name would otherwise be read as English until the formatter lands.
+ */
 export function plainHtml(text) {
-  const safe = String(text || '').replace(/[&<>"]/g, (ch) => ({
+  const raw = String(text || '');
+  const safe = raw.replace(/[&<>"]/g, (ch) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;',
   }[ch]));
-  return `<p>${safe.replace(/\n/g, '<br>')}</p>`;
+  const he = HEBREW.test(raw);
+  const en = /[A-Za-z]/.test(raw);
+  const attrs = he
+    ? ' dir="rtl" lang="he" style="unicode-bidi:isolate"'
+    : en
+      ? ' dir="ltr" lang="en" style="unicode-bidi:isolate"'
+      : '';
+  return `<p${attrs}>${safe.replace(/\n/g, '<br>')}</p>`;
 }
