@@ -371,11 +371,14 @@ export function useSeo(page, lang, hash) {
       setMeta('name', 'description', desc);
       setMeta('property', 'og:title', title);
       setMeta('property', 'og:description', desc);
-      setMeta('property', 'og:url', abs(here));
+      // The share card should open the same entry the address does. A canonical
+      // stays on the page; the fragment is what lands on one role or project.
+      const shareUrl = missing || !liveHash ? abs(here) : `${abs(path)}#${encodeURIComponent(liveHash)}`;
+      setMeta('property', 'og:url', shareUrl);
       setMeta('property', 'og:site_name', tx(profile.name, 'en'));
       setMeta('name', 'twitter:title', title);
       setMeta('name', 'twitter:description', desc);
-      setMeta('name', 'twitter:url', abs(here));
+      setMeta('name', 'twitter:url', shareUrl);
       const imageAlt = `${tx(profile.name, 'en')} — AI Solutions Engineer`;
       setMeta('property', 'og:image:alt', imageAlt);
       setMeta('name', 'twitter:image:alt', imageAlt);
