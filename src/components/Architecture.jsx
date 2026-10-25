@@ -52,6 +52,12 @@ function Rail({ delay }) {
   );
 }
 
+/** A Hebrew page would read "WhatsApp" and "Gmail" in a Hebrew voice. */
+function latinLang(text, pageLang) {
+  if (pageLang !== 'he' || !text) return undefined;
+  return /[֐-׿]/.test(text) ? undefined : 'en';
+}
+
 /** Two short parts sit side by side. A long label or note needs the card's width. */
 function needsRoom(nodes, lang) {
   if (nodes.length < 2) return false;
@@ -63,10 +69,12 @@ function needsRoom(nodes, lang) {
 }
 
 function Node({ node, lang, delay }) {
+  const label = tx(node.label, lang);
+  const sub = node.sub ? tx(node.sub, lang) : '';
   return (
     <div className="arch-node" dir="auto" style={{ animationDelay: `${delay}ms` }}>
-      <span className="arch-label">{tx(node.label, lang)}</span>
-      {node.sub && <span className="arch-sub" dir="auto">{tx(node.sub, lang)}</span>}
+      <span className="arch-label" lang={latinLang(label, lang)}>{label}</span>
+      {sub && <span className="arch-sub" dir="auto" lang={latinLang(sub, lang)}>{sub}</span>}
     </div>
   );
 }
@@ -82,7 +90,7 @@ export function Architecture({ spec, lang, label }) {
       <figcaption className="arch-cap" dir="auto">{label}</figcaption>
       {groups.map((group, gi) => (
         <div key={gi} className="arch-group">
-          {group.title && <div className="arch-group-title" dir="auto">{tx(group.title, lang)}</div>}
+          {group.title && <div className="arch-group-title" dir="auto" lang={latinLang(tx(group.title, lang), lang)}>{tx(group.title, lang)}</div>}
           {(group.steps || []).map((step, si) => {
             const at = delay;
             delay += 80;
