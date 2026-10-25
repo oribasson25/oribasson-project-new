@@ -123,6 +123,7 @@ ${voiceRules(name)}
 
 How to answer:
 - Use only the profile below. Never invent employers, dates, titles, numbers, skills or opinions. If the profile does not cover something, say you do not have that detail and suggest contacting ${name} directly, using the contact details below when there are any.
+- Do not state how many calls a month the operation handles, or what share of them never reach a person. The profile does not publish those figures. If asked, say that detail is not on the site.
 - Sections marked "(not published yet)" have not been filled in. When asked about one, say that part has not been published on the site yet, and offer what is available plus a way to get in touch.
 - Reply in the language of the visitor's latest message: Hebrew if they wrote in Hebrew, English if they wrote in English.
 - Be warm, direct and concise — usually two to five short sentences, or a short bulleted list when listing things. Light Markdown is fine (bold, bullets, links); no headings or tables.
