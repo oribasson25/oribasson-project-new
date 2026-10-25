@@ -69,6 +69,25 @@ import { useReducedMotion } from '../lib/hooks.js';
  * 51. projects 8legs highlight "Python tools": Python, edited in Monaco.
  * 52. resume.education[0] details: identity and access, and Group Policy.
  *     Segmentation, hardening, and logs are already said.
+ * 53. resume.experience[0] "Custom Tooling & Function Calling": live CRM
+ *     read/write and customer authentication. TypeScript and cross-turn
+ *     state are already said.
+ * 54. resume.experience[2] second highlight: telephony, meeting rooms, and
+ *     workstations. Active Directory and Cisco are already said.
+ * 55. resume.experience[0] roadmap highlight: success metrics, set before
+ *     development. Volume, cost, feasibility, and HITL are already said.
+ * 56. resume.experience[0] "Production Incident Debugging": reporting
+ *     discrepancies. The audio wire and the launch are already said.
+ * 57. projects hr-recruitment description: a batch of resumes, scored together.
+ * 58. projects 8legs highlight "Chatbots as code": an npm CLI. The repo and
+ *     the A/B tests are already said.
+ * 59. projects policy-documents: locates the active policies. Authentication
+ *     and sending are already said.
+ * 60. projects back-office-agent: resolves a status question from the mail.
+ * 61. projects 8legs highlight "Python tools": any pip package. Monaco is
+ *     already said.
+ * 62. projects 8legs role: a personal project, designed and built end to end.
+ * 63. resume.experience[0] tech and the Integrations skill: MCP, beside the CRM.
  */
 const FACTS = [
   { en: 'Live LLM agents at Libra Insurance.', he: 'סוכני LLM בפרודקשן, בליברה ביטוח.' },
@@ -123,6 +142,17 @@ const FACTS = [
   { en: 'The 8Legs interface itself is in Hebrew and in English.', he: 'הממשק של 8Legs עצמו בעברית ובאנגלית.' },
   { en: 'A custom 8Legs tool is Python, edited in Monaco on the page.', he: 'כלי מותאם ב-8Legs נכתב ב-Python, בעורך Monaco שבדף.' },
   { en: 'The cybersecurity certificate covered identity, access, and Group Policy.', he: 'הסמכת הסייבר כללה זהויות, הרשאות ו-Group Policy.' },
+  { en: 'Function calls read and write the CRM, and check the customer.', he: 'קריאות הפונקציה קוראות וכותבות ב-CRM, ובודקות מי הלקוח.' },
+  { en: 'The IDF post also covered telephony, meeting rooms, and the desks.', he: 'בצה״ל גם טלפוניה, חדרי ישיבות ועמדות קצה.' },
+  { en: 'Success is defined as a metric before the build starts.', he: 'מדד ההצלחה נקבע לפני שמתחילים לבנות.' },
+  { en: 'A reporting gap in production, traced and closed.', he: 'פער בדיווח בפרודקשן, שאותר ונסגר.' },
+  { en: 'A batch of resumes is scored in one upload.', he: 'מקבץ קורות חיים מקבל ציון בהעלאה אחת.' },
+  { en: 'An npm CLI can drive an 8Legs chatbot.', he: 'CLI של npm יכול להפעיל צ׳טבוט ב-8Legs.' },
+  { en: 'The chat finds the policies that are still active.', he: 'הצ׳אט מאתר את הפוליסות שעדיין פעילות.' },
+  { en: 'A status question that arrived by mail gets an answer.', he: 'בירור סטטוס שהגיע במייל מקבל תשובה.' },
+  { en: 'A Python tool on 8Legs can pull in any pip package.', he: 'כלי Python ב-8Legs יכול להשתמש בכל חבילת pip.' },
+  { en: '8Legs is a personal project, designed and built end to end.', he: '8Legs הוא פרויקט אישי, שעוצב ונבנה מקצה לקצה.' },
+  { en: 'The agent tools speak MCP, beside the CRM.', he: 'הכלים לסוכן מדברים גם MCP, לצד ה-CRM.' },
 ];
 
 const EXIT = 420;
