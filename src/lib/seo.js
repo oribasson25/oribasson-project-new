@@ -151,7 +151,7 @@ function crumbs(page) {
   };
 }
 
-function pageNode(page) {
+function pageNode(page, mainEntity) {
   const path = PATHS[page] || '/';
   const home = page === 'chat';
   return {
@@ -163,11 +163,12 @@ function pageNode(page) {
     inLanguage: ['en', 'he'],
     isPartOf: { '@id': `${ORIGIN}/#website` },
     about: { '@id': `${ORIGIN}/#person` },
-    mainEntity: home ? { '@id': `${ORIGIN}/#person` } : undefined,
+    mainEntity: home ? { '@id': `${ORIGIN}/#person` } : mainEntity,
   };
 }
 
 export function jsonLd(page) {
+  const list = page === 'chat' || page === 'resume' || page === 'projects' ? projectList() : null;
   const graph = [
     {
       '@type': 'WebSite',
@@ -179,26 +180,10 @@ export function jsonLd(page) {
       publisher: { '@id': `${ORIGIN}/#person` },
     },
     personNode(),
-    pageNode(page),
+    pageNode(page, page === 'projects' && list ? { '@id': list['@id'] } : undefined),
   ];
-  if (page === 'chat' || page === 'resume') {
-    const list = projectList();
-    if (list) graph.push(list);
-  }
+  if (list) graph.push(list);
   if (page === 'resume' || page === 'projects') graph.push(crumbs(page));
-  if (page === 'projects') {
-    graph.push({
-      '@type': 'ItemList',
-      name: DESC.en.projects,
-      itemListElement: (projects || []).map((p, i) => ({
-        '@type': 'ListItem',
-        position: i + 1,
-        name: tx(p.name, 'en'),
-        description: tx(p.description, 'en'),
-        url: p.id ? `${ORIGIN}/projects#${p.id}` : (p.links?.live || undefined),
-      })),
-    });
-  }
   return { '@context': 'https://schema.org', '@graph': graph };
 }
 
