@@ -61,10 +61,12 @@ export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size 
     const a = ANIMS[current];
     if (!a) return undefined;
     if (reduced) { setFrame(0); return undefined; }
-    let timer;
+    let timer = 0;
     let i = 0;
     let cycle = 0;
+    let alive = true;
     const step = () => {
+      if (!alive || document.hidden) return;
       setFrame(i);
       const delay = a.ms[i];
       i += 1;
@@ -74,6 +76,7 @@ export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size 
         i = 0;
         if (a.rest) {
           timer = setTimeout(() => {
+            if (!alive || document.hidden) return;
             setFrame(0);
             timer = setTimeout(() => { i = 1; step(); }, rand(a.rest));
           }, delay);
@@ -82,10 +85,24 @@ export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size 
         }
         return;
       }
-      timer = setTimeout(() => setOverride(null), delay + (a.hold || 0));
+      timer = setTimeout(() => { if (alive) setOverride(null); }, delay + (a.hold || 0));
     };
+    // A hidden tab was still stepping the sheet. It rests, and starts again
+    // from the first frame when the tab comes back.
+    const onVis = () => {
+      clearTimeout(timer);
+      if (document.hidden) return;
+      i = 0;
+      cycle = 0;
+      step();
+    };
+    document.addEventListener('visibilitychange', onVis);
     step();
-    return () => clearTimeout(timer);
+    return () => {
+      alive = false;
+      clearTimeout(timer);
+      document.removeEventListener('visibilitychange', onVis);
+    };
   }, [current, reduced, pulse && pulse.n]);
 
   /* Looking at the cursor: only while idle, and only while the cursor is
