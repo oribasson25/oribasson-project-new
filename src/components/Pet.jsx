@@ -45,7 +45,7 @@ const rand = ([a, b]) => a + Math.random() * (b - a);
  * size   height for 'full', side for 'head'
  * glitch { rgb, slices } — red/cyan split in px, and bands of the figure torn sideways
  */
-export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size = 200, onClick, title, label, style, glitch }) {
+export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size = 200, onClick, title, label, style, glitch, decorative = false }) {
   const reduced = useReducedMotion();
   const base = mode === 'working' || mode === 'talking' ? mode : 'idle';
   const [override, setOverride] = useState(null);
@@ -171,8 +171,10 @@ export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size 
     : undefined;
 
   return (
-    <div ref={ref} role={interactive ? 'button' : 'img'} tabIndex={interactive ? 0 : undefined}
-      aria-label={interactive ? (label || title || 'Ori') : (title || 'Ori')} title={title || undefined}
+    <div ref={ref} role={decorative ? undefined : interactive ? 'button' : 'img'} tabIndex={interactive ? 0 : undefined}
+      aria-hidden={decorative ? true : undefined}
+      aria-label={decorative ? undefined : interactive ? (label || title || 'Ori') : (title || 'Ori')}
+      title={decorative ? undefined : (title || undefined)}
       onClick={onClick} onKeyDown={onKeyDown}
       style={{
         ...box,

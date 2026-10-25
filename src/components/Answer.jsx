@@ -190,7 +190,7 @@ export function Steps({ steps, dir }) {
 
   return (
     <div className="fade-in" style={{ display: 'flex', alignItems: 'flex-end', gap: 10, padding: '2px 2px 6px' }}>
-      <Pet mode="working" size={58} />
+      <Pet mode="working" size={58} decorative />
       <ol dir={dir} aria-live="polite" style={{ listStyle: 'none', margin: 0, padding: '0 0 6px', display: 'flex', flexDirection: 'column', gap: 6 }}>
         {steps.slice(0, step + 1).map((label, i) => {
           const done = i < step;

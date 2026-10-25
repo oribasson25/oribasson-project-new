@@ -249,7 +249,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
           background: 'var(--bg-card)', border: '1px solid var(--border)',
           display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
         }}>
-          <Pet crop="head" size={34} />
+          <Pet crop="head" size={34} decorative />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div dir="auto" style={{ fontWeight: 800, fontSize: 15, letterSpacing: '-0.02em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -285,7 +285,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
 
           {error && !pending && (
             <div className="fade-in" style={{ display: 'flex', alignItems: 'flex-end', gap: 10 }}>
-              <Pet pulse={chat.pulse} size={58} />
+              <Pet pulse={chat.pulse} size={58} decorative />
               <div role="alert" dir={dir} style={{
                 flex: 1, background: 'var(--danger-dim)', border: '1px solid rgba(220,38,38,0.25)',
                 color: 'var(--danger-ink)', padding: '9px 13px', borderRadius: 'var(--r-md)',

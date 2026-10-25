@@ -45,7 +45,7 @@ export function AdminLogin({ t, lang, setLang, onSignedIn, onBack, mobile }) {
       }}>
         <div style={{ position: 'absolute', top: '38%', left: '50%', transform: 'translate(-50%,-50%)', width: 420, height: 420, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.09) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div dir={dir} style={{ position: 'relative', zIndex: 1, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Pet size={190} mode="idle" pulse={{ name: 'waving', n: 1 }} follow />
+          <Pet size={190} mode="idle" pulse={{ name: 'waving', n: 1 }} follow decorative />
           <div dir={dir} style={{ fontSize: 40, fontWeight: 700, letterSpacing: '-0.03em', marginTop: 18, unicodeBidi: 'isolate' }}>
             <span style={{ color: HERO_INK, unicodeBidi: 'normal' }}>{first}</span>
             {rest.length > 0 && <>{' '}<span style={{ color: HERO_INK_DIM, unicodeBidi: 'normal' }}>{rest.join(' ')}</span></>}

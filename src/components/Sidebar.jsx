@@ -16,7 +16,7 @@ export function BrandMark({ lang, mark = 34, text = 19, onClick, style }) {
         background: 'var(--bg-card)', border: '1px solid var(--border)',
         display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
       }}>
-        <Pet crop="head" size={mark - 4} />
+        <Pet crop="head" size={mark - 4} decorative />
       </div>
       {/* The global Hebrew rule makes every span its own bidi island, which
           leaves this line with no strong letter of its own: it falls back to
