@@ -122,6 +122,11 @@ import { useReducedMotion } from '../lib/hooks.js';
  * 81. projects 8legs tech: React, Node.js, Vercel Serverless.
  * 82. projects 8legs tech: Playwright and WhatsApp Cloud API.
  *     React, Node, and Vercel Serverless are already said.
+ * 83. profile.location: Israel.
+ * 84. projects claims-voice-agent tagline: inbound voice.
+ *     The Hebrew claim intake is already said.
+ * 85. projects 8legs links.live: the platform has its own site.
+ *     The widget and WhatsApp are already said.
  */
 const FACTS = [
   { en: 'Live LLM agents at Libra Insurance.', he: 'סוכני LLM בפרודקשן, בליברה ביטוח.' },
@@ -206,6 +211,9 @@ const FACTS = [
   { en: 'Tailwind and Vercel Blob are part of that hiring system.', he: 'במערכת הגיוס גם Tailwind ו-Vercel Blob.' },
   { en: '8Legs also runs on React, Node, and Vercel Serverless.', he: '8Legs רץ גם על React, \u200fNode ו-Vercel Serverless.' },
   { en: 'Playwright and the WhatsApp Cloud API are part of 8Legs.', he: 'ב-8Legs גם Playwright ו-WhatsApp Cloud API.' },
+  { en: 'Based in Israel.', he: 'גר בישראל.' },
+  { en: 'The claims voice agent takes the inbound call.', he: 'הסוכן הקולי לתביעות עונה לשיחה הנכנסת.' },
+  { en: '8Legs is live, on a site of its own.', he: '8Legs באוויר, באתר משלו.' },
 ];
 
 /* A Latin name inside a Hebrew line. The span is the language change;
