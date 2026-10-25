@@ -17,10 +17,14 @@ function rememberProject(id, open) {
   if (open) {
     const next = `${base}#${id}`;
     if (`${base}${location.hash}` !== next) history.replaceState(history.state, '', next);
-  } else if (location.hash === `#${id}`) {
-    history.replaceState(history.state, '', base);
+    document.title = titleFor('projects', id);
+    return;
   }
-  document.title = titleFor('projects', open ? id : '');
+  // Closing a card that is not the one in the address must leave that name
+  // in the tab. Two cards can be open when a shared link opened the first.
+  if (location.hash !== `#${id}`) return;
+  history.replaceState(history.state, '', base);
+  document.title = titleFor('projects', '');
 }
 
 function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
