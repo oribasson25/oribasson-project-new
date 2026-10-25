@@ -7,15 +7,14 @@ import { useReducedMotion } from '../lib/hooks.js';
  *
  * 1. profile.headline "Production LLM agents"; resume.experience[0] Libra Insurance.
  * 2. projects claims-voice-agent: Hebrew claim intake and status, live CRM.
- * 3. resume.experience[1] claims call-center supervisor; that role's summary
- *    says the AI platform now automates the workflow he supervised.
+ * 3. resume.experience[1] is a claims shift supervisor, then the agents.
  * 4. resume.experience[1] highlight: trained representatives and handled escalations.
  * 5. resume.summary and the Languages & Code skill group: TypeScript, Python, SQL.
  * 6. resume.experience[0] highlight "API Reverse-Engineering": undocumented CRM
  *    APIs from network traffic, written up as Postman collections.
- * 7. resume.summary and the roadmap highlight: HITL boundaries set before development.
+ * 7. resume.summary and the roadmap highlight: HITL boundaries, set before development.
  * 8. resume.experience[0] "Multi-Agent System Architecture": error recovery.
- * 9. resume.experience[0] "Production Incident Debugging": pilot to full live launch.
+ * 9. resume.experience[0] "Production Incident Debugging": guided the pilot to a full live launch.
  * 10. projects hr-recruitment: each uploaded resume is scored against every open job.
  * 11. projects hr-recruitment highlight "Reads real resumes": PDF and Word, Hebrew and English.
  * 12. projects 8legs tagline and description: a plain description becomes a chatbot, no code.
@@ -48,8 +47,8 @@ import { useReducedMotion } from '../lib/hooks.js';
  * 37. projects 8legs description: Claude, GPT, or a local model through Ollama.
  * 38. projects 8legs highlight "Knowledge (RAG)": a whole-site crawl, and a
  *     Hebrew–English keyword bridge.
- * 39. projects 8legs highlight "Chatbots as code": a private repo, and A/B tests
- *     on live traffic.
+ * 39. projects 8legs highlight "Chatbots as code": a private repo per chatbot,
+ *     and A/B tests on live traffic.
  * 40. resume.education[0] details: segmentation, endpoint hardening, log analysis.
  * 41. resume.experience[0] "Production Incident Debugging": the launch alongside
  *     engineering, IT, cybersecurity, SOC, and ops.
@@ -57,13 +56,13 @@ import { useReducedMotion } from '../lib/hooks.js';
 const FACTS = [
   { en: 'Live LLM agents at Libra Insurance.', he: 'סוכני LLM בפרודקשן, בליברה ביטוח.' },
   { en: 'A Hebrew voice agent opens the claim and checks the status.', he: 'סוכן קולי בעברית פותח תביעה ובודק סטטוס.' },
-  { en: 'Ran the claims desk. Then built the agents for it.', he: 'ניהל את מוקד התביעות. אחר כך בנה לו את הסוכנים.' },
+  { en: 'Supervised a claims shift. Then built the agents for it.', he: 'פיקח על משמרת במוקד. אחר כך בנה לה את הסוכנים.' },
   { en: 'Trained the reps, and took the calls they escalated.', he: 'הכשיר את הנציגים, וטיפל בשיחות שהוסלמו.' },
   { en: 'The agent tools are TypeScript, Python, and SQL.', he: 'הכלים לסוכן: TypeScript, ‏Python ו-SQL.' },
   { en: 'Undocumented CRM APIs, read off the wire, filed in Postman.', he: 'API לא מתועד של ה-CRM, מהרשת אל Postman.' },
-  { en: 'A person still has to say yes before it ships.', he: 'לפני שזה עולה, מישהו עדיין צריך לאשר.' },
+  { en: 'Where a person stays in the loop is set before the build.', he: 'לפני הפיתוח נקבע איפה אדם נשאר בתהליך.' },
   { en: 'If a step fails, the agent recovers and carries on.', he: 'אם שלב נכשל, הסוכן מתאושש וממשיך את השיחה.' },
-  { en: 'Took the agents from a pilot to a full live launch.', he: 'ליווה את הסוכנים מפיילוט עד עלייה מלאה לאוויר.' },
+  { en: 'Guided the agents from a pilot to a full live launch.', he: 'ליווה את הסוכנים מפיילוט עד עלייה מלאה לאוויר.' },
   { en: 'One resume, a score for each open job.', he: 'קו״ח אחד, ציון לכל משרה פתוחה.' },
   { en: 'PDF and Word resumes, read in Hebrew and in English.', he: 'קורות חיים ב-PDF וב-Word, בעברית ובאנגלית.' },
   { en: '8Legs turns a plain description into a chatbot. No code.', he: '8Legs הופך תיאור פשוט לצ׳טבוט. בלי קוד.' },
@@ -93,7 +92,7 @@ const FACTS = [
   { en: 'The mail leaves from a real Gmail inbox.', he: 'המייל יוצא מתיבת Gmail אמיתית.' },
   { en: 'Claude or GPT, or a local model through Ollama.', he: 'Claude או GPT, או מודל מקומי דרך Ollama.' },
   { en: 'A whole site is crawled, and Hebrew search finds the English.', he: 'אתר שלם נסרק, וחיפוש בעברית מוצא את האנגלית.' },
-  { en: 'Each 8Legs chatbot has its own repo, and a live A/B test.', he: 'לכל צ׳טבוט ב-8Legs יש ריפו משלו, וניסוי A/B חי.' },
+  { en: 'Each 8Legs chatbot has its own repo, and A/B tests on live traffic.', he: 'לכל צ׳טבוט ב-8Legs יש ריפו משלו, וניסויי A/B על תנועה אמיתית.' },
   { en: 'The certificate covered segmentation, hardening, and reading logs.', he: 'ההסמכה כללה סגמנטציה, הקשחת עמדות וניתוח לוגים.' },
   { en: 'The launch ran with engineering, IT, cyber, the SOC, and ops.', he: 'ההשקה רצה עם פיתוח, IT, סייבר, ה-SOC ותפעול.' },
 ];
