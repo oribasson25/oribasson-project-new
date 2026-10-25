@@ -245,7 +245,7 @@ export function Sidebar({ t, lang, page, go, recents, activeChatId, onPickRecent
         <div style={{ padding: '0 20px 8px', display: 'flex', alignItems: 'center', gap: 8 }}>
           <Eyebrow style={{ flex: 1 }}>{t.recent}</Eyebrow>
           <button type="button" onClick={onNewChat} title={t.newChat} aria-label={t.newChat}
-            className="quiet"
+            className="quiet hit"
             style={{ display: 'flex', alignItems: 'center', background: 'transparent', padding: 2, borderRadius: 7 }}
           >{Icons.plusCircle}</button>
         </div>
@@ -275,7 +275,7 @@ export function Sidebar({ t, lang, page, go, recents, activeChatId, onPickRecent
               <div style={{ fontSize: 10.5, color: 'var(--text-muted)', marginTop: 1 }}>{t.administrator}</div>
             </div>
             <button type="button" onClick={onSignOut} title={t.signOut} aria-label={t.signOut}
-              className="quiet is-danger"
+              className="quiet is-danger hit"
               style={{ display: 'flex', alignItems: 'center', background: 'transparent', padding: 5, borderRadius: 8 }}
             >{Icons.logout}</button>
           </div>
