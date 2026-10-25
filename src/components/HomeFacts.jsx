@@ -88,6 +88,18 @@ import { useReducedMotion } from '../lib/hooks.js';
  *     already said.
  * 62. projects 8legs role: a personal project, designed and built end to end.
  * 63. resume.experience[0] tech and the Integrations skill: MCP, beside the CRM.
+ * 64. resume.experience[1] summary: the daily claims workflow is what the agents run.
+ * 65. projects hr-recruitment highlight "Recruitment pipeline": from the resume,
+ *     through interview and offer, to hired or out.
+ * 66. projects 8legs highlight "Knowledge (RAG)": PDF and Word uploads, then
+ *     full-text search. The crawl and the Hebrew–English bridge are already said.
+ * 67. projects 8legs highlight "Chatbots as code": branches. The repo and the
+ *     A/B tests are already said.
+ * 68. resume.education[0] details: network security architecture and traffic
+ *     filtering. Segmentation, hardening, logs, identity, and Group Policy
+ *     are already said.
+ * 69. resume.skills Infrastructure & Networking: Windows Server, beside the
+ *     rest of that list. Active Directory and Cisco are already said.
  */
 const FACTS = [
   { en: 'Live LLM agents at Libra Insurance.', he: 'סוכני LLM בפרודקשן, בליברה ביטוח.' },
@@ -153,6 +165,12 @@ const FACTS = [
   { en: 'A Python tool on 8Legs can pull in any pip package.', he: 'כלי Python ב-8Legs יכול להשתמש בכל חבילת pip.' },
   { en: '8Legs is a personal project, designed and built end to end.', he: '8Legs הוא פרויקט אישי, שעוצב ונבנה מקצה לקצה.' },
   { en: 'The agent tools speak MCP, beside the CRM.', he: 'הכלים לסוכן מדברים גם MCP, לצד ה-CRM.' },
+  { en: 'The daily claims work is what the agents run now.', he: 'העבודה היומית במוקד היא מה שהסוכנים מריצים היום.' },
+  { en: 'A candidate moves from the resume to an interview, an offer, or out.', he: 'מועמד עובר מקו״ח לראיון, להצעה, או החוצה.' },
+  { en: '8Legs reads uploaded PDF and Word, then searches the text.', he: '8Legs קורא PDF ו-Word שהועלו, ואז מחפש בטקסט.' },
+  { en: 'Each 8Legs chatbot keeps its own branches.', he: 'לכל צ׳טבוט ב-8Legs יש ענפים משלו.' },
+  { en: 'The certificate covered network security and how traffic is filtered.', he: 'ההסמכה כללה אבטחת רשת ואיך מסננים תעבורה.' },
+  { en: 'Windows Server sits with the rest of the networking.', he: 'Windows Server יושב עם שאר עבודת הרשת.' },
 ];
 
 /* A Latin name inside a Hebrew line. The span is the language change;
