@@ -308,23 +308,24 @@ body {
 }
 @keyframes factFade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes factFadeOut { from { opacity: 1; } to { opacity: 0; } }
-/* On a phone the line sits under the figure. A short slide still reads as
-   arriving from the side, and 10px stays inside the column. */
+/* On a phone the line sits under the figure. The slot keeps 18px clear on
+   each side, so a 16px slide still reads as arriving from the side and
+   cannot leave the screen. */
 @keyframes factInLeftSoft {
-  from { opacity: 0; transform: translateX(-10px); }
+  from { opacity: 0; transform: translateX(-16px); }
   to { opacity: 1; transform: none; }
 }
 @keyframes factOutLeftSoft {
   from { opacity: 1; transform: none; }
-  to { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 0; transform: translateX(-12px); }
 }
 @keyframes factInRightSoft {
-  from { opacity: 0; transform: translateX(10px); }
+  from { opacity: 0; transform: translateX(16px); }
   to { opacity: 1; transform: none; }
 }
 @keyframes factOutRightSoft {
   from { opacity: 1; transform: none; }
-  to { opacity: 0; transform: translateX(8px); }
+  to { opacity: 0; transform: translateX(12px); }
 }
 .home-fact.is-in.from-left { animation: factInLeft 0.46s var(--ease) both; }
 .home-fact.is-out.from-left { animation: factOutLeft 0.28s var(--ease) forwards; }
@@ -345,7 +346,7 @@ body {
     top: auto;
     left: auto;
     right: auto;
-    width: min(280px, 100%);
+    width: min(280px, calc(100% - 36px));
     margin-top: 10px;
     transform: none;
     text-align: center;
