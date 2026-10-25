@@ -155,6 +155,8 @@ import { useReducedMotion } from '../lib/hooks.js';
  *     Group Policy is already said.
  * 104. resume.summary: critical decision points, from supervising the desk.
  * 105. projects hr-recruitment description: jobs and candidates, beside the board.
+ * 106. resume.education[0] location: Kernelios College is in Israel.
+ *     The certificate itself is already said.
  */
 const FACTS = [
   { en: 'Live LLM agents at Libra Insurance.', he: 'סוכני LLM בפרודקשן, בליברה ביטוח.' },
@@ -262,6 +264,7 @@ const FACTS = [
   { en: 'The certificate covered Active Directory security policy.', he: 'ההסמכה כללה מדיניות אבטחה ב-Active Directory.' },
   { en: 'Critical decision points in a claim, from the work on the desk.', he: 'נקודות ההחלטה הקריטיות בתביעה, מהעבודה במוקד.' },
   { en: 'The hiring system keeps the jobs and the candidates.', he: 'מערכת הגיוס שומרת את המשרות ואת המועמדים.' },
+  { en: 'Kernelios College is in Israel.', he: 'מכללת Kernelios בישראל.' },
 ];
 
 /* A Latin name inside a Hebrew line. The span is the language change;
