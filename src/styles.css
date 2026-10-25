@@ -766,7 +766,7 @@ a { color: inherit; }
     line-height: 1.15;
   }
   .print-line { margin: -8px 0 22px; font-size: 12.5px; line-height: 1.5; color: #243044; }
-  .resume-job { break-inside: avoid; }
+  .resume-job, .resume-edu, .resume-lang { break-inside: avoid; }
   /* A printed Live button is useless without the address. */
   .project-card a[href^="http"]::after {
     content: " (" attr(href) ")";
