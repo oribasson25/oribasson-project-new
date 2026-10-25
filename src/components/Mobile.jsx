@@ -68,11 +68,13 @@ function focusable(root) {
 export function MobileSheet({ open, onClose, title, children, closeLabel = 'Close' }) {
   const dialogRef = useRef(null);
   const restoreRef = useRef(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
   useEffect(() => {
     if (!open) return undefined;
     restoreRef.current = document.activeElement;
     const onKey = (e) => {
-      if (e.key === 'Escape') { onClose(); return; }
+      if (e.key === 'Escape') { onCloseRef.current(); return; }
       if (e.key !== 'Tab' || !dialogRef.current) return;
       const items = focusable(dialogRef.current);
       if (!items.length) return;
@@ -84,16 +86,31 @@ export function MobileSheet({ open, onClose, title, children, closeLabel = 'Clos
     document.addEventListener('keydown', onKey);
     const closeBtn = dialogRef.current?.querySelector('[data-sheet-close]');
     (closeBtn || dialogRef.current)?.focus();
+    // The tab trap stops the keyboard. inert takes the rest of the page out of
+    // the accessibility tree too, so a reader cannot wander behind the sheet.
+    // Lift it before returning focus, or the button underneath cannot take it.
+    const dialog = dialogRef.current;
+    const root = dialog?.parentElement;
+    const silenced = [];
+    if (root) {
+      for (const child of root.children) {
+        if (child === dialog || child.hasAttribute('data-sheet-backdrop')) continue;
+        if (child.hasAttribute('inert')) continue;
+        child.setAttribute('inert', '');
+        silenced.push(child);
+      }
+    }
     return () => {
       document.removeEventListener('keydown', onKey);
+      silenced.forEach((el) => el.removeAttribute('inert'));
       const back = restoreRef.current;
       if (back && typeof back.focus === 'function') back.focus();
     };
-  }, [open, onClose]);
+  }, [open]);
   if (!open) return null;
   return (
     <>
-      <div className="screen-only" onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(13,15,20,0.35)', zIndex: 300 }} />
+      <div data-sheet-backdrop="" className="screen-only" aria-hidden="true" onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(13,15,20,0.35)', zIndex: 300 }} />
       <div ref={dialogRef} id="more-sheet" className="m-sheet fade-in screen-only" role="dialog" aria-modal="true" aria-label={title} tabIndex={-1} style={{
         position: 'fixed', left: 0, right: 0, bottom: 0, zIndex: 301, display: 'flex', flexDirection: 'column',
         maxHeight: 'calc(100dvh - 28px)', background: 'var(--bg-sidebar)', borderRadius: '22px 22px 0 0',
