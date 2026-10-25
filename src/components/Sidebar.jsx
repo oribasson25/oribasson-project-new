@@ -72,7 +72,8 @@ export function ContactCard({ t }) {
             title={r.key === 'email' || r.key === 'phone' ? r.label(c[r.key]) : c[r.key]}
             style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, fontWeight: 600, textDecoration: 'none', minWidth: 0 }}>
             <span style={{ display: 'flex', flexShrink: 0, color: 'var(--text-muted)' }}>{r.icon}</span>
-            <span dir="ltr" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.label(c[r.key])}</span>
+            {/* The address is Latin. On a Hebrew page the voice for the row would otherwise read it. */}
+            <span lang="en" dir="ltr" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.label(c[r.key])}</span>
             {r.key !== 'email' && r.key !== 'phone' && <span className="sr-only">{t.newTab}</span>}
           </a>
         ))}
@@ -107,14 +108,18 @@ export function ContactActions({ t, compact }) {
     return (
       <div style={{ display: 'flex', gap: 6 }}>
         {items.map((it) => (
-          <a key={it.key} href={it.href} title={it.title} aria-label={it.external ? `${it.title}. ${t.newTab}` : it.title}
+          <a key={it.key} href={it.href} title={it.title}
             target={it.external ? '_blank' : undefined} rel={it.external ? 'noopener noreferrer' : undefined}
             style={{
               width: 44, height: 44, borderRadius: '50%', flexShrink: 0,
               background: 'var(--primary)', color: 'var(--primary-ink)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               boxShadow: '0 2px 10px var(--primary-glow)',
-            }}>{it.icon}</a>
+            }}>
+            <span className="sr-only" lang="en">{it.title}</span>
+            {it.external && <span className="sr-only"> {t.newTab}</span>}
+            {it.icon}
+          </a>
         ))}
       </div>
     );
@@ -125,9 +130,9 @@ export function ContactActions({ t, compact }) {
       {items.map((it, i) => (
         <Btn key={it.key} size="sm" variant={i === 0 ? 'primary' : 'ghost'} icon={it.icon} href={it.href} title={it.title}
           sameTab={!it.external} note={it.external ? t.newTab : undefined}
-          name={it.key === 'email' ? `${it.label}, ${c.email}` : undefined}
           style={it.key === 'phone' ? { direction: 'ltr' } : undefined}>
-          {it.label}
+          {it.key === 'phone' || it.key === 'linkedin' ? <span lang="en">{it.label}</span> : it.label}
+          {it.key === 'email' && <span className="sr-only" lang="en">{`, ${c.email}`}</span>}
         </Btn>
       ))}
     </div>
