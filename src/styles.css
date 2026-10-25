@@ -515,6 +515,8 @@ button:active { transform: scale(0.985); }
   box-shadow: var(--shadow-lg);
 }
 .skip-link:focus { transform: none; }
+/* The target is the whole column. A ring around it reads as a frame, not a place. */
+#main:focus { outline: none; }
 .sr-only {
   position: absolute;
   width: 1px;
