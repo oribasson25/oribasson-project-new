@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import profile from '../../content/profile.js';
 import resume from '../../content/resume.js';
 import projects from '../../content/projects.js';
-import { tx } from '../../shared/text.js';
+import { tx, tl, bullet } from '../../shared/text.js';
 import { strings } from '../i18n.js';
 
 export const ORIGIN = 'https://oribasson.com';
@@ -76,6 +76,17 @@ function removeLink(rel) {
   document.head.querySelector(`link[rel="${rel}"]`)?.remove();
 }
 
+/** The lines the resume actually shows, so a crawler does not stop at the job title. */
+function jobDescription(job) {
+  const summary = tx(job.summary, 'en');
+  const highlights = tl(job.highlights, 'en').map((item) => {
+    const { title, text } = bullet(item);
+    return title ? `${title}: ${text}` : text;
+  }).filter(Boolean);
+  const parts = [summary, ...highlights].filter(Boolean);
+  return parts.length ? parts.join(' ') : undefined;
+}
+
 function personNode() {
   const job = (resume.experience || [])[0];
   const company = job ? tx(job.company, 'en') : '';
@@ -88,9 +99,11 @@ function personNode() {
     const name = tx(e.degree, 'en');
     const org = tx(e.school, 'en');
     if (!name) return null;
+    const details = tx(e.details, 'en');
     return {
       '@type': 'EducationalOccupationalCredential',
       name,
+      description: details || undefined,
       recognizedBy: org ? { '@type': 'EducationalOrganization', name: org } : undefined,
     };
   }).filter(Boolean);
@@ -160,7 +173,6 @@ function experienceList() {
     const role = tx(job.role, 'en');
     const company = tx(job.company, 'en');
     if (!role) return null;
-    const summary = tx(job.summary, 'en');
     return {
       '@type': 'ListItem',
       position: i + 1,
@@ -170,7 +182,7 @@ function experienceList() {
         roleName: role,
         startDate: job.start || undefined,
         endDate: job.end || undefined,
-        description: summary || undefined,
+        description: jobDescription(job),
       },
     };
   }).filter(Boolean);
