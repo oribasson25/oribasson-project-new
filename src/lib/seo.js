@@ -156,12 +156,17 @@ function personNode() {
     const org = tx(e.school, 'en');
     if (!name) return null;
     const details = tx(e.details, 'en');
+    const place = tx(e.location, 'en');
     return {
       '@type': 'EducationalOccupationalCredential',
       name,
       description: details || undefined,
       url: e.id ? `${ORIGIN}/resume#${e.id}` : undefined,
-      recognizedBy: org ? { '@type': 'EducationalOrganization', name: org } : undefined,
+      recognizedBy: org ? {
+        '@type': 'EducationalOrganization',
+        name: org,
+        address: place ? { '@type': 'PostalAddress', addressCountry: place } : undefined,
+      } : undefined,
     };
   }).filter(Boolean);
   const headline = tx(profile.headline, 'en');

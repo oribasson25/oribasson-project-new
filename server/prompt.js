@@ -62,7 +62,8 @@ function renderProfile() {
 
   const education = (resume.education || []).map((e) => {
     const head = [both(e.degree), both(e.school)].filter(Boolean).join(', ');
-    const meta = period(e.start, e.end);
+    // The page shows the school's place. The chat should be able to say it.
+    const meta = [period(e.start, e.end), both(e.location)].filter(Boolean).join(', ');
     return `- ${head}${meta ? ` (${meta})` : ''}${both(e.details) ? ` — ${both(e.details)}` : ''}`;
   });
 
