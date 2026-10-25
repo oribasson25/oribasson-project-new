@@ -18,7 +18,7 @@ const MARK = '/pet/ori-mark.webp';
 let sheetDecoded = false;
 let sheetPromise = null;
 
-/** One fetch, shared by every figure. The mark is already on screen by then. */
+/** One fetch, shared by every figure that moves. The mark is already on screen. */
 function loadSheet() {
   if (sheetDecoded) return Promise.resolve(true);
   if (typeof Image === 'undefined') return Promise.resolve(false);
@@ -37,15 +37,18 @@ function loadSheet() {
   return sheetPromise;
 }
 
-function useSheet() {
+function useSheet(enabled) {
   const [ready, setReady] = useState(sheetDecoded);
   useEffect(() => {
+    if (!enabled) return undefined;
     if (sheetDecoded) { setReady(true); return undefined; }
     let live = true;
     loadSheet().then((ok) => { if (live && ok) setReady(true); });
     return () => { live = false; };
-  }, []);
-  return ready;
+  }, [enabled]);
+  // A still portrait keeps the small image even after some other figure has
+  // fetched the sheet.
+  return enabled && (ready || sheetDecoded);
 }
 const CW = 192;
 const CH = 208;
@@ -81,7 +84,11 @@ const rand = ([a, b]) => a + Math.random() * (b - a);
  */
 export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size = 200, onClick, title, label, style, glitch, decorative = false }) {
   const reduced = useReducedMotion();
-  const sheetReady = useSheet();
+  // The corner mark and the thread avatar never leave the rest pose. The
+  // sheet is half a megabyte of motion, so it waits for a figure that moves:
+  // the home figure, the one at work, the wave on the sign-in screen.
+  const needsSheet = !decorative || follow || typeof onClick === 'function' || !!(pulse && pulse.name) || (mode && mode !== 'idle');
+  const sheetReady = useSheet(needsSheet);
   const base = mode === 'working' || mode === 'talking' ? mode : 'idle';
   const [override, setOverride] = useState(null);
   const [frame, setFrame] = useState(0);
