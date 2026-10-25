@@ -67,7 +67,7 @@ function CopyAnswer({ rootRef, lang }) {
   }
   return (
     <>
-      <button type="button" className="copy-answer screen-only" onClick={copy}
+      <button type="button" className="copy-answer screen-only fade-in" onClick={copy}
         aria-label={copied ? t.copied : t.copyAnswerName}>
         {copied ? t.copied : t.copyAnswer}
       </button>
