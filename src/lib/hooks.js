@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 
 /*
  * Pages have real addresses — /resume, /projects, /admin — so a recruiter can
@@ -69,6 +69,29 @@ export function useShortScreen() {
 /** True when the shorter home is still too tall for this phone. */
 export function useTightScreen() {
   return watchMedia(TIGHT);
+}
+
+/**
+ * True while `node` is at most `max` CSS pixels wide. The node arrives
+ * through the callback ref, so a screen that mounts later is still measured.
+ * A missing node is wide: the first paint should not assume a phone column.
+ */
+export function useMaxWidth(max) {
+  const [node, setNode] = useState(null);
+  const [narrow, setNarrow] = useState(false);
+  useLayoutEffect(() => {
+    if (!node) return undefined;
+    const apply = () => {
+      const next = node.clientWidth <= max;
+      setNarrow((prev) => (prev === next ? prev : next));
+    };
+    apply();
+    if (typeof ResizeObserver === 'undefined') return undefined;
+    const ro = new ResizeObserver(apply);
+    ro.observe(node);
+    return () => ro.disconnect();
+  }, [node, max]);
+  return [setNode, narrow];
 }
 
 export function useReducedMotion() {

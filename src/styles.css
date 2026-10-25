@@ -111,8 +111,10 @@ body {
   color: var(--text-2);
   text-wrap: balance;
 }
-/* The welcome column: desktop padding, and the phone's. */
-.home-welcome { padding: 0 34px 50px; }
+/* The welcome column: desktop padding, and the phone's.
+   A sideways scrollbar would mean a line or the hello bubble left the column.
+   Clip that axis only; the column still scrolls down. */
+.home-welcome { padding: 0 34px 50px; overflow-x: clip; }
 .home-welcome.is-phone { padding: 6px 18px 12px; }
 .home-ask { margin-top: 28px; }
 .home-welcome.is-phone .home-ask { margin-top: 14px; }

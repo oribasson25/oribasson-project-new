@@ -9,7 +9,7 @@ import { Answer, Steps } from './Answer.jsx';
 import { bidiParts, messageBidi } from './ui.jsx';
 import { architectures } from './architectures.js';
 import { diagramProjectId } from '../lib/projectDiagram.js';
-import { useReducedMotion, useShortScreen, useTightScreen } from '../lib/hooks.js';
+import { useMaxWidth, useReducedMotion, useShortScreen, useTightScreen } from '../lib/hooks.js';
 import { useIntroVoice } from '../lib/useIntroVoice.js';
 import { loadMarkdown } from '../lib/loadMarkdown.js';
 
@@ -160,6 +160,11 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
   const short = useShortScreen();
   const tight = useTightScreen();
   const reduced = useReducedMotion();
+  // The side bubble is 270px and starts most of the way across a 265px figure.
+  // Under about 760px of column it leaves the screen. The phone already stacks
+  // it; a narrow desktop does the same. Wider than that, it stays on his right.
+  const [setStage, stageNarrow] = useMaxWidth(760);
+  const bubbleBelow = stacked || stageNarrow;
   const first = firstName(lang);
   const firstPerson = profile.voice === 'first-person';
   const offline = status.chat === 'unavailable';
@@ -276,17 +281,18 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         alignItems: 'center', justifyContent: 'safe center', overflowY: 'auto',
       }}>
         <div className="sr-only" aria-live="polite">{halted ? t.stopped : ''}</div>
-        <div className="home-stage hero-rise" style={{ animationDelay: '0.04s' }}>
+        <div ref={setStage} className="home-stage hero-rise" style={{ animationDelay: '0.04s' }}>
           <PetStage size={stacked ? (tight ? 96 : short ? 112 : 148) : 230} mode={pending ? 'working' : 'idle'} pulse={chat.pulse} busy={pending} voice={voice} label={t.petJump} onHover={setFigureHot}>
-            {!stacked && <IntroBubble t={t} voice={voice} transcript={introText} />}
-            {stacked && voice.heard && voice.state !== 'playing' && <IntroBubble t={t} voice={voice} stacked />}
+            {!bubbleBelow && <IntroBubble t={t} voice={voice} transcript={introText} />}
+            {bubbleBelow && voice.heard && voice.state !== 'playing' && <IntroBubble t={t} voice={voice} stacked={bubbleBelow} />}
           </PetStage>
-          {stacked && !(voice.heard && voice.state !== 'playing') && (
-            <IntroBubble t={t} voice={voice} transcript={introText} stacked dense={short} />
+          {bubbleBelow && !(voice.heard && voice.state !== 'playing') && (
+            <IntroBubble t={t} voice={voice} transcript={introText} stacked={stacked} below={!stacked} dense={stacked && short} />
           )}
-          {/* On a phone the hello sits above the line, so either side is free. */}
+          {/* On a phone, and in a column too narrow for a side bubble, the hello
+              sits above the line, so either side is free. */}
           <HomeFacts lang={lang} t={t} hold={voice.state === 'playing' || figureHot}
-            avoidRight={!stacked && voice.available && (!voice.heard || voice.state === 'playing')} />
+            avoidRight={!bubbleBelow && voice.available && (!voice.heard || voice.state === 'playing')} />
         </div>
         <h1 className="hero-title hero-rise" dir={dir} style={{ animationDelay: '0.14s' }}>{t.hello(first)}</h1>
         <svg className="hero-rule hero-rise" viewBox="0 0 72 8" width="72" height="8" aria-hidden="true" style={{ animationDelay: '0.22s' }}>

@@ -49,7 +49,7 @@ function Tail({ side }) {
   return <span aria-hidden="true" style={{ position: 'absolute', width: 12, height: 12, background: 'var(--bg-card)', transform: 'rotate(45deg)', ...at }} />;
 }
 
-export function IntroBubble({ t, voice, transcript, stacked, dense }) {
+export function IntroBubble({ t, voice, transcript, stacked, dense, below }) {
   const { state, heard, duration, play, stop, dismiss, levelRef, audioRef } = voice;
   const playing = state === 'playing';
   const reduced = useReducedMotion();
@@ -103,9 +103,15 @@ export function IntroBubble({ t, voice, transcript, stacked, dense }) {
   const progress = a && duration ? Math.min(1, a.currentTime / duration) : 0;
   const caption = playing && a ? captionAt(transcript, a.currentTime, duration) : null;
   const level = playing ? levelRef.current : 0;
+  // `below` is the desktop column that is too narrow for a bubble beside the
+  // figure. Same resting place as the phone, without the phone's tighter type.
+  // The stop and dismiss stay 44px: that column is where a tablet lands.
+  const tap = stacked || below;
   const place = stacked
     ? { position: 'relative', margin: '2px auto 0', maxWidth: 'min(300px, 100%)' }
-    : { position: 'absolute', left: '86%', top: '16%', width: 'max-content', maxWidth: 270 };
+    : below
+      ? { position: 'relative', margin: '12px auto 0', width: 'max-content', maxWidth: 'min(300px, 100%)', minWidth: 0 }
+      : { position: 'absolute', left: '86%', top: '16%', width: 'max-content', maxWidth: 270 };
 
   return (
     <div className="fade-in" style={{
@@ -113,7 +119,7 @@ export function IntroBubble({ t, voice, transcript, stacked, dense }) {
       borderRadius: 16, boxShadow: 'var(--shadow-lg)', padding: dense ? '2px 6px 2px 4px' : '9px 10px 9px 9px',
       display: 'flex', alignItems: 'center', gap: 10,
     }}>
-      <Tail side={stacked ? 'top' : 'left'} />
+      <Tail side={stacked || below ? 'top' : 'left'} />
       {playing ? (
         <>
           <div aria-hidden="true" style={{ display: 'flex', alignItems: 'center', gap: 3, height: 26, padding: '0 4px', flexShrink: 0 }}>
@@ -139,21 +145,21 @@ export function IntroBubble({ t, voice, transcript, stacked, dense }) {
             </div>
           </div>
           <button type="button" onClick={stop} title={t.introStop} aria-label={t.introStop}
-            style={{ width: stacked ? 44 : 28, height: stacked ? 44 : 28, borderRadius: '50%', flexShrink: 0, background: 'var(--bg-hover)', color: 'var(--text)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            style={{ width: tap ? 44 : 28, height: tap ? 44 : 28, borderRadius: '50%', flexShrink: 0, background: 'var(--bg-hover)', color: 'var(--text)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <span style={{ width: 9, height: 9, borderRadius: 2, background: 'currentColor' }} />
           </button>
         </>
       ) : (
         <>
           <button type="button" onClick={play}
-            style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'transparent', padding: 0, textAlign: 'start', minWidth: 0, flex: '1 1 auto', minHeight: stacked ? 44 : undefined }}>
+            style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'transparent', padding: 0, textAlign: 'start', minWidth: 0, flex: '1 1 auto', minHeight: tap ? 44 : undefined }}>
             <span style={{ width: 30, height: 30, borderRadius: '50%', flexShrink: 0, background: 'var(--primary)', color: 'var(--primary-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11 }}>▶</span>
             <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', lineHeight: 1.35, minWidth: 0 }}>{t.introOffer}</span>
             {duration > 0 && <span style={{ fontSize: 11.5, color: 'var(--text-muted)', fontFamily: 'var(--mono)', flexShrink: 0 }}>{fmt(duration)}</span>}
           </button>
           <button type="button" onClick={dismiss} title={t.introDismiss} aria-label={t.introDismiss}
             style={{
-              width: stacked ? 44 : 32, height: stacked ? 44 : 32, borderRadius: 8, flexShrink: 0,
+              width: tap ? 44 : 32, height: tap ? 44 : 32, borderRadius: 8, flexShrink: 0,
               background: 'transparent', color: 'var(--text-muted)', fontSize: 16, lineHeight: 1,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>×</button>
