@@ -42,7 +42,7 @@ export function MobileBottomNav({ t, page, go, onMore, moreOpen }) {
       {items.map((it) => {
         const on = it.id === 'more' ? moreOpen : page === it.id && !moreOpen;
         return (
-          <button key={it.id} type="button" onClick={it.onClick} aria-label={it.label} title={it.label}
+          <button key={it.id} type="button" className="m-tab" onClick={it.onClick} aria-label={it.label} title={it.label}
             aria-current={it.id !== 'more' && on ? 'page' : undefined}
             aria-expanded={it.id === 'more' ? moreOpen : undefined}
             aria-controls={it.id === 'more' ? 'more-sheet' : undefined}

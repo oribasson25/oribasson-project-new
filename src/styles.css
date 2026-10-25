@@ -1021,3 +1021,59 @@ a { color: inherit; }
   .home-fact::after { animation: none !important; transform: none !important; }
   button:active { transform: none; }
 }
+
+/* Windows high contrast drops the paper colors. Borders and the system
+   highlight keep the controls, the current page, and the side-line tick. */
+@media (forced-colors: active) {
+  .shimmer {
+    background: none;
+    color: CanvasText;
+    -webkit-text-fill-color: CanvasText;
+    animation: none;
+  }
+  .pet-halo, .pet-ground, .project-fade { display: none; }
+  .q-chip,
+  .project-card,
+  .bubble-user,
+  .bubble-assistant,
+  .send-btn,
+  .btn,
+  .nav-btn,
+  .seg-tab,
+  .thread-latest,
+  .home-fact-btn,
+  .m-tab {
+    border: 1px solid ButtonText;
+  }
+  .nav-btn[data-on="true"],
+  .seg-tab.is-on,
+  .m-tab[aria-current="page"] {
+    background: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+  .home-fact-slot[data-side="left"] .home-fact::after,
+  .home-fact-slot[data-side="right"] .home-fact::before {
+    background: CanvasText;
+  }
+  .resume-job.is-linked,
+  .resume-edu.is-linked,
+  .project-card.is-linked,
+  .project-card.is-linked:hover,
+  .project-card.is-linked:focus-within {
+    box-shadow: inset 3px 0 0 Highlight;
+  }
+  [dir="rtl"] .resume-job.is-linked,
+  [dir="rtl"] .resume-edu.is-linked,
+  [dir="rtl"] .project-card.is-linked,
+  [dir="rtl"] .project-card.is-linked:hover,
+  [dir="rtl"] .project-card.is-linked:focus-within {
+    box-shadow: inset -3px 0 0 Highlight;
+  }
+  :focus-visible { outline-color: Highlight; }
+  .skip-link:focus {
+    background: Canvas;
+    color: CanvasText;
+    border: 1px solid CanvasText;
+  }
+}
