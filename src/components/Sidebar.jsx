@@ -125,6 +125,7 @@ export function ContactActions({ t, compact }) {
       {items.map((it, i) => (
         <Btn key={it.key} size="sm" variant={i === 0 ? 'primary' : 'ghost'} icon={it.icon} href={it.href} title={it.title}
           sameTab={!it.external} note={it.external ? t.newTab : undefined}
+          name={it.key === 'email' ? `${it.label}, ${c.email}` : undefined}
           style={it.key === 'phone' ? { direction: 'ltr' } : undefined}>
           {it.label}
         </Btn>
