@@ -32,7 +32,7 @@ import { useReducedMotion } from '../lib/hooks.js';
  * 22. resume.languages English, professional working proficiency, beside native Hebrew.
  * 23. projects back-office-agent description: OCR, then the document is filed on the claim.
  * 24. projects live-call-intelligence description: escalation signals during the call.
- * 25. projects 8legs description: live as a website widget or on WhatsApp.
+ * 25. projects 8legs description: live as a website widget or on WhatsApp Business.
  * 26. projects hr-recruitment highlight: drag-and-drop Kanban.
  * 27. resume.experience[0] eval highlight: quality dashboards for the business.
  * 28. resume.experience[0] "Production Incident Debugging": WebSocket audio / ASR.
@@ -169,7 +169,7 @@ const FACTS = [
   { en: 'English as well, at a working professional level.', he: 'גם אנגלית, ברמה של עבודה.' },
   { en: 'OCR reads the document from the mail, then files it on the claim.', he: 'OCR קורא את המסמך מהמייל, ומתייק אותו בתביעה.' },
   { en: 'It catches an escalation while the rep is still on the line.', he: 'סוכן השיחה קולט הסלמה עוד במהלך השיחה.' },
-  { en: '8Legs can sit on the site itself, or inside WhatsApp.', he: '8Legs יושב באתר עצמו, או בתוך WhatsApp.' },
+  { en: '8Legs can sit on the site, or on WhatsApp Business.', he: '8Legs יושב באתר עצמו, או ב-WhatsApp Business.' },
   { en: 'Candidates are moved by hand across a Kanban board.', he: 'את המועמדים מזיזים ביד על לוח Kanban.' },
   { en: 'The call scores land on a dashboard the business reads.', he: 'ציוני השיחות עולים לדשבורד שהעסק קורא.' },
   { en: 'A voice fault in production, traced along the audio wire.', he: 'תקלת קול בפרודקשן, דרך האודיו על הקו.' },
