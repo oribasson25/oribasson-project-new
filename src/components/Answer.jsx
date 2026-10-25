@@ -94,6 +94,9 @@ function animateEntrances(root, trail, now) {
 export function Answer({ content, streaming, onRevealed, diagram, lang, diagramLabel, speaker }) {
   const reduced = useReducedMotion();
   const [live] = useState(() => streaming && !reduced);
+  // This answer is the one being written now, including when motion is reduced
+  // and there is no word-by-word reveal. Older answers stay quiet.
+  const [fresh] = useState(() => streaming);
   const [shown, setShown] = useState(live ? 0 : Infinity);
   const latest = useRef({});
   latest.current = { content, streaming, onRevealed };
@@ -174,8 +177,8 @@ export function Answer({ content, streaming, onRevealed, diagram, lang, diagramL
   return (
     <div dir="auto" className={live ? 'bubble-assistant fade-in' : 'bubble-assistant'}
       aria-busy={writing ? 'true' : undefined}
-      aria-live={live ? (writing ? 'off' : 'polite') : undefined}
-      aria-atomic={live ? 'true' : undefined}>
+      aria-live={fresh ? (writing ? 'off' : 'polite') : undefined}
+      aria-atomic={fresh ? 'true' : undefined}>
       {speaker && <span className="sr-only">{speaker}: </span>}
       {/* Hidden while the words are still arriving, so a reader hears the
           finished answer once instead of every new word. */}
