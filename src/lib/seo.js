@@ -81,6 +81,16 @@ function personNode() {
   const company = job ? tx(job.company, 'en') : '';
   const role = job ? tx(job.role, 'en') : '';
   const schools = (resume.education || []).map((e) => tx(e.school, 'en')).filter(Boolean);
+  const credentials = (resume.education || []).map((e) => {
+    const name = tx(e.degree, 'en');
+    const org = tx(e.school, 'en');
+    if (!name) return null;
+    return {
+      '@type': 'EducationalOccupationalCredential',
+      name,
+      recognizedBy: org ? { '@type': 'EducationalOrganization', name: org } : undefined,
+    };
+  }).filter(Boolean);
   const headline = tx(profile.headline, 'en');
   const sameAs = [profile.contact?.linkedin, profile.contact?.github, profile.contact?.website].filter(Boolean);
   const knowsAbout = (resume.skills || []).flatMap((g) => g.items || []).filter(Boolean);
@@ -103,6 +113,7 @@ function personNode() {
     alumniOf: schools.length === 1
       ? { '@type': 'EducationalOrganization', name: schools[0] }
       : (schools.length ? schools.map((name) => ({ '@type': 'EducationalOrganization', name })) : undefined),
+    hasCredential: credentials.length === 1 ? credentials[0] : (credentials.length ? credentials : undefined),
     knowsLanguage: (resume.languages || []).map((l) => tx(l.name, 'en')).filter(Boolean),
     knowsAbout: knowsAbout.length ? knowsAbout : undefined,
     description: tx(resume.summary, 'en'),
