@@ -76,8 +76,9 @@ export function AdminLogin({ t, lang, setLang, onSignedIn, onBack, mobile }) {
             <div style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 500, lineHeight: 1.6 }}>{L.sub}</div>
           </div>
           <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
-            <input className="login-field" type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-              placeholder={L.password} aria-label={L.password} autoFocus autoComplete="current-password" dir="ltr"
+            <label htmlFor="admin-password" style={{ display: 'block', fontSize: 12, fontWeight: 650, color: 'var(--text-2)', marginBottom: 6 }}>{L.password}</label>
+            <input id="admin-password" className="login-field" type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+              autoFocus autoComplete="current-password" dir="ltr"
               aria-invalid={error ? 'true' : undefined}
               aria-describedby={error ? 'login-error' : undefined} />
             {error && (
