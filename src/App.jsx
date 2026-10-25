@@ -98,13 +98,20 @@ export default function App() {
     const el = document.activeElement;
     const field = el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT');
     if (field) return;
+    // A pointer click should not draw a ring around the title. A key should.
+    const fromPointer = !!el && el.matches(':focus') && !el.matches(':focus-visible');
+    const focusOpts = { preventScroll: true, focusVisible: !fromPointer };
     if (target) {
       const heading = target.querySelector('h1, h2, h3') || target;
       if (heading.tabIndex < 0) heading.tabIndex = -1;
-      heading.focus({ preventScroll: true });
+      heading.focus(focusOpts);
       return;
     }
-    if (el && el.tagName === 'BUTTON') main.focus({ preventScroll: true });
+    if (el && (el.tagName === 'BUTTON' || el.tagName === 'A')) {
+      const heading = main.querySelector('h1') || main;
+      if (heading.tabIndex < 0) heading.tabIndex = -1;
+      heading.focus(focusOpts);
+    }
   }, [page, hash]);
 
   function ask(text) {
