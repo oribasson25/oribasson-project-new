@@ -101,6 +101,8 @@ const STRINGS = {
     architecture: 'Architecture',
     askProjectQuestion: (name) => `Tell me about the project ${name}`,
     askJobQuestion: (role, company) => `Tell me about the ${role} role at ${company}`,
+    askAboutStudy: (degree, school) => `Ask about ${degree}${school ? ` at ${school}` : ''}`,
+    askStudyQuestion: (degree, school) => `Tell me about ${degree}${school ? ` at ${school}` : ''}`,
 
     login: {
       heading: 'Admin',
@@ -267,6 +269,8 @@ const STRINGS = {
     architecture: 'מבנה',
     askProjectQuestion: (name) => `ספרו לי על הפרויקט ${name}`,
     askJobQuestion: (role, company) => `ספרו לי על התפקיד ${role} ב-${company}`,
+    askAboutStudy: (degree, school) => `שאלו על ${degree}${school ? ` ב-${school}` : ''}`,
+    askStudyQuestion: (degree, school) => `ספרו לי על ${degree}${school ? ` ב-${school}` : ''}`,
 
     login: {
       heading: 'ניהול',

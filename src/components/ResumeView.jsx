@@ -142,6 +142,13 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked, hash }) {
                         {[tx(e.school, lang), tx(e.location, lang)].filter(Boolean).join(' · ')}
                       </div>
                       {tx(e.details, lang) && <div dir="auto" style={{ fontSize: 12.5, color: 'var(--text-2)', marginTop: 6, lineHeight: 1.6 }}>{tx(e.details, lang)}</div>}
+                      {(tx(e.degree, lang) || tx(e.school, lang)) && (
+                        <span className="print-hide" style={{ display: 'inline-flex', marginTop: 12 }}>
+                          <Btn size="sm" icon={Icons.sparkle} name={t.askAboutStudy(tx(e.degree, lang), tx(e.school, lang))} onClick={() => onAsk(t.askStudyQuestion(tx(e.degree, lang), tx(e.school, lang)))}>
+                            {t.askAboutExperience}
+                          </Btn>
+                        </span>
+                      )}
                     </div>
                     <div dir="ltr" style={{ fontFamily: 'var(--mono)', fontSize: 11.5, color: 'var(--text-muted)', paddingTop: 3 }}><Period start={e.start} end={e.end} present={t.present} /></div>
                   </li>
