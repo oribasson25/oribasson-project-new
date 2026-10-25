@@ -234,7 +234,7 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   return (
     <div ref={slotRef} className="home-fact-slot" role="group" aria-label={t.factsLabel} data-side={side} data-pinned={pinned ? 'true' : 'false'} dir={lang === 'he' ? 'rtl' : 'ltr'}>
       {/* The hint stays off the live region. A new line is the words. */}
-      <div className="home-fact-live" aria-live={hold ? 'off' : 'polite'} aria-atomic="true">
+      <div className="home-fact-live" aria-live={hold || keyFocus ? 'off' : 'polite'} aria-atomic="true">
         <button
           type="button"
           className="home-fact-btn"
