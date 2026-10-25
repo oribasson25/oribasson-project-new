@@ -79,15 +79,18 @@ function Node({ node, lang, delay }) {
   );
 }
 
-export function Architecture({ spec, lang, label }) {
+export function Architecture({ spec, lang, label, name }) {
   const ref = useRef(null);
   const [reduced, drawn] = useDrawn(ref);
   const groups = spec.groups || [{ steps: spec.steps || [] }];
   let delay = 30;
 
   return (
-    <figure ref={ref} className={`arch${reduced ? '' : ' arch-motion'}${drawn ? ' is-in' : ''}`}>
-      <figcaption className="arch-cap" dir="auto">{label}</figcaption>
+    <figure ref={ref} className={`arch${reduced ? '' : ' arch-motion'}${drawn ? ' is-in' : ''}`}
+      aria-label={name ? `${label}. ${name}` : undefined}>
+      {/* The caption stays the one word. The project's name is for a reader,
+          so six diagrams on one page are not six copies of the same word. */}
+      <figcaption className="arch-cap" dir="auto" aria-hidden={name ? 'true' : undefined}>{label}</figcaption>
       {groups.map((group, gi) => (
         <div key={gi} className="arch-group">
           {group.title && <div className="arch-group-title" dir="auto" lang={latinLang(tx(group.title, lang), lang)}>{tx(group.title, lang)}</div>}

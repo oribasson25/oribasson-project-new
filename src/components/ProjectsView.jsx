@@ -160,7 +160,7 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
         height: spec ? 'auto' : (expanded || held != null ? 'auto' : CARD_HEIGHT), minHeight: spec ? 0 : CARD_HEIGHT,
       }}>
       {spec && head}
-      {spec && <Architecture spec={spec} lang={lang} label={t.architecture} />}
+      {spec && <Architecture spec={spec} lang={lang} label={t.architecture} name={name} />}
       <div ref={clipRef} className={`project-clip${held != null ? ' is-easing' : ''}`}
         onTransitionEnd={(e) => {
           if (e.propertyName !== 'max-height' || e.target !== e.currentTarget) return;

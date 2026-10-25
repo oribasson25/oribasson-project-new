@@ -1,10 +1,13 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { loadMarkdown, renderMarkdownSync, plainHtml } from '../lib/loadMarkdown.js';
+import projects from '../../content/projects.js';
+import { tx } from '../../shared/text.js';
 import { stripProjectMarkers } from '../lib/projectDiagram.js';
 import { strings } from '../i18n.js';
 import { useReducedMotion } from '../lib/hooks.js';
 import { Pet } from './Pet.jsx';
 import { Architecture } from './Architecture.jsx';
+import { architectures } from './architectures.js';
 
 /*
  * How an answer arrives, in stages: while the model reads, Ori works through
@@ -22,6 +25,13 @@ const BLOCK_MS = 420;          // keep in step with .rv-b
 const MIN_RATE = 70;           // characters a second, however short the backlog
 const STEP_AT = [700, 1600];   // when the second and third steps begin, in ms
 const BLOCKS = ':scope > p, :scope > h1, :scope > h2, :scope > h3, :scope > h4, :scope > blockquote, :scope > pre, :scope > table, li';
+
+function diagramName(diagram, lang) {
+  if (!diagram) return '';
+  const id = Object.keys(architectures).find((key) => architectures[key] === diagram);
+  const project = id && projects.find((p) => p.id === id);
+  return project ? tx(project.name, lang) : '';
+}
 
 /** Close a ** or ` left open at the cursor, so bold text is bold as it appears rather than asterisks until the end. */
 function closeOpen(text) {
@@ -167,7 +177,7 @@ export function Answer({ content, streaming, onRevealed, diagram, lang, diagramL
       <div ref={mdRef} className="md" dangerouslySetInnerHTML={{ __html: html }} />
       {diagram && !writing && (
         <div dir={lang === 'he' ? 'rtl' : 'ltr'} style={{ marginTop: 12 }}>
-          <Architecture spec={diagram} lang={lang} label={diagramLabel} />
+          <Architecture spec={diagram} lang={lang} label={diagramLabel} name={diagramName(diagram, lang)} />
         </div>
       )}
     </div>
