@@ -171,9 +171,9 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked, hash }) {
               <Section title={t.languages}>
                 <ul className="plain-list">
                   {languages.map((l, i) => (
-                    <li key={i} className="resume-lang" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12, fontSize: 13.5, padding: '9px 0', borderTop: i ? '1px solid var(--border)' : 'none' }}>
+                    <li key={i} className="resume-lang" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '2px 12px', fontSize: 13.5, padding: '9px 0', borderTop: i ? '1px solid var(--border)' : 'none' }}>
                       <span dir="auto" style={{ fontWeight: 600 }}>{tx(l.name, lang)}</span>
-                      <span dir="auto" style={{ color: 'var(--text-2)' }}>{tx(l.level, lang)}</span>
+                      <span dir="auto" style={{ color: 'var(--text-2)', marginInlineStart: 'auto', maxWidth: '100%', textAlign: 'end' }}>{tx(l.level, lang)}</span>
                     </li>
                   ))}
                 </ul>
