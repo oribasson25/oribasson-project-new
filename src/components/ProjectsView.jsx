@@ -18,6 +18,7 @@ function rememberProject(id, open) {
     const next = `${base}#${id}`;
     if (`${base}${location.hash}` !== next) history.replaceState(history.state, '', next);
     document.title = titleFor('projects', id);
+    window.dispatchEvent(new Event('ob-address'));
     return;
   }
   // Closing a card that is not the one in the address must leave that name
@@ -25,6 +26,7 @@ function rememberProject(id, open) {
   if (location.hash !== `#${id}`) return;
   history.replaceState(history.state, '', base);
   document.title = titleFor('projects', '');
+  window.dispatchEvent(new Event('ob-address'));
 }
 
 function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
@@ -221,6 +223,16 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
 export function ProjectsView({ t, lang, onAsk, onOpenChat, stacked, hash }) {
   const dir = lang === 'he' ? 'rtl' : 'ltr';
   const list = projects || [];
+  // Opening a card writes the address with replaceState, which does not
+  // notify the router. The mark follows that write; a real navigation still
+  // arrives through `hash`.
+  const [address, setAddress] = useState(hash || '');
+  useEffect(() => { setAddress(hash || ''); }, [hash]);
+  useEffect(() => {
+    const sync = () => setAddress(window.location.hash.replace(/^#/, ''));
+    window.addEventListener('ob-address', sync);
+    return () => window.removeEventListener('ob-address', sync);
+  }, []);
   return (
     <div dir={dir}>
       {!stacked && <PageHeader eyebrow={t.portfolio} title={t.projectsTitle} subtitle={list.length ? t.projectCount(list.length) : null} />}
@@ -234,7 +246,7 @@ export function ProjectsView({ t, lang, onAsk, onOpenChat, stacked, hash }) {
         // An opened card grows on its own; the rest of its row keeps the common height.
         <ul className="project-grid">
           {list.map((p, i) => (
-            <ProjectCard key={p.id || i} p={p} t={t} lang={lang} onAsk={onAsk} index={i} linked={!!p.id && hash === p.id} />
+            <ProjectCard key={p.id || i} p={p} t={t} lang={lang} onAsk={onAsk} index={i} linked={!!p.id && address === p.id} />
           ))}
         </ul>
       )}
