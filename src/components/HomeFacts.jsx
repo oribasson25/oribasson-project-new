@@ -302,7 +302,7 @@ function readTime(text) {
  * it sits under him and still arrives from the side, by a few pixels, so it
  * cannot leave the screen. A mouse hover holds the current line; a click, or
  * Enter, keeps it there. Arrow keys, while the line is focused, show the
- * next or the previous one. A finger does the same with a sideways swipe,
+ * next or the previous one, and that line is read out. A finger does the same with a sideways swipe,
  * and the page still scrolls up and down. Reaching the line while it is
  * leaving brings that same line back. Keyboard focus holds it too, until
  * Enter or Escape asks the lines to move again — focus alone would have
@@ -336,6 +336,9 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   const [composing, setComposing] = useState(false);
   const [covered, setCovered] = useState(false);
   const [side, setSide] = useState('left');
+  // The words are the button's name. A reader does not always hear that name
+  // change under a focus that stays put, so an arrow copies the new line here.
+  const [keyLine, setKeyLine] = useState('');
   const slotRef = useRef(null);
   const lineRef = useRef(null);
   const fromKeyboard = useRef(false);
@@ -433,7 +436,10 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
     const el = lineRef.current;
     // A language switch is a new entrance. Leaving would finish on the other language.
     const langChanged = langSeen.current !== lang;
-    if (langChanged) langSeen.current = lang;
+    if (langChanged) {
+      langSeen.current = lang;
+      setKeyLine('');
+    }
     if (langChanged && phase === 'out') {
       setPhase('in');
       return;
@@ -450,6 +456,8 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
     setPhase('in');
     setSide(avoidRef.current || next % 2 === 0 ? 'left' : 'right');
     setIndex(next);
+    const nextFact = FACTS[next];
+    return nextFact[lang] || nextFact.en;
   }
 
   function togglePin() {
@@ -538,16 +546,17 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
             const back = lang === 'he' ? 'ArrowRight' : 'ArrowLeft';
             if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp' && e.key !== forward && e.key !== back) return;
             e.preventDefault();
-            step(e.key === 'ArrowDown' || e.key === forward ? 1 : -1);
+            setKeyLine(step(e.key === 'ArrowDown' || e.key === forward ? 1 : -1));
           }}
           onMouseEnter={() => { if (fineHover) setHover(true); }}
           onMouseLeave={() => setHover(false)}
           onFocus={() => { if (fromKeyboard.current) { setKeyFocus(true); setKeyHold(true); } }}
-          onBlur={() => { setKeyFocus(false); setKeyHold(true); }}
+          onBlur={() => { setKeyFocus(false); setKeyHold(true); setKeyLine(''); }}
         >
           <span ref={lineRef} className={`home-fact is-${phase} from-${motion}`}><FactWords text={text} lang={lang} /></span>
         </button>
       </div>
+      <span className="sr-only" aria-live="polite" aria-atomic="true">{keyLine}</span>
       <span id="home-fact-hint" className="sr-only">{pinned ? t.factsResume : t.factsPause}</span>
     </div>
   );
