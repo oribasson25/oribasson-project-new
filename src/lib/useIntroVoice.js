@@ -34,19 +34,29 @@ export function useIntroVoice(src) {
     if (!src) return undefined;
     setFailed(false);
     const a = new Audio();
-    // The file is a few hundred kilobytes. Leave it until the figure has
-    // painted; a tap before then still starts it in the same gesture.
+    // The file is a few hundred kilobytes. It waits until the figure's sheet
+    // has finished, so the two don't share the connection. A tap before then
+    // still starts the voice in that same gesture.
     a.preload = 'none';
     audioRef.current = a;
     let live = true;
+    let timer = 0;
     const arm = () => {
       if (!live || a.getAttribute('src')) return;
       a.preload = 'metadata';
       a.src = src;
     };
-    const idle = window.requestIdleCallback
-      ? window.requestIdleCallback(arm, { timeout: 2500 })
-      : window.setTimeout(arm, 1200);
+    const begun = performance.now();
+    const waitForSheet = () => {
+      if (!live || a.getAttribute('src')) return;
+      const entry = performance.getEntriesByType('resource').find((e) => e.name.includes('/pet/ori.webp'));
+      if ((entry && entry.responseEnd > 0) || performance.now() - begun > 8000) {
+        arm();
+        return;
+      }
+      timer = window.setTimeout(waitForSheet, 250);
+    };
+    timer = window.setTimeout(waitForSheet, 250);
     const onMeta = () => setDuration(Number.isFinite(a.duration) ? a.duration : 0);
     const onError = () => setFailed(true);
     const onEnded = () => finish();
@@ -55,8 +65,7 @@ export function useIntroVoice(src) {
     a.addEventListener('ended', onEnded);
     return () => {
       live = false;
-      if (window.requestIdleCallback && typeof idle === 'number') window.cancelIdleCallback(idle);
-      else clearTimeout(idle);
+      clearTimeout(timer);
       a.pause();
       a.removeEventListener('loadedmetadata', onMeta);
       a.removeEventListener('error', onError);
