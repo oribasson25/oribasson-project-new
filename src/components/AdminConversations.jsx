@@ -58,7 +58,7 @@ function Thread({ id, t, lang, onBack, onDeleted, onUnauthorized }) {
           <PageHeader eyebrow={C.title} title={convo.title || '…'} size={28}
             actions={(
               <>
-                {confirming && <Btn onClick={() => setConfirming(false)}>✕</Btn>}
+                {confirming && <Btn name={t.close} onClick={() => setConfirming(false)}><span aria-hidden="true">✕</span></Btn>}
                 <Btn danger icon={Icons.trash} onClick={remove}
                   style={confirming ? { background: 'var(--danger)', color: '#fff', borderColor: 'var(--danger)' } : undefined}>
                   {confirming ? C.confirmDel : C.del}
