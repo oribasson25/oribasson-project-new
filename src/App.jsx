@@ -16,6 +16,36 @@ import { PetWatermark } from './components/Pet.jsx';
 import { MobileTopBar, MobileBottomNav, MobileMore, NAV_SPACE } from './components/Mobile.jsx';
 import { NotFound } from './components/NotFound.jsx';
 
+/**
+ * The skip link's target is the column. The keyboard should land on the
+ * heading in it. A heading already on screen stays where it is; one that
+ * has been scrolled away comes back.
+ */
+function scrollParent(el) {
+  let node = el.parentElement;
+  while (node && node !== document.body) {
+    const oy = getComputedStyle(node).overflowY;
+    if (oy === 'auto' || oy === 'scroll') return node;
+    node = node.parentElement;
+  }
+  return document.getElementById('main');
+}
+
+function skipToContent(e) {
+  const main = document.getElementById('main');
+  if (!main) return;
+  const heading = main.querySelector('h1');
+  const target = heading || main;
+  if (target.tabIndex < 0) target.tabIndex = -1;
+  e.preventDefault();
+  const scroller = scrollParent(target);
+  const box = target.getBoundingClientRect();
+  const frame = scroller ? scroller.getBoundingClientRect() : { top: 0, bottom: window.innerHeight };
+  const inView = box.top >= frame.top - 1 && box.bottom <= frame.bottom + 1;
+  target.focus({ preventScroll: true });
+  if (!inView) target.scrollIntoView({ block: 'start' });
+}
+
 /** Said once, after a change. The first paint already has a language. */
 function LangLive({ lang }) {
   const ready = useRef(false);
@@ -163,7 +193,7 @@ export default function App() {
     return (
       <div className="m-root m-app" style={{ position: 'relative', display: 'flex', flexDirection: 'column', background: 'var(--bg-app)', overflow: 'hidden' }}>
         <LangLive lang={lang} />
-        <a href="#main" className="skip-link">{t.skip}</a>
+        <a href="#main" className="skip-link" onClick={skipToContent}>{t.skip}</a>
         <MobileTopBar t={t} lang={lang} setLang={setLang} go={go} home={page === 'chat'} />
         {page === 'chat' ? (
           <main id="main" tabIndex={-1} style={{ flex: 1, minHeight: 0, display: 'flex', paddingBottom: navSpace }}>{home(true)}</main>
@@ -187,7 +217,7 @@ export default function App() {
   return (
     <div style={{ display: 'flex', height: 'calc(100vh / var(--ui-zoom))', overflow: 'hidden', position: 'relative' }}>
       <LangLive lang={lang} />
-      <a href="#main" className="skip-link">{t.skip}</a>
+      <a href="#main" className="skip-link" onClick={skipToContent}>{t.skip}</a>
       <Sidebar t={t} lang={lang} page={page} go={go} recents={recents}
         activeChatId={chat.messages.length ? chat.chatId : null}
         onPickRecent={pickRecent} onNewChat={newChat} onClearHistory={clearHistory}
