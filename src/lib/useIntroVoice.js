@@ -21,6 +21,8 @@ export function useIntroVoice(src) {
   const [failed, setFailed] = useState(false);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);
+  const srcRef = useRef(src);
+  srcRef.current = src;
   const ctxRef = useRef(null);
   const analyserRef = useRef(null);
   const dataRef = useRef(null);
@@ -32,16 +34,29 @@ export function useIntroVoice(src) {
     if (!src) return undefined;
     setFailed(false);
     const a = new Audio();
-    a.preload = 'metadata';
-    a.src = src;
+    // The file is a few hundred kilobytes. Leave it until the figure has
+    // painted; a tap before then still starts it in the same gesture.
+    a.preload = 'none';
+    audioRef.current = a;
+    let live = true;
+    const arm = () => {
+      if (!live || a.getAttribute('src')) return;
+      a.preload = 'metadata';
+      a.src = src;
+    };
+    const idle = window.requestIdleCallback
+      ? window.requestIdleCallback(arm, { timeout: 2500 })
+      : window.setTimeout(arm, 1200);
     const onMeta = () => setDuration(Number.isFinite(a.duration) ? a.duration : 0);
     const onError = () => setFailed(true);
     const onEnded = () => finish();
     a.addEventListener('loadedmetadata', onMeta);
     a.addEventListener('error', onError);
     a.addEventListener('ended', onEnded);
-    audioRef.current = a;
     return () => {
+      live = false;
+      if (window.requestIdleCallback && typeof idle === 'number') window.cancelIdleCallback(idle);
+      else clearTimeout(idle);
       a.pause();
       a.removeEventListener('loadedmetadata', onMeta);
       a.removeEventListener('error', onError);
@@ -91,6 +106,10 @@ export function useIntroVoice(src) {
   function play() {
     const a = audioRef.current;
     if (!a) return;
+    if (!a.getAttribute('src')) {
+      a.preload = 'auto';
+      a.src = srcRef.current;
+    }
     try {
       if (!ctxRef.current) {
         const Ctx = window.AudioContext || window.webkitAudioContext;
