@@ -320,9 +320,9 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         <button type="button" className="thread-latest" onClick={() => {
           const el = listRef.current;
           if (!el) return;
+          // The scroll itself clears the control, once the latest line is in view.
+          // Hiding it first made the control come back for a moment and cut the jump short.
           el.scrollTo({ top: el.scrollHeight, behavior: reduced ? 'auto' : 'smooth' });
-          stick.current = true;
-          setStuck(true);
         }}>{t.latest}</button>
       )}
       </div>
