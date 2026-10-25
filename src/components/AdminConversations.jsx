@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { timeAgo } from '../i18n.js';
 import { loadMarkdown, renderMarkdownSync, plainHtml } from '../lib/loadMarkdown.js';
 import { stripProjectMarkers } from '../lib/projectDiagram.js';
-import { Icons, PageHeader, Btn, Chip, EmptyState, Section } from './ui.jsx';
+import { Icons, PageHeader, Btn, Chip, EmptyState, Section, messageBidi } from './ui.jsx';
 
 function place(c) {
   return [c.city, c.country].filter(Boolean).join(', ');
@@ -72,17 +72,20 @@ function Thread({ id, t, lang, onBack, onDeleted, onUnauthorized }) {
             <Chip mono>{C.visitor} {String(convo.visitor_id).slice(0, 8)}</Chip>
           </div>
           <div style={{ maxWidth: 760, display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {(convo.messages || []).map((m, i) => (m.role === 'user' ? (
-              <div key={i} dir="auto" className="bubble-user" style={{
-                maxWidth: '85%', padding: '10px 14px', fontSize: 13.5,
+            {(convo.messages || []).map((m, i) => {
+              const bidi = messageBidi(m.content);
+              return m.role === 'user' ? (
+              <div key={i} dir={bidi.dir} lang={bidi.lang} className="bubble-user" style={{
+                maxWidth: '85%', padding: '10px 14px', fontSize: 13.5, ...bidi.style,
               }}>{m.content}</div>
             ) : (
-              <div key={i} dir="auto" className="bubble-assistant" style={{
-                padding: '12px 15px', fontSize: 13.5,
+              <div key={i} dir={bidi.dir} lang={bidi.lang} className="bubble-assistant" style={{
+                padding: '12px 15px', fontSize: 13.5, ...bidi.style,
               }}>
-                <div className="md" dangerouslySetInnerHTML={{ __html: messageHtml(m.content, t.newTab, mdReady) }} />
+                <div className="md" dir={bidi.dir} style={{ unicodeBidi: 'isolate' }} dangerouslySetInnerHTML={{ __html: messageHtml(m.content, t.newTab, mdReady) }} />
               </div>
-            )))}
+            );
+            })}
           </div>
         </>
       )}

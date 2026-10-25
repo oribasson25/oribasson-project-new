@@ -6,6 +6,7 @@ import { stripProjectMarkers } from '../lib/projectDiagram.js';
 import { strings } from '../i18n.js';
 import { useReducedMotion } from '../lib/hooks.js';
 import { Pet } from './Pet.jsx';
+import { messageBidi } from './ui.jsx';
 import { Architecture } from './Architecture.jsx';
 import { architectures } from './architectures.js';
 
@@ -226,15 +227,16 @@ export function Answer({ content, streaming, onRevealed, diagram, lang, diagramL
     if (live && mdRef.current) animateEntrances(mdRef.current, trail.current, performance.now());
   }, [html]);
 
+  const bidi = messageBidi(content);
   return (
-    <div dir="auto" className={live ? 'bubble-assistant fade-in' : 'bubble-assistant'}>
+    <div dir={bidi.dir} className={live ? 'bubble-assistant fade-in' : 'bubble-assistant'} style={bidi.style}>
       <div aria-busy={writing ? 'true' : undefined}
         aria-live={fresh ? (writing ? 'off' : 'polite') : undefined}
         aria-atomic={fresh ? 'true' : undefined}>
         {speaker && <span className="sr-only">{speaker}: </span>}
         {/* Hidden while the words are still arriving, so a reader hears the
             finished answer once instead of every new word. */}
-        <div ref={mdRef} className="md" aria-hidden={writing ? true : undefined} dangerouslySetInnerHTML={{ __html: html }} />
+        <div ref={mdRef} className="md" dir={bidi.dir} style={{ unicodeBidi: 'isolate' }} aria-hidden={writing ? true : undefined} dangerouslySetInnerHTML={{ __html: html }} />
         {diagram && !writing && (
           <div dir={lang === 'he' ? 'rtl' : 'ltr'} style={{ marginTop: 12 }}>
             <Architecture spec={diagram} lang={lang} label={diagramLabel} name={diagramName(diagram, lang)} />

@@ -669,6 +669,13 @@ a { color: inherit; }
 .md img { max-width: 100%; height: auto; }
 .md .caret { display: inline-block; width: 7px; height: 1em; background: var(--text); vertical-align: -0.15em; margin-inline-start: 2px; border-radius: 1px; animation: caret 1s steps(1) infinite; }
 
+/* A Hebrew answer that opens with a name stays Hebrew. The page rule would
+   call the block English from that first word. */
+.bubble-user[dir],
+.bubble-assistant[dir],
+.md[dir],
+.md [dir] { unicode-bidi: isolate; }
+
 /* An answer being written (Answer.jsx sets the delays): each new paragraph or
    bullet rises in, each new word fades in from a blur. */
 @keyframes blockIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }

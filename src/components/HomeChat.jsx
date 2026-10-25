@@ -6,6 +6,7 @@ import { Pet, PetStage } from './Pet.jsx';
 import { IntroBubble } from './IntroBubble.jsx';
 import { HomeFacts } from './HomeFacts.jsx';
 import { Answer, Steps } from './Answer.jsx';
+import { messageBidi } from './ui.jsx';
 import { architectures } from './architectures.js';
 import { diagramProjectId } from '../lib/projectDiagram.js';
 import { useReducedMotion, useShortScreen, useTightScreen } from '../lib/hooks.js';
@@ -351,14 +352,23 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
       }}>
         <div ref={threadRef} role="log" dir={dir} aria-relevant="additions" aria-label={t.threadTitle(first)}
           style={{ width: 'min(720px, 100%)', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 14 }}>
-          {messages.map((msg, i) => (msg.role === 'user' ? (
-            <div key={msg.id} dir="auto" className="bubble-user"><span className="sr-only">{t.you}: </span>{msg.content}</div>
-          ) : (
+          {messages.map((msg, i) => {
+            if (msg.role === 'user') {
+              const bidi = messageBidi(msg.content);
+              return (
+                <div key={msg.id} dir={bidi.dir} className="bubble-user" style={bidi.style}>
+                  <span className="sr-only">{t.you}: </span>
+                  <span lang={bidi.lang} style={{ unicodeBidi: 'normal' }}>{msg.content}</span>
+                </div>
+              );
+            }
+            return (
             <Answer key={msg.id} content={msg.content} streaming={msg.id === streamingId}
               speaker={first} lang={lang} diagramLabel={t.architecture}
               diagram={architectures[diagramProjectId(questionBefore(messages, i), msg.content)] || null}
               onRevealed={() => setRevealing((id) => (id === msg.id ? null : id))} />
-          )))}
+            );
+          })}
 
           {waitingForFirstToken && <Steps steps={t.steps(first)} dir={dir} />}
 

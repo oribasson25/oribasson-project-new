@@ -28,6 +28,62 @@ md.renderer.rules.link_close = (tokens, idx, options, env, self) => {
   return extra + defaultClose(tokens, idx, options, env, self);
 };
 
+const HEBREW = /[\u0590-\u05FF]/;
+
+/** The words between an open token and its close. */
+function blockText(tokens, from, until) {
+  let text = '';
+  for (let i = from; i < until; i++) {
+    const token = tokens[i];
+    if (token.children) {
+      for (const child of token.children) text += child.content || '';
+    } else text += token.content || '';
+  }
+  return text;
+}
+
+/**
+ * A Hebrew answer often opens with a project name. Plaintext would call that
+ * paragraph English, and the Hebrew after the name would run backwards.
+ */
+function stampBlock(token, text) {
+  if (HEBREW.test(text)) {
+    token.attrSet('dir', 'rtl');
+    token.attrSet('lang', 'he');
+  } else if (/[A-Za-z]/.test(text)) {
+    token.attrSet('dir', 'ltr');
+    token.attrSet('lang', 'en');
+  } else return;
+  token.attrJoin('style', 'unicode-bidi:isolate');
+}
+
+md.core.ruler.push('block_dir', (state) => {
+  const pairs = [
+    ['paragraph_open', 'paragraph_close'],
+    ['bullet_list_open', 'bullet_list_close'],
+    ['ordered_list_open', 'ordered_list_close'],
+    ['list_item_open', 'list_item_close'],
+    ['heading_open', 'heading_close'],
+    ['blockquote_open', 'blockquote_close'],
+  ];
+  const tokens = state.tokens;
+  for (const [open, close] of pairs) {
+    for (let i = 0; i < tokens.length; i++) {
+      if (tokens[i].type !== open) continue;
+      let depth = 1;
+      let j = i + 1;
+      for (; j < tokens.length; j++) {
+        if (tokens[j].type === open) depth += 1;
+        else if (tokens[j].type === close) {
+          depth -= 1;
+          if (depth === 0) break;
+        }
+      }
+      stampBlock(tokens[i], blockText(tokens, i + 1, j));
+    }
+  }
+});
+
 export function renderMarkdown(text, env) {
   return md.render(text || '', env || {});
 }
