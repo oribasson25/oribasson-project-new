@@ -149,6 +149,7 @@ function projectList() {
       const description = tx(p.description, 'en') || undefined;
       const url = `${ORIGIN}/projects#${p.id}`;
       const keywords = (p.tech || []).filter(Boolean).join(', ');
+      const sameAs = [p.links?.live, p.links?.repo].filter(Boolean);
       return {
         '@type': 'ListItem',
         position: i + 1,
@@ -160,6 +161,7 @@ function projectList() {
           name,
           description,
           url,
+          sameAs: sameAs.length ? sameAs : undefined,
           creator: { '@id': `${ORIGIN}/#person` },
           dateCreated: p.year || undefined,
           keywords: keywords || undefined,
