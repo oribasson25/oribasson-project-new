@@ -393,7 +393,10 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   return (
     <div ref={slotRef} className="home-fact-slot" role="group" aria-label={t.factsLabel} data-side={side} data-pinned={pinned ? 'true' : 'false'} dir={lang === 'he' ? 'rtl' : 'ltr'}>
       {/* The hint stays off the live region. A new line is the words. */}
-      <div className="home-fact-live" aria-live={hold || keyFocus ? 'off' : 'polite'} aria-atomic="true">
+      {/* The words are the button. A live region would speak every line as it
+          rotates, over a reader who is somewhere else on the page. Focusing
+          the line reads the one that is up; arrows change it under that focus. */}
+      <div className="home-fact-live">
         <button
           type="button"
           className="home-fact-btn"
