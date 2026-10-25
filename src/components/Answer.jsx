@@ -37,7 +37,28 @@ function answerText(root) {
   return (clone.textContent || '').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
 }
 
-function CopyAnswer({ rootRef, lang }) {
+/** The diagram under an answer, as the lines a copy can keep. */
+function diagramPlain(spec, lang, heading) {
+  if (!spec) return '';
+  const groups = spec.groups || [{ steps: spec.steps || [] }];
+  const lines = [];
+  for (const group of groups) {
+    const title = group.title ? tx(group.title, lang) : '';
+    if (title) lines.push(title);
+    for (const step of group.steps || []) {
+      const parts = (step.nodes || []).map((node) => {
+        const label = tx(node.label, lang);
+        const sub = node.sub ? tx(node.sub, lang) : '';
+        return sub ? `${label} (${sub})` : label;
+      }).filter(Boolean);
+      if (parts.length) lines.push(parts.join(' · '));
+    }
+  }
+  if (!lines.length) return '';
+  return heading ? `${heading}\n${lines.join('\n')}` : lines.join('\n');
+}
+
+function CopyAnswer({ rootRef, lang, extra }) {
   const t = strings(lang === 'he' ? 'he' : 'en');
   const [note, setNote] = useState('');
   const timer = useRef(0);
@@ -45,14 +66,16 @@ function CopyAnswer({ rootRef, lang }) {
   async function copy() {
     const root = rootRef.current;
     const value = root ? answerText(root) : '';
-    if (!value) return;
+    const more = String(extra || '').trim();
+    const text = [value, more].filter(Boolean).join('\n\n');
+    if (!text) return;
     let ok = false;
     try {
-      await navigator.clipboard.writeText(value);
+      await navigator.clipboard.writeText(text);
       ok = true;
     } catch {
       const area = document.createElement('textarea');
-      area.value = value;
+      area.value = text;
       area.setAttribute('readonly', '');
       area.style.position = 'fixed';
       area.style.insetInlineStart = '-9999px';
@@ -243,7 +266,9 @@ export function Answer({ content, streaming, onRevealed, diagram, lang, diagramL
           </div>
         )}
       </div>
-      {!writing && content.trim() && <CopyAnswer rootRef={mdRef} lang={lang} />}
+      {!writing && content.trim() && (
+        <CopyAnswer rootRef={mdRef} lang={lang} extra={diagram ? diagramPlain(diagram, lang, diagramLabel) : ''} />
+      )}
     </div>
   );
 }
