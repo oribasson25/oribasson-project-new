@@ -362,13 +362,16 @@ body {
   }
   .home-fact-slot[data-side="left"] .home-fact-live,
   .home-fact-slot[data-side="right"] .home-fact-live {
-    display: block;
+    display: flex;
+    justify-content: center;
     width: 100%;
     min-width: 0;
   }
+  /* The slot stays wide so a long line can wrap. The button hugs the words,
+     so the focus ring is the sentence and not the empty width around it. */
   .home-fact-btn {
-    width: 100%;
-    max-width: none;
+    width: max-content;
+    max-width: 100%;
     min-height: 44px;
     margin: 0;
     padding: 2px 8px;
@@ -376,7 +379,7 @@ body {
     align-items: center;
     justify-content: center;
   }
-  .home-fact { width: 100%; min-width: 0; padding-left: 0; padding-right: 0; }
+  .home-fact { width: auto; max-width: 100%; min-width: 0; padding-left: 0; padding-right: 0; }
   .home-fact::before,
   .home-fact::after { display: none; }
   .home-fact.is-in.from-left { animation-name: factInLeftSoft; }
