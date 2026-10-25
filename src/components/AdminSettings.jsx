@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
 import { tx } from '../../shared/text.js';
 import { useReducedMotion } from '../lib/hooks.js';
-import { PageHeader, Eyebrow, Btn, StatusDot, Section } from './ui.jsx';
+import { PageHeader, Eyebrow, Btn, StatusDot, Section, bidiParts, bidiProps } from './ui.jsx';
+
+/** A settings line keeps the page's language when it names Anthropic, Neon, or a file. */
+function mixedLine(text, lang) {
+  const bidi = bidiProps(String(text || ''), lang);
+  return { dir: bidi.dir, lang: bidi.lang, extra: bidi.style, body: bidiParts(text, lang) };
+}
 
 function EyeIcon({ off }) {
   return (
@@ -95,6 +101,13 @@ export function AdminSettings({ t, lang, onUnauthorized, onChanged, stacked }) {
 
   const dirty = apiKey.trim() || (settings && model !== settings.model);
   const label = { fontSize: 12, color: 'var(--text-2)', marginBottom: 4, display: 'block' };
+  const keyText = !settings ? ''
+    : settings.keyUnreadable ? S.keyUnreadable
+      : settings.hasKey ? S.keySet(settings.keyHint)
+        : S.keyNone;
+  const keyLine = mixedLine(keyText, lang);
+  const note = message ? mixedLine(message.text, lang) : null;
+  const limits = mixedLine(S.limitsNote, lang);
 
   return (
     <div dir={dir}>
@@ -125,9 +138,7 @@ export function AdminSettings({ t, lang, onUnauthorized, onChanged, stacked }) {
               {settings && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 9, fontSize: 12.5, fontWeight: 600, color: settings.hasKey ? 'var(--text)' : 'var(--text-2)' }}>
                   <StatusDot on={settings.hasKey && settings.chatEnabled} />
-                  <span dir="auto">
-                    {settings.keyUnreadable ? S.keyUnreadable : settings.hasKey ? S.keySet(settings.keyHint) : S.keyNone}
-                  </span>
+                  <span dir={keyLine.dir} lang={keyLine.lang} style={keyLine.extra}>{keyLine.body}</span>
                 </div>
               )}
 
@@ -163,8 +174,8 @@ export function AdminSettings({ t, lang, onUnauthorized, onChanged, stacked }) {
                 {settings && settings.hasKey && (
                   <Btn danger disabled={busy} onClick={() => save({ removeKey: true })}>{S.removeKey}</Btn>
                 )}
-                {message && (
-                  <span role="status" style={{ fontSize: 12.5, fontWeight: 600, color: message.ok ? 'var(--success-ink)' : 'var(--danger-ink)' }}>{message.text}</span>
+                {note && (
+                  <span role="status" dir={note.dir} lang={note.lang} style={{ fontSize: 12.5, fontWeight: 600, color: message.ok ? 'var(--success-ink)' : 'var(--danger-ink)', ...note.extra }}>{note.body}</span>
                 )}
               </div>
             </div>
@@ -183,7 +194,7 @@ export function AdminSettings({ t, lang, onUnauthorized, onChanged, stacked }) {
           </Section>
 
           <Section id="set-limits" title={S.limits}>
-            <div style={{ fontSize: 12.5, color: 'var(--text-2)', lineHeight: 1.7 }}>{S.limitsNote}</div>
+            <div dir={limits.dir} lang={limits.lang} style={{ fontSize: 12.5, color: 'var(--text-2)', lineHeight: 1.7, ...limits.extra }}>{limits.body}</div>
           </Section>
         </div>
       </div>

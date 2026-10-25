@@ -3,6 +3,7 @@ import profile from '../../content/profile.js';
 import { tx } from '../../shared/text.js';
 import { Pet } from './Pet.jsx';
 import { LangToggle } from './Sidebar.jsx';
+import { bidiParts, bidiProps, isHebrew } from './ui.jsx';
 
 /* 8Legs' front door: the dark welcome panel on the left, the form on the right. */
 const HERO_INK = '#f2f3f7';
@@ -15,6 +16,8 @@ export function AdminLogin({ t, lang, setLang, onSignedIn, onBack, mobile }) {
   const L = t.login;
   const dir = lang === 'he' ? 'rtl' : 'ltr';
   const [first, ...rest] = tx(profile.name, lang).split(' ');
+  const hero = bidiProps(L.heroSub, lang);
+  const err = error ? bidiProps(error, lang) : null;
 
   async function submit() {
     if (!password || busy) return;
@@ -52,11 +55,11 @@ export function AdminLogin({ t, lang, setLang, onSignedIn, onBack, mobile }) {
           </div>
           <div style={{ marginTop: 22 }}>
             <div style={{ fontSize: 20, fontWeight: 800, color: HERO_INK, letterSpacing: '-0.02em', marginBottom: 10, maxWidth: 380 }}>{L.heroTitle}</div>
-            <div style={{ fontSize: 14, color: HERO_INK_DIM, maxWidth: 330, lineHeight: 1.7, margin: '0 auto' }}>{L.heroSub}</div>
+            <div dir={hero.dir} lang={hero.lang} style={{ fontSize: 14, color: HERO_INK_DIM, maxWidth: 330, lineHeight: 1.7, margin: '0 auto', ...hero.style }}>{bidiParts(L.heroSub, lang)}</div>
           </div>
           <div style={{ display: 'flex', gap: 8, marginTop: 30, flexWrap: 'wrap', justifyContent: 'center' }}>
             {L.pills.map((f) => (
-              <span key={f} style={{ fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 20, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.14)', color: HERO_INK_DIM }}>{f}</span>
+              <span key={f} lang={isHebrew(f) ? 'he' : 'en'} dir={isHebrew(f) ? 'rtl' : 'ltr'} style={{ fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 20, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.14)', color: HERO_INK_DIM, unicodeBidi: 'isolate' }}>{f}</span>
             ))}
           </div>
         </div>
@@ -81,9 +84,9 @@ export function AdminLogin({ t, lang, setLang, onSignedIn, onBack, mobile }) {
               autoFocus autoComplete="current-password" dir="ltr"
               aria-invalid={error ? 'true' : undefined}
               aria-describedby={error ? 'login-error' : undefined} />
-            {error && (
-              <div id="login-error" role="alert" style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--danger-ink)', fontSize: 13, marginTop: 12, padding: '10px 12px', background: 'var(--danger-dim)', borderRadius: 'var(--r-sm)', border: '1px solid rgba(220,38,38,0.2)', lineHeight: 1.5 }}>
-                {error}
+            {err && (
+              <div id="login-error" role="alert" dir={err.dir} lang={err.lang} style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--danger-ink)', fontSize: 13, marginTop: 12, padding: '10px 12px', background: 'var(--danger-dim)', borderRadius: 'var(--r-sm)', border: '1px solid rgba(220,38,38,0.2)', lineHeight: 1.5, ...err.style }}>
+                {bidiParts(error, lang)}
               </div>
             )}
             <button className="login-submit" type="submit" disabled={busy || !password}
