@@ -31,7 +31,7 @@ const STRINGS = {
     hello: (first) => `Hi, I'm ${first}`,
     helloSub: (first, firstPerson) => firstPerson
       ? 'Ask me anything about my experience, skills and projects.'
-      : `Ask my AI assistant anything about my experience, skills and projects — it answers from my resume.`,
+      : `Ask my AI assistant anything about my experience, skills and projects — it answers from my resume and projects.`,
     helloSubShort: (firstPerson) => (firstPerson ? 'Ask me anything about my work.' : 'Ask my AI assistant anything about my work.'),
     introOffer: 'Hear me say hi',
     introStop: 'Stop',
@@ -46,7 +46,7 @@ const STRINGS = {
     placeholderShort: 'Ask anything…',
     answer: 'Ask a follow-up…',
     suggestions: 'Suggested questions',
-    foot: (first) => `Answers are written by AI from ${first}'s resume. Conversations are saved and shown to ${first}.`,
+    foot: (first) => `Answers are written by AI from ${first}'s resume and projects. Conversations are saved and shown to ${first}.`,
     threadTitle: (first) => `Chat with ${first}`,
     you: 'You',
     poweredBy: (model) => (model ? `AI · ${model}` : 'AI assistant'),
@@ -189,7 +189,7 @@ const STRINGS = {
     hello: (first) => `היי, אני ${first}`,
     helloSub: (first, firstPerson) => firstPerson
       ? 'אפשר לשאול כל דבר על הניסיון, הכישורים והפרויקטים שלי.'
-      : 'שאלו את ה-AI שלי כל דבר על הניסיון, הכישורים והפרויקטים שלי — התשובות מבוססות על קורות החיים.',
+      : 'שאלו את ה-AI שלי כל דבר על הניסיון, הכישורים והפרויקטים שלי — התשובות מבוססות על קורות החיים והפרויקטים.',
     helloSubShort: (firstPerson) => (firstPerson ? 'אפשר לשאול אותי כל דבר על העבודה שלי.' : 'שאלו את ה-AI שלי כל דבר על העבודה שלי.'),
     introOffer: 'שמעו ממני כמה מילים',
     introStop: 'עצירה',
@@ -204,7 +204,7 @@ const STRINGS = {
     placeholderShort: 'שאלו כל דבר…',
     answer: 'שאלת המשך…',
     suggestions: 'שאלות מוצעות',
-    foot: (first) => `התשובות נכתבות ב-AI מתוך קורות החיים. השיחות נשמרות ומוצגות ל${first}.`,
+    foot: (first) => `התשובות נכתבות ב-AI מתוך קורות החיים והפרויקטים. השיחות נשמרות ומוצגות ל${first}.`,
     threadTitle: (first) => `שיחה עם ${first}`,
     you: 'אתם',
     poweredBy: (model) => (model ? `AI · ${model}` : 'עוזר AI'),
