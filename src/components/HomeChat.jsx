@@ -23,7 +23,7 @@ function questionBefore(messages, index) {
   return '';
 }
 
-export function Composer({ value, onChange, onSend, onStop, busy, disabled, placeholder, dir, width = 720, fieldRef, autoFocus, sendLabel = 'Send', sendHint, stopLabel, stopHint, large, onFieldFocus }) {
+export function Composer({ value, onChange, onSend, onStop, busy, disabled, placeholder, dir, width = 720, fieldRef, autoFocus, sendLabel = 'Send', sendHint, stopLabel, stopHint, countLabel, large, onFieldFocus }) {
   const [focus, setFocus] = useState(false);
   const own = useRef(null);
   const ref = fieldRef || own;
@@ -37,9 +37,13 @@ export function Composer({ value, onChange, onSend, onStop, busy, disabled, plac
   }, [value]);
 
   const empty = !value.trim();
+  const left = 2000 - value.length;
+  const showCount = !!countLabel && value.length >= 1700;
+  const hintId = sendHint || (busy && stopHint) ? 'chat-composer-hint' : '';
+  const describedBy = [hintId, showCount ? 'composer-count' : ''].filter(Boolean).join(' ');
   return (
+    <div style={{ width: `min(${width}px, 100%)`, margin: '0 auto' }}>
     <div dir={dir} style={{
-      width: `min(${width}px, 100%)`, margin: '0 auto',
       background: 'var(--bg-card)', border: `1px solid ${focus ? 'var(--primary)' : 'var(--border)'}`,
       borderRadius: 28, boxShadow: focus ? '0 0 0 4px var(--primary-dim), var(--shadow-lg)' : 'var(--shadow)',
       padding: 6, paddingInlineStart: 8, display: 'flex', alignItems: 'flex-end', gap: 6,
@@ -61,7 +65,7 @@ export function Composer({ value, onChange, onSend, onStop, busy, disabled, plac
         disabled={disabled}
         placeholder={placeholder}
         aria-label={placeholder}
-        aria-describedby={sendHint || (busy && stopHint) ? 'chat-composer-hint' : undefined}
+        aria-describedby={describedBy || undefined}
         style={{
           flex: 1, resize: 'none', border: 'none', background: 'transparent', outline: 'none',
           boxShadow: 'none', fontSize: 15, lineHeight: 1.55, padding: '12px 10px', maxHeight: 150,
@@ -79,6 +83,12 @@ export function Composer({ value, onChange, onSend, onStop, busy, disabled, plac
           : <span className="send-arrow" aria-hidden="true">↑</span>}
       </button>
       {(sendHint || (busy && stopHint)) && <span id="chat-composer-hint" className="sr-only">{busy && stopHint ? stopHint : sendHint}</span>}
+    </div>
+    {showCount && (
+      <div id="composer-count" dir={dir} className={left <= 40 ? 'composer-count is-short screen-only' : 'composer-count screen-only'}>
+        {countLabel(left)}
+      </div>
+    )}
     </div>
   );
 }
@@ -271,7 +281,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
           <Composer value={input} onChange={setInput} onSend={() => submit()} onStop={halt} busy={pending} fieldRef={fieldRef}
             onFieldFocus={loadMarkdown}
             disabled={pending || offline} dir={dir} sendLabel={t.send} sendHint={t.sendHint}
-            stopLabel={t.stop} stopHint={t.stopHint} large={stacked}
+            stopLabel={t.stop} stopHint={t.stopHint} countLabel={t.charsLeft} large={stacked}
             placeholder={stacked ? t.placeholderShort : t.placeholder} />
         </div>
 
@@ -377,7 +387,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         <Composer value={input} onChange={setInput} onSend={() => submit()} onStop={halt} busy={pending} fieldRef={fieldRef} dir={dir}
           onFieldFocus={loadMarkdown}
           disabled={pending || offline} placeholder={t.answer} autoFocus={!stacked} sendLabel={t.send} sendHint={t.sendHint}
-          stopLabel={t.stop} stopHint={t.stopHint} large={stacked} />
+          stopLabel={t.stop} stopHint={t.stopHint} countLabel={t.charsLeft} large={stacked} />
       </div>
     </div>
   );
