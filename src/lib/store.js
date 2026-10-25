@@ -67,6 +67,24 @@ export function clearChats() {
   return [];
 }
 
+/* A question the visitor started and has not sent. The chat screen unmounts
+   when they open the resume, so the words would otherwise be gone on the way
+   back. It lasts for this visit, and a private window that blocks storage
+   simply starts empty. */
+const DRAFT = 'ob_draft';
+
+export function loadDraft() {
+  try { return sessionStorage.getItem(DRAFT) || ''; } catch { return ''; }
+}
+
+export function saveDraft(text) {
+  try {
+    const value = String(text || '');
+    if (value) sessionStorage.setItem(DRAFT, value);
+    else sessionStorage.removeItem(DRAFT);
+  } catch { /* storage unavailable */ }
+}
+
 export function chatTitle(messages) {
   const first = (messages || []).find((m) => m.role === 'user');
   return first ? first.content.replace(/\s+/g, ' ').trim() : '';

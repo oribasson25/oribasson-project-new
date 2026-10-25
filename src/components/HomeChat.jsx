@@ -12,6 +12,7 @@ import { diagramProjectId } from '../lib/projectDiagram.js';
 import { useMaxWidth, useReducedMotion, useShortScreen, useTightScreen } from '../lib/hooks.js';
 import { useIntroVoice } from '../lib/useIntroVoice.js';
 import { loadMarkdown } from '../lib/loadMarkdown.js';
+import { loadDraft, saveDraft } from '../lib/store.js';
 
 function firstName(lang) {
   return tx(profile.name, lang).split(' ')[0] || 'Ori';
@@ -146,7 +147,9 @@ function Notice({ children, dir }) {
 }
 
 export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState(loadDraft);
+  // The screen unmounts on the way to the resume. The words come back with it.
+  useEffect(() => { saveDraft(input); }, [input]);
   const [revealing, setRevealing] = useState(null);
   const [figureHot, setFigureHot] = useState(false);
   const [stuck, setStuck] = useState(true);
