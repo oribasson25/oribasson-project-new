@@ -149,7 +149,8 @@ export function SegTabs({ items, value, onChange, style, small, label }) {
   const refs = useRef([]);
   // One tab stop for the pair. Arrow keys move within it, the way a
   // two-choice control does, and the chosen language is the one that stays
-  // in the tab order.
+  // in the tab order. A held key must not keep flipping: two choices would
+  // land on whichever one the repeat happened to release.
   function move(from, dir) {
     const next = (from + dir + items.length) % items.length;
     onChange(items[next].id);
@@ -168,7 +169,7 @@ export function SegTabs({ items, value, onChange, style, small, label }) {
             onClick={() => onChange(it.id)} title={it.title} lang={it.lang}
             aria-label={it.title || it.label}
             onKeyDown={(e) => {
-              if (e.altKey || e.metaKey || e.ctrlKey || e.shiftKey) return;
+              if (e.altKey || e.metaKey || e.ctrlKey || e.shiftKey || e.repeat) return;
               const forward = e.key === 'ArrowRight' || e.key === 'ArrowDown';
               const back = e.key === 'ArrowLeft' || e.key === 'ArrowUp';
               if (!forward && !back) return;
