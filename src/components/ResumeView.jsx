@@ -66,7 +66,7 @@ function Job({ job, t, lang, onAsk }) {
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginTop: 14 }}>
         {(job.tech || []).map((x) => <Chip key={x} mono>{x}</Chip>)}
         <span className="print-hide" style={{ display: 'contents' }}>
-          <Btn size="sm" icon={Icons.sparkle} onClick={() => onAsk(t.askJobQuestion(role, company))} style={{ marginInlineStart: 'auto' }}>
+          <Btn size="sm" icon={Icons.sparkle} name={t.askAboutRole(role, company)} onClick={() => onAsk(t.askJobQuestion(role, company))} style={{ marginInlineStart: 'auto' }}>
             {t.askAboutExperience}
           </Btn>
         </span>

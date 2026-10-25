@@ -184,15 +184,15 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
             background: 'transparent', padding: '6px 2px', fontSize: 12, fontWeight: 650,
           }}>
           {expanded ? t.showLess : t.readMore}
-            <span style={{ display: 'inline-block', transform: expanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.22s var(--ease)' }}>▾</span>
+            <span aria-hidden="true" style={{ display: 'inline-block', transform: expanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.22s var(--ease)' }}>▾</span>
         </button>
       )}
 
       <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', borderTop: '1px solid var(--border)', paddingTop: 14, marginTop: 2 }}>
-        {links.live && <Btn size="sm" icon={Icons.external} href={links.live} note={t.newTab}>{t.live}</Btn>}
-        {links.repo && <Btn size="sm" icon={Icons.github} href={links.repo} note={t.newTab}>{t.code}</Btn>}
+        {links.live && <Btn size="sm" icon={Icons.external} href={links.live} note={t.newTab} name={t.openLive(name)}>{t.live}</Btn>}
+        {links.repo && <Btn size="sm" icon={Icons.github} href={links.repo} note={t.newTab} name={t.openCode(name)}>{t.code}</Btn>}
         <span className="print-hide" style={{ display: 'contents' }}>
-          <Btn size="sm" icon={Icons.sparkle} onClick={() => onAsk(t.askProjectQuestion(name))} style={{ marginInlineStart: 'auto' }}>
+          <Btn size="sm" icon={Icons.sparkle} name={t.askAboutNamed(name)} onClick={() => onAsk(t.askProjectQuestion(name))} style={{ marginInlineStart: 'auto' }}>
             {t.askAboutProject}
           </Btn>
         </span>

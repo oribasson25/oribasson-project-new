@@ -89,16 +89,19 @@ export function PageHeader({ eyebrow, title, subtitle, actions, size = 36 }) {
 }
 
 /** Two weights, one shape: `primary` (graphite, at most one per screen) and `ghost`. */
-export function Btn({ variant = 'ghost', icon, children, onClick, title, disabled, danger, style, size = 'md', href, type, download, sameTab, note }) {
+export function Btn({ variant = 'ghost', icon, children, onClick, title, disabled, danger, style, size = 'md', href, type, download, sameTab, note, name }) {
   const pad = size === 'sm' ? '7px 12px' : '10px 17px';
   const font = size === 'sm' ? 12.5 : 13;
   const primary = variant === 'primary';
   const Tag = href ? 'a' : 'button';
   const cls = ['btn', primary ? 'is-primary' : '', danger ? 'is-danger' : '', size === 'sm' ? 'btn-sm' : ''].filter(Boolean).join(' ');
+  // A name replaces the visible words for a reader. The new-tab note has to
+  // travel with it, or the shorter label drops that warning.
+  const spoken = name ? (note ? `${name}. ${note}` : name) : undefined;
   return (
     <Tag href={href} target={href && !download && !sameTab ? '_blank' : undefined} rel={href ? 'noopener noreferrer' : undefined}
       download={download} type={href ? undefined : type || 'button'}
-      onClick={onClick} title={title} disabled={disabled}
+      onClick={onClick} title={title} disabled={disabled} aria-label={spoken}
       className={cls}
       style={{
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 7,
