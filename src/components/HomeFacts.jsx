@@ -127,6 +127,22 @@ import { useReducedMotion } from '../lib/hooks.js';
  *     The Hebrew claim intake is already said.
  * 85. projects 8legs links.live: the platform has its own site.
  *     The widget and WhatsApp are already said.
+ * 86. resume.experience[0] start 2024, end empty: the current role.
+ * 87. resume.experience[1] 2023–2024.
+ * 88. resume.experience[2] 2023.
+ * 89. resume.experience[0] first highlight: Hebrew chat agents, beside voice,
+ *     inside the live insurance systems.
+ * 90. resume.summary: SQL for data grounding. The languages are already said.
+ * 91. projects 8legs tech: Neon PostgreSQL. The hiring system's Neon is already said.
+ * 92. projects hr-recruitment tech: TypeScript. Next.js, Prisma, Neon, Tailwind,
+ *     and Vercel Blob are already said.
+ * 93. projects 8legs highlight "Autopilot": the wizard also builds the tables.
+ *     The prompt, the knowledge, and the channel are already said.
+ * 94. resume.experience[1] highlight: the claim's real failure points.
+ * 95. resume.experience[0] "API Reverse-Engineering": the collections unblocked
+ *     the integrations. The wire and Postman are already said.
+ * 96. projects hr-recruitment and 8legs year: 2026.
+ * 97. projects 8legs tech: Python on the platform. The custom tools are already said.
  */
 const FACTS = [
   { en: 'Live LLM agents at Libra Insurance.', he: 'סוכני LLM בפרודקשן, בליברה ביטוח.' },
@@ -214,6 +230,18 @@ const FACTS = [
   { en: 'Based in Israel.', he: 'גר בישראל.' },
   { en: 'The claims voice agent takes the inbound call.', he: 'הסוכן הקולי לתביעות עונה לשיחה הנכנסת.' },
   { en: '8Legs is live, on a site of its own.', he: '8Legs באוויר, באתר משלו.' },
+  { en: 'The AI role at Libra is the current one, from 2024.', he: 'תפקיד ה-AI בליברה הוא הנוכחי, מ-2024.' },
+  { en: 'The claims desk ran from 2023 to 2024.', he: 'המוקד רץ מ-2023 עד 2024.' },
+  { en: 'The IDF network post was in 2023.', he: 'תפקיד הרשת בצה״ל היה ב-2023.' },
+  { en: 'Hebrew chat agents sit in the live insurance systems, beside the voice line.', he: 'סוכני צ׳אט בעברית יושבים במערכות הביטוח החיות, לצד הקו הקולי.' },
+  { en: 'SQL is what ties the agent tools to the data.', he: 'SQL הוא מה שקושר את הכלים לנתונים.' },
+  { en: '8Legs keeps its data in Neon.', he: '8Legs שומר את הנתונים ב-Neon.' },
+  { en: 'TypeScript is part of the hiring system too.', he: 'גם TypeScript הוא חלק ממערכת הגיוס.' },
+  { en: 'The 8Legs wizard also builds the tables the chatbot writes to.', he: 'האשף של 8Legs בונה גם את הטבלאות שהצ׳טבוט כותב אליהן.' },
+  { en: 'The agents were shaped around the claim\'s real failure points.', he: 'הסוכנים נבנו סביב נקודות הכשל האמיתיות בתביעה.' },
+  { en: 'Those Postman collections are what unblocked the CRM integrations.', he: 'אוספי ה-Postman הם מה שפתח את האינטגרציה ל-CRM.' },
+  { en: 'The hiring system and 8Legs both date from 2026.', he: 'גם מערכת הגיוס וגם 8Legs מ-2026.' },
+  { en: 'Python is part of the 8Legs platform, not only its tools.', he: 'Python הוא חלק מפלטפורמת 8Legs, לא רק מהכלים.' },
 ];
 
 /* A Latin name inside a Hebrew line. The span is the language change;
