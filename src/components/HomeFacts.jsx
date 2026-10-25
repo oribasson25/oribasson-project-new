@@ -52,6 +52,23 @@ import { useReducedMotion } from '../lib/hooks.js';
  * 40. resume.education[0] details: segmentation, endpoint hardening, log analysis.
  * 41. resume.experience[0] "Production Incident Debugging": the launch alongside
  *     engineering, IT, cybersecurity, SOC, and ops.
+ * 42. projects claims-voice-agent: validation before the claim is written.
+ * 43. resume.experience[0] "Multi-Agent System Architecture": system prompts
+ *     and multi-step reasoning. Cross-turn state and recovery are already said.
+ * 44. resume.experience[0] eval highlight: Hebrew tagging rubrics.
+ * 45. projects live-call-intelligence: a context summary during the call.
+ * 46. resume.experience[1]: working with the claims desk shortened requirements
+ *     and eased adoption of the agents.
+ * 47. projects hr-recruitment highlight "AI CV matching": color by fit, and a
+ *     match history.
+ * 48. projects hr-recruitment highlight "Everyday HR work": interview summaries
+ *     and ratings. Notes, reminders, and Excel are already said.
+ * 49. projects 8legs description: records data into tables, and calls an
+ *     external system.
+ * 50. projects 8legs description: a full English and Hebrew interface.
+ * 51. projects 8legs highlight "Python tools": Python, edited in Monaco.
+ * 52. resume.education[0] details: identity and access, and Group Policy.
+ *     Segmentation, hardening, and logs are already said.
  */
 const FACTS = [
   { en: 'Live LLM agents at Libra Insurance.', he: 'סוכני LLM בפרודקשן, בליברה ביטוח.' },
@@ -95,6 +112,17 @@ const FACTS = [
   { en: 'Each 8Legs chatbot has its own repo, and A/B tests on live traffic.', he: 'לכל צ׳טבוט ב-8Legs יש ריפו משלו, וניסויי A/B על תנועה אמיתית.' },
   { en: 'The certificate covered segmentation, hardening, and reading logs.', he: 'ההסמכה כללה סגמנטציה, הקשחת עמדות וניתוח לוגים.' },
   { en: 'The launch ran with engineering, IT, cyber, the SOC, and ops.', he: 'ההשקה רצה עם פיתוח, IT, סייבר, ה-SOC ותפעול.' },
+  { en: 'The voice agent checks the details before it writes the claim.', he: 'הסוכן הקולי בודק את הפרטים לפני שהוא כותב את התביעה.' },
+  { en: 'The prompts and the reasoning steps are written for live traffic.', he: 'הפרומפטים ושלבי החשיבה נכתבים לתעבורה חיה.' },
+  { en: 'Hebrew transcripts are scored against a written tagging rubric.', he: 'תמלולים בעברית מקבלים ציון לפי רובריקת תיוג כתובה.' },
+  { en: 'The live-call agent writes a short summary while the rep is still talking.', he: 'סוכן השיחה כותב סיכום קצר עוד בזמן שהנציג מדבר.' },
+  { en: 'Working beside the claims desk shortened the requirements and the path to adoption.', he: 'העבודה מול מוקד התביעות קיצרה את הדרישות ואת הדרך לאימוץ.' },
+  { en: 'A match is colored by fit, and the earlier scores stay on record.', he: 'ההתאמה נצבעת לפי הרמה, והציונים הקודמים נשמרים.' },
+  { en: 'Each candidate keeps an interview summary and a rating.', he: 'לכל מועמד יש סיכום ראיון ודירוג.' },
+  { en: '8Legs writes data into tables, and connects to an outside system.', he: '8Legs רושם נתונים לטבלאות, ומתחבר למערכת חיצונית.' },
+  { en: 'The 8Legs interface itself is in Hebrew and in English.', he: 'הממשק של 8Legs עצמו בעברית ובאנגלית.' },
+  { en: 'A custom 8Legs tool is Python, edited in Monaco on the page.', he: 'כלי מותאם ב-8Legs נכתב ב-Python, בעורך Monaco שבדף.' },
+  { en: 'The cybersecurity certificate covered identity, access, and Group Policy.', he: 'הסמכת הסייבר כללה זהויות, הרשאות ו-Group Policy.' },
 ];
 
 const EXIT = 420;
