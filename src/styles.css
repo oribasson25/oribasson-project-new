@@ -571,6 +571,9 @@ a { color: inherit; }
 @keyframes wordIn { from { opacity: 0; filter: blur(3px); } to { opacity: 1; filter: blur(0); } }
 .md .rv-b { animation: blockIn 0.42s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 .md .rv-w { animation: wordIn 0.52s ease-out both; }
+/* A blur on every new word repaints the answer. A phone fades the word in
+   without it; the desktop keeps the softer entrance. */
+@keyframes wordInFlat { from { opacity: 0; } to { opacity: 1; } }
 /* …and stays part of its sentence: in Hebrew every span is otherwise its own
    direction island, and a paragraph of fresh words would read left to right. */
 [data-ui-lang] .md .rv-w { unicode-bidi: normal; }
@@ -758,6 +761,7 @@ a { color: inherit; }
   .hero-sub { font-size: 14.5px; margin-top: 10px; }
   .hero-rule { margin-top: 12px; }
   .hero-foot { margin-top: 20px; }
+  .md .rv-w { animation-name: wordInFlat; }
   /* The quiet rows stay looking like text. The extra height is the tap. */
   .contact-row { min-height: 44px; }
   .read-more { min-height: 44px; }
