@@ -172,9 +172,14 @@ export function Answer({ content, streaming, onRevealed, diagram, lang, diagramL
   }, [html]);
 
   return (
-    <div dir="auto" className={live ? 'bubble-assistant fade-in' : 'bubble-assistant'}>
+    <div dir="auto" className={live ? 'bubble-assistant fade-in' : 'bubble-assistant'}
+      aria-busy={writing ? 'true' : undefined}
+      aria-live={live ? (writing ? 'off' : 'polite') : undefined}
+      aria-atomic={live ? 'true' : undefined}>
       {speaker && <span className="sr-only">{speaker}: </span>}
-      <div ref={mdRef} className="md" dangerouslySetInnerHTML={{ __html: html }} />
+      {/* Hidden while the words are still arriving, so a reader hears the
+          finished answer once instead of every new word. */}
+      <div ref={mdRef} className="md" aria-hidden={writing ? true : undefined} dangerouslySetInnerHTML={{ __html: html }} />
       {diagram && !writing && (
         <div dir={lang === 'he' ? 'rtl' : 'ltr'} style={{ marginTop: 12 }}>
           <Architecture spec={diagram} lang={lang} label={diagramLabel} name={diagramName(diagram, lang)} />
