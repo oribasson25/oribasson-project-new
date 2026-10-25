@@ -1,7 +1,7 @@
 import profile from '../../content/profile.js';
 import resume from '../../content/resume.js';
 import { tx, tl, bullet } from '../../shared/text.js';
-import { Icons, PageHeader, Btn, Chip, EmptyState, Section, Eyebrow, bidiParts, bidiProps, flowDir } from './ui.jsx';
+import { Icons, PageHeader, Btn, Chip, EmptyState, Section, Eyebrow, PrintContact, bidiParts, bidiProps, flowDir } from './ui.jsx';
 
 function yearTime(value) {
   const text = value == null || value === '' ? '' : String(value);
@@ -39,15 +39,6 @@ function Bullets({ items, size = 13, lang }) {
       })}
     </ul>
   );
-}
-
-/** On paper the sidebar is gone, so the resume carries its own contact line. */
-function PrintLine() {
-  const c = profile.contact || {};
-  const linkedin = c.linkedin ? c.linkedin.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : '';
-  const bits = [c.email, c.phone, linkedin].filter(Boolean);
-  if (!bits.length) return null;
-  return <p className="print-line">{bits.join(' · ')}</p>;
 }
 
 function isEmpty() {
@@ -116,7 +107,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked, hash }) {
         {!stacked && <PageHeader eyebrow={t.portfolio} title={t.resumeTitle} subtitle={sub || name} actions={actions} />}
         {stacked && <p className="print-name">{name}</p>}
         {stacked && lead}
-        <PrintLine />
+        <PrintContact />
         <Section>
           <EmptyState icon={Icons.resume} title={t.comingSoon} subtitle={t.comingSoonSub}
             action={<Btn icon={Icons.chat} onClick={onOpenChat}>{t.openChat}</Btn>} />
@@ -137,7 +128,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked, hash }) {
       {!stacked && <PageHeader eyebrow={t.resumeTitle} title={name} subtitle={sub} actions={actions} />}
       {stacked && <p className="print-name">{name}</p>}
       {stacked && lead}
-      <PrintLine />
+      <PrintContact />
       <div className="resume-wrap">
       <div className={`resume-layout${side && !stacked ? ' has-side' : ''}`}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 26, minWidth: 0 }}>

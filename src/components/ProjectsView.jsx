@@ -1,9 +1,10 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import profile from '../../content/profile.js';
 import projects from '../../content/projects.js';
 import { tx, tl, bullet } from '../../shared/text.js';
 import { useReducedMotion } from '../lib/hooks.js';
 import { titleFor } from '../lib/seo.js';
-import { Icons, PageHeader, Btn, Chip, EmptyState, Section, bidiParts, bidiProps, flowDir } from './ui.jsx';
+import { Icons, PageHeader, Btn, Chip, EmptyState, Section, PrintContact, bidiParts, bidiProps, flowDir } from './ui.jsx';
 import { Architecture } from './Architecture.jsx';
 import { architectures } from './architectures.js';
 
@@ -253,6 +254,8 @@ export function ProjectsView({ t, lang, onAsk, onOpenChat, stacked, hash }) {
   }, []);
   return (
     <div dir={dir}>
+      {/* The heading here is the section. Paper still needs the person, and a way to reach him. */}
+      <PrintContact name={tx(profile.name, lang)} />
       {!stacked && <PageHeader eyebrow={t.portfolio} title={t.projectsTitle} subtitle={list.length ? t.projectCount(list.length) : null} />}
       {stacked && list.length > 0 && <p className="page-lead" dir="auto">{t.projectCount(list.length)}</p>}
       {list.length === 0 ? (

@@ -1001,6 +1001,10 @@ a { color: inherit; }
     line-height: 1.15;
   }
   .print-line { margin: -8px 0 22px; font-size: 12.5px; line-height: 1.5; color: #243044; }
+  /* Under the greeting the line is not tucked against a page title. Beside the
+     printed name it sits on the next line, not through it. */
+  .home-welcome .print-line { margin: 10px 0 6px; }
+  .print-name + .print-line { margin-top: 0; }
   .resume-job, .resume-edu, .resume-lang, .project-card { break-inside: avoid; }
   /* On screen the skills sit beside the jobs, and the projects sit in a grid.
      Paper is one column, so a card is not sliced and the skills follow the jobs. */
@@ -1039,7 +1043,7 @@ a { color: inherit; }
     height: auto !important;
     background: #fff;
   }
-  #root, #root > div, .m-app, main, [data-scroller] {
+  #root, #root > div, .m-app, main, [data-scroller], .home-welcome {
     height: auto !important;
     overflow: visible !important;
     display: block !important;

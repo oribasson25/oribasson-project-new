@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import profile from '../../content/profile.js';
 
 /* The 8Legs.ai design primitives — eyebrow, page header, crumbs, two button
    weights, chips, segmented tabs — redrawn in graphite. */
@@ -150,6 +151,24 @@ export function PageHeader({ eyebrow, title, subtitle, actions, size = 36 }) {
         </div>
       )}
     </div>
+  );
+}
+
+/**
+ * On paper the sidebar is gone, so a page carries its own contact line.
+ * `name` leads a page whose heading is the section, not the person.
+ * Both are hidden on screen.
+ */
+export function PrintContact({ name }) {
+  const c = profile.contact || {};
+  const linkedin = c.linkedin ? c.linkedin.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : '';
+  const bits = [c.email, c.phone, linkedin].filter(Boolean);
+  if (!name && !bits.length) return null;
+  return (
+    <>
+      {name ? <p className="print-name">{name}</p> : null}
+      {bits.length ? <p className="print-line">{bits.join(' · ')}</p> : null}
+    </>
   );
 }
 

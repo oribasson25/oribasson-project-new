@@ -6,7 +6,7 @@ import { Pet, PetStage } from './Pet.jsx';
 import { IntroBubble } from './IntroBubble.jsx';
 import { HomeFacts } from './HomeFacts.jsx';
 import { Answer, Steps } from './Answer.jsx';
-import { bidiParts, messageBidi } from './ui.jsx';
+import { PrintContact, bidiParts, messageBidi } from './ui.jsx';
 import { architectures } from './architectures.js';
 import { diagramProjectId } from '../lib/projectDiagram.js';
 import { useMaxWidth, useReducedMotion, useShortScreen, useTightScreen } from '../lib/hooks.js';
@@ -306,6 +306,8 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
             avoidRight={!bubbleBelow && voice.available && (!voice.heard || voice.state === 'playing')} />
         </div>
         <h1 className="hero-title hero-rise" dir={dir} style={{ animationDelay: '0.14s' }}>{t.hello(first)}</h1>
+        {/* The contact buttons live in the bar, which paper does not print. */}
+        <PrintContact />
         <svg className="hero-rule hero-rise" viewBox="0 0 72 8" width="72" height="8" aria-hidden="true" style={{ animationDelay: '0.22s' }}>
           <path className="arch-line hero-draw" d="M2 4 H70" pathLength="1" />
         </svg>
