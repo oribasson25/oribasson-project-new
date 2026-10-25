@@ -111,6 +111,14 @@ body {
   color: var(--text-2);
   text-wrap: balance;
 }
+/* The welcome column: desktop padding, and the phone's. */
+.home-welcome { padding: 0 34px 50px; }
+.home-welcome.is-phone { padding: 8px 18px 18px; }
+.home-ask { margin-top: 28px; }
+.home-welcome.is-phone .home-ask { margin-top: 22px; }
+.home-chips { margin-top: 20px; width: min(720px, 100%); }
+.home-welcome.is-phone .home-chips { margin-top: 16px; width: 100%; }
+
 .hero-foot {
   margin-top: 32px;
   max-width: 34em;
@@ -851,6 +859,18 @@ a { color: inherit; }
   .login-back { min-height: 44px; }
   .login-field,
   .login-submit { min-height: 44px; }
+  /* 667px of height, after the top bar and the floating bar, left the
+     question half under the bar. The same screen, pulled in a little. */
+  @media (max-height: 720px) {
+    .home-welcome.is-phone { padding-top: 2px; padding-bottom: 10px; }
+    .home-welcome.is-phone .hero-title { margin-top: 6px; }
+    .home-welcome.is-phone .hero-rule { margin-top: 6px; }
+    .home-welcome.is-phone .hero-sub { margin-top: 6px; }
+    .home-welcome.is-phone .home-ask { margin-top: 12px; }
+    .home-welcome.is-phone .home-chips { margin-top: 10px; }
+    .home-welcome.is-phone .home-fact-slot { margin-top: 4px; }
+    .home-welcome.is-phone .hero-foot { margin-top: 14px; }
+  }
   .seg-tab { min-height: 44px; }
   .key-eye { min-width: 44px; min-height: 44px; }
   .thread-action { min-height: 44px; }

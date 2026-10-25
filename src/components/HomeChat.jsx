@@ -81,7 +81,7 @@ export function Composer({ value, onChange, onSend, disabled, placeholder, dir, 
    cards: six pills wrapped one per line filled half the screen. */
 function QuestionChips({ items, onPick, disabled, dir, style, grid, className, label, stagger }) {
   return (
-    <div role="group" aria-label={label} dir={dir} className={stagger ? undefined : className} style={{
+    <div role="group" aria-label={label} dir={dir} className={className} style={{
       ...(grid
         ? { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }
         : { display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }),
@@ -193,10 +193,9 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
   /* ── nothing said yet: Ori in the middle of the screen ── */
   if (!started) {
     return (
-      <div style={{
+      <div className={stacked ? 'home-welcome is-phone' : 'home-welcome'} style={{
         flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'safe center',
-        padding: stacked ? '8px 18px 18px' : '0 34px 50px', overflowY: 'auto',
+        alignItems: 'center', justifyContent: 'safe center', overflowY: 'auto',
       }}>
         <div className="home-stage hero-rise" style={{ animationDelay: '0.04s' }}>
           <PetStage size={stacked ? 148 : 230} mode={pending ? 'working' : 'idle'} pulse={chat.pulse} busy={pending} voice={voice} label={t.petJump}>
@@ -215,7 +214,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         </svg>
         <div className="hero-sub hero-rise" dir={dir} style={{ animationDelay: '0.3s' }}>{stacked ? t.helloSubShort(firstPerson) : t.helloSub(first, firstPerson)}</div>
 
-        <div className="hero-rise" style={{ animationDelay: '0.4s', width: '100%', marginTop: stacked ? 22 : 28 }}>
+        <div className="hero-rise home-ask" style={{ animationDelay: '0.4s', width: '100%' }}>
           {offlineNote}
           <Composer value={input} onChange={setInput} onSend={() => submit()} fieldRef={fieldRef}
             onFieldFocus={loadMarkdown}
@@ -224,8 +223,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         </div>
 
         <QuestionChips items={chips} onPick={submit} disabled={pending || offline} dir={dir} grid={stacked} label={t.suggestions}
-          stagger
-          style={{ marginTop: stacked ? 16 : 20, width: stacked ? '100%' : 'min(720px, 100%)' }} />
+          className="home-chips" stagger />
 
         <div className="hero-foot hero-rise" dir={dir} style={{ animationDelay: '0.74s' }}>{t.foot(first)}</div>
       </div>
