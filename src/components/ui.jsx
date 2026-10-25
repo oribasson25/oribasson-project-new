@@ -52,6 +52,25 @@ export function bidiProps(text, lang) {
   return { dir: 'ltr' };
 }
 
+/**
+ * The page's direction. A block that opens with a Latin name would otherwise
+ * be read as English, and the Hebrew after that name runs the other way.
+ */
+export function flowDir(lang) {
+  if (lang === 'he') return { dir: 'rtl', style: { unicodeBidi: 'isolate' } };
+  return { dir: 'ltr' };
+}
+
+/** A message stays in its own language even when it opens with a Latin name. */
+export function messageBidi(text) {
+  const he = isHebrew(text);
+  return {
+    dir: he ? 'rtl' : 'ltr',
+    lang: he ? 'he' : 'en',
+    style: { unicodeBidi: 'isolate' },
+  };
+}
+
 /** The words of a Hebrew line, with each Latin name marked as English. */
 export function bidiParts(text, lang) {
   if (lang !== 'he' || !text || !isHebrew(text)) return text;

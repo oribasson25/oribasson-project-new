@@ -3,7 +3,7 @@ import projects from '../../content/projects.js';
 import { tx, tl, bullet } from '../../shared/text.js';
 import { useReducedMotion } from '../lib/hooks.js';
 import { titleFor } from '../lib/seo.js';
-import { Icons, PageHeader, Btn, Chip, EmptyState, Section, bidiParts, bidiProps } from './ui.jsx';
+import { Icons, PageHeader, Btn, Chip, EmptyState, Section, bidiParts, bidiProps, flowDir } from './ui.jsx';
 import { Architecture } from './Architecture.jsx';
 import { architectures } from './architectures.js';
 
@@ -42,8 +42,14 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
   const frame = useRef(0);
   const reduced = useReducedMotion();
   const name = tx(p.name, lang);
+  const flow = flowDir(lang);
+  const named = bidiProps(name, lang);
+  // A Latin-only name still sits on the Hebrew side of the card.
+  const nameBidi = lang === 'he' ? { dir: flow.dir, lang: named.lang, style: flow.style } : named;
   const tagline = tx(p.tagline, lang);
   const taglineBidi = bidiProps(tagline, lang);
+  const description = tx(p.description, lang);
+  const descriptionBidi = bidiProps(description, lang);
   const highlights = tl(p.highlights, lang);
   const links = p.links || {};
   const role = tx(p.role, lang);
@@ -125,34 +131,39 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
 
   const head = (
     <div>
-      <h2 tabIndex={-1} dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 16, letterSpacing: '-0.02em', lineHeight: 1.3 }}>{name}</h2>
+      <h2 tabIndex={-1} dir={nameBidi.dir} lang={nameBidi.lang} style={{ margin: 0, fontWeight: 700, fontSize: 16, letterSpacing: '-0.02em', lineHeight: 1.3, ...nameBidi.style }}>{bidiParts(name, lang)}</h2>
       {tagline && (
         <div dir={taglineBidi.dir} lang={taglineBidi.lang} style={{ fontSize: 13, color: 'var(--text-2)', marginTop: 6, fontWeight: 500, lineHeight: 1.45, ...taglineBidi.style }}>
           {bidiParts(tagline, lang)}
         </div>
       )}
       {(p.year || role) && (
-        <div dir="auto" style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--text-muted)', marginTop: 8 }}>
-          {year}{p.year && role ? ' · ' : ''}{role}
+        <div dir={flow.dir} style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--text-muted)', marginTop: 8, ...flow.style }}>
+          {year}{p.year && role ? ' · ' : ''}{bidiParts(role, lang)}
         </div>
       )}
     </div>
   );
   const prose = (
     <>
-      {tx(p.description, lang) && (
-        <div dir="auto" style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>{tx(p.description, lang)}</div>
+      {description && (
+        <div dir={descriptionBidi.dir} lang={descriptionBidi.lang} style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.7, whiteSpace: 'pre-wrap', ...descriptionBidi.style }}>{bidiParts(description, lang)}</div>
       )}
       {highlights.length > 0 && (
-        <ul style={{ margin: 0, paddingInlineStart: 18, fontSize: 12.5, color: 'var(--text-2)', lineHeight: 1.7 }}>
+        <ul dir={flow.dir} style={{ margin: 0, paddingInlineStart: 18, fontSize: 12.5, color: 'var(--text-2)', lineHeight: 1.7, ...flow.style }}>
           {highlights.map((item, i) => {
             const { title, text } = bullet(item);
-            return <li key={i} style={{ unicodeBidi: 'normal' }}>{title && <strong style={{ color: 'var(--text)', fontWeight: 650 }}>{title}: </strong>}{text}</li>;
+            return (
+              <li key={i} style={{ unicodeBidi: 'normal' }}>
+                {title && <strong style={{ color: 'var(--text)', fontWeight: 650, unicodeBidi: 'normal' }}>{bidiParts(`${title}: `, lang)}</strong>}
+                {bidiParts(text, lang)}
+              </li>
+            );
           })}
         </ul>
       )}
       {(p.tech || []).length > 0 && (
-        <ul className="plain-list" style={{ display: 'flex', gap: 6, flexWrap: 'wrap', margin: 0, padding: 0 }}>
+        <ul className="plain-list" dir={flow.dir} style={{ display: 'flex', gap: 6, flexWrap: 'wrap', margin: 0, padding: 0, ...flow.style }}>
           {p.tech.map((x) => <li key={x}><Chip mono>{x}</Chip></li>)}
         </ul>
       )}
@@ -160,12 +171,13 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
   );
 
   return (
-    <li id={p.id || undefined} className={`project-card fade-in${linked ? ' is-linked' : ''}`}
+    <li id={p.id || undefined} dir={flow.dir} className={`project-card fade-in${linked ? ' is-linked' : ''}`}
       style={{
         scrollMarginTop: 18,
         animationDelay: `${Math.min(index, 7) * 70}ms`,
         padding: '20px 20px 16px', display: 'flex', flexDirection: 'column', gap: 14,
         height: spec ? 'auto' : (expanded || held != null ? 'auto' : CARD_HEIGHT), minHeight: spec ? 0 : CARD_HEIGHT,
+        ...flow.style,
       }}>
       {spec && head}
       {spec && <Architecture spec={spec} lang={lang} label={t.architecture} name={name} />}
@@ -213,7 +225,7 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
         </button>
       )}
 
-      <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', borderTop: '1px solid var(--border)', paddingTop: 14, marginTop: 2 }}>
+      <div dir={flow.dir} style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', borderTop: '1px solid var(--border)', paddingTop: 14, marginTop: 2, ...flow.style }}>
         {links.live && <Btn size="sm" icon={Icons.external} href={links.live} note={t.newTab} name={t.openLive(name)}>{t.live}</Btn>}
         {links.repo && <Btn size="sm" icon={Icons.github} href={links.repo} note={t.newTab} name={t.openCode(name)}>{t.code}</Btn>}
         <span className="print-hide" style={{ display: 'contents' }}>
