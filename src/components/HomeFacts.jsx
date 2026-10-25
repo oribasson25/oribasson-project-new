@@ -217,7 +217,7 @@ const FACTS = [
   { en: 'The hiring system keeps a resume library.', he: 'מערכת הגיוס שומרת מאגר קורות חיים.' },
   { en: 'On 8Legs, card and ID numbers stay out of the chat history.', he: 'ב-8Legs, כרטיס ותעודת זהות לא נכנסים להיסטוריית השיחה.' },
   { en: 'The 8Legs wizard writes the prompt, the knowledge, and the channel.', he: 'האשף של 8Legs כותב פרומפט, ידע וערוץ.' },
-  { en: 'The board\'s last stages: hired, rejected, ghosted, or withdrew.', he: 'בלוח, השלבים האחרונים הם גיוס, דחייה, היעלמות או חזרה.' },
+  { en: 'The board\'s last stages: hired, rejected, ghosted, or withdrew.', he: 'השלבים האחרונים בלוח: גיוס, דחייה, היעלמות או חזרה מהמועמדות.' },
   { en: 'Each 8Legs chatbot gets a private GitHub repo.', he: 'לכל צ׳טבוט ב-8Legs יש ריפו GitHub פרטי.' },
   { en: 'The hiring system was designed and built full-stack at Libra.', he: 'מערכת הגיוס עוצבה ונבנתה ב-full-stack, בליברה.' },
   { en: 'The IDF post opened user accounts and set their permissions.', he: 'בצה״ל נפתחו משתמשים ונקבעו ההרשאות שלהם.' },
