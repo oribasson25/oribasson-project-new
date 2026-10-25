@@ -838,6 +838,8 @@ a { color: inherit; }
     padding: env(safe-area-inset-top) 12px 0;
   }
   .m-nav, .m-sheet { padding-bottom: env(safe-area-inset-bottom); }
+  /* A flick at the end of the sheet should not drag the page underneath. */
+  .m-sheet, .m-sheet-body { overscroll-behavior: contain; }
   /* The bar floats over the bottom of the scroller. A control scrolled into
      view should stop above it, not underneath. */
   .m-root main { scroll-padding-bottom: calc(92px + env(safe-area-inset-bottom)); }

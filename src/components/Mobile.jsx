@@ -86,11 +86,34 @@ export function MobileSheet({ open, onClose, title, children, closeLabel = 'Clos
     document.addEventListener('keydown', onKey);
     const closeBtn = dialogRef.current?.querySelector('[data-sheet-close]');
     (closeBtn || dialogRef.current)?.focus();
+    // The sheet covers the page, but the page's own scroller was still live:
+    // a flick moved the welcome screen behind it. Freeze those, and let the
+    // sheet keep the only one that scrolls.
+    const locked = [];
+    const root = dialogRef.current?.parentElement;
+    if (root) {
+      for (const el of root.querySelectorAll('main, main *')) {
+        const oy = getComputedStyle(el).overflowY;
+        if (oy !== 'auto' && oy !== 'scroll') continue;
+        locked.push([el, el.style.overflowY, el.scrollTop]);
+        el.style.overflowY = 'hidden';
+      }
+    }
+    // overflow:hidden stops a finger. A script, or iOS, can still set
+    // scrollTop, so the position is put back if it moves.
+    const holdScroll = (e) => {
+      const row = locked.find(([el]) => el === e.currentTarget);
+      if (row && e.currentTarget.scrollTop !== row[2]) e.currentTarget.scrollTop = row[2];
+    };
+    locked.forEach(([el]) => el.addEventListener('scroll', holdScroll));
+    const backdrop = root?.querySelector('[data-sheet-backdrop]');
+    const stopScroll = (e) => e.preventDefault();
+    backdrop?.addEventListener('touchmove', stopScroll, { passive: false });
+    backdrop?.addEventListener('wheel', stopScroll, { passive: false });
     // The tab trap stops the keyboard. inert takes the rest of the page out of
     // the accessibility tree too, so a reader cannot wander behind the sheet.
     // Lift it before returning focus, or the button underneath cannot take it.
     const dialog = dialogRef.current;
-    const root = dialog?.parentElement;
     const silenced = [];
     if (root) {
       for (const child of root.children) {
@@ -102,6 +125,12 @@ export function MobileSheet({ open, onClose, title, children, closeLabel = 'Clos
     }
     return () => {
       document.removeEventListener('keydown', onKey);
+      locked.forEach(([el, prev]) => {
+        el.removeEventListener('scroll', holdScroll);
+        el.style.overflowY = prev;
+      });
+      backdrop?.removeEventListener('touchmove', stopScroll);
+      backdrop?.removeEventListener('wheel', stopScroll);
       silenced.forEach((el) => el.removeAttribute('inert'));
       const back = restoreRef.current;
       if (back && typeof back.focus === 'function') back.focus();
@@ -124,7 +153,7 @@ export function MobileSheet({ open, onClose, title, children, closeLabel = 'Clos
           <div style={{ flex: 1, fontWeight: 800, fontSize: 16 }}>{title}</div>
           <button type="button" data-sheet-close onClick={onClose} aria-label={closeLabel} style={{ width: 44, height: 44, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-2)', fontSize: 18 }}>▾</button>
         </div>
-        <div style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>{children}</div>
+        <div className="m-sheet-body" style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>{children}</div>
       </div>
     </>
   );
