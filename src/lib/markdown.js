@@ -20,6 +20,16 @@ function escapeText(value) {
   return String(value).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
 }
 
+// A picture in an answer would be a remote image, and the page refuses those.
+// Keep the words the model wrote instead of a broken icon.
+md.renderer.rules.image = (tokens, idx) => {
+  const token = tokens[idx];
+  const alt = String(token.content || '').trim();
+  const src = String(token.attrGet('src') || '').trim();
+  const label = alt || src;
+  return label ? escapeText(label) : '';
+};
+
 // The visible link text stays as the model wrote it. The note is only for
 // someone who cannot see that the link leaves the conversation.
 md.renderer.rules.link_close = (tokens, idx, options, env, self) => {
