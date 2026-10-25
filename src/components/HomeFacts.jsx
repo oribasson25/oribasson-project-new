@@ -114,11 +114,12 @@ function readTime(text) {
  * it sits under him and still arrives from the side, by a few pixels, so it
  * cannot leave the screen. A mouse hover holds the current line; a click, or
  * Enter, keeps it there. Arrow keys, while the line is focused, show the
- * next or the previous one. Reaching the line while it is leaving brings
- * that same line back. Keyboard focus holds it too, and so does scrolling it
- * off the screen. A text field holds it as well, so the words stay put
- * while a question is typed. Reduced motion swaps the words in place, with
- * no slide, and leaves each line up a little longer.
+ * next or the previous one. A finger does the same with a sideways swipe,
+ * and the page still scrolls up and down. Reaching the line while it is
+ * leaving brings that same line back. Keyboard focus holds it too, and so
+ * does scrolling it off the screen. A text field holds it as well, so the
+ * words stay put while a question is typed. Reduced motion swaps the words
+ * in place, with no slide, and leaves each line up a little longer.
  *
  * `hold` freezes the cycle while the recorded hello is playing. `avoidRight`
  * keeps every line on the left while the hello bubble occupies that side.
@@ -140,6 +141,11 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   const slotRef = useRef(null);
   const lineRef = useRef(null);
   const fromKeyboard = useRef(false);
+  const swipe = useRef(null);
+  const suppressClick = useRef(false);
+  const indexRef = useRef(index);
+  indexRef.current = index;
+  useEffect(() => () => { if (swipe.current) swipe.current.drop(); }, []);
   const avoidRef = useRef(avoidRight);
   avoidRef.current = avoidRight;
   const fact = FACTS[index];
@@ -220,15 +226,58 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
     el.style.animation = '';
   }, [index, phase, side, reduced]);
 
+  function step(dir) {
+    const next = (indexRef.current + dir + FACTS.length) % FACTS.length;
+    indexRef.current = next;
+    setPhase('in');
+    setSide(avoidRef.current || next % 2 === 0 ? 'left' : 'right');
+    setIndex(next);
+  }
+
   function togglePin() {
+    if (suppressClick.current) {
+      suppressClick.current = false;
+      return;
+    }
     setPinned((v) => !v);
   }
 
-  function step(dir) {
-    const next = (index + dir + FACTS.length) % FACTS.length;
-    setPhase('in');
-    setSide(avoidRight || next % 2 === 0 ? 'left' : 'right');
-    setIndex(next);
+  // A sideways swipe moves one line. A vertical drag is the page scrolling,
+  // so it is left alone. The click that follows a drag must not also pin.
+  function onPointerDown(e) {
+    if (e.pointerType === 'mouse') return;
+    const start = { x: e.clientX, y: e.clientY, id: e.pointerId };
+    const drop = () => {
+      swipe.current = null;
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', drop);
+    };
+    const ignoreClick = () => {
+      suppressClick.current = true;
+      window.setTimeout(() => { suppressClick.current = false; }, 400);
+    };
+    const move = (ev) => {
+      if (ev.pointerId !== start.id || !swipe.current) return;
+      const dx = ev.clientX - start.x;
+      const dy = ev.clientY - start.y;
+      if (Math.abs(dy) > 14 && Math.abs(dy) > Math.abs(dx)) drop();
+    };
+    const up = (ev) => {
+      if (ev.pointerId !== start.id || !swipe.current) return;
+      const dx = ev.clientX - start.x;
+      const dy = ev.clientY - start.y;
+      drop();
+      if (Math.abs(dx) < 44 || Math.abs(dx) < Math.abs(dy) * 1.25) return;
+      ignoreClick();
+      // Left shows the next line in English, right in Hebrew — the way a
+      // row of cards moves. The arrow keys point the other way, on purpose.
+      step(lang === 'he' ? (dx > 0 ? 1 : -1) : (dx < 0 ? 1 : -1));
+    };
+    swipe.current = { id: start.id, drop };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', drop);
   }
 
   return (
@@ -243,6 +292,7 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
           aria-posinset={index + 1}
           aria-describedby={keyFocus ? 'home-fact-hint' : undefined}
           onClick={togglePin}
+          onPointerDown={onPointerDown}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();

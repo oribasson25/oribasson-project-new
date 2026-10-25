@@ -242,6 +242,9 @@ body {
   text-align: inherit;
   cursor: pointer;
   border-radius: 6px;
+  /* Vertical scrolling still belongs to the page. A sideways drag is a swipe. */
+  touch-action: pan-y;
+  user-select: none;
 }
 /* The slot is wider than a short line. Park the words against the figure,
    so the focus ring hugs the sentence instead of an empty box. */
