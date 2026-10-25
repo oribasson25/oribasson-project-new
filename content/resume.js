@@ -12,6 +12,7 @@ export default {
 
   experience: [
     {
+      id: 'libra-ai',
       company: { en: 'Libra Insurance', he: 'ליברה ביטוח' },
       role: { en: 'AI Solutions Engineering + AI Project Management', he: 'הנדסת פתרונות AI וניהול פרויקטי AI' },
       start: '2024',
@@ -39,6 +40,7 @@ export default {
       tech: ['TypeScript', 'Python', 'SQL', 'Function calling', 'CRM', 'MCP', 'Postman'],
     },
     {
+      id: 'libra-claims',
       company: { en: 'Libra Insurance', he: 'ליברה ביטוח' },
       role: { en: 'Claims Call Center Shift Supervisor', he: 'ניהול משמרת במוקד שירות תביעות' },
       start: '2023',
@@ -61,6 +63,7 @@ export default {
       },
     },
     {
+      id: 'idf-networks',
       company: { en: 'Military Service (IDF)', he: 'שירות צבאי (צה״ל)' },
       role: { en: 'Network Administrator', he: 'ניהול רשתות' },
       start: '2023',
@@ -80,6 +83,7 @@ export default {
 
   education: [
     {
+      id: 'kernelios',
       degree: { en: 'Cybersecurity Implementation, Professional Certification', he: 'הסמכה מקצועית ביישום סייבר' },
       school: { en: 'Kernelios College', he: 'מכללת Kernelios' },
       location: { en: 'Israel', he: 'ישראל' },

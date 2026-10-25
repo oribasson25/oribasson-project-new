@@ -71,7 +71,7 @@ export default function App() {
   if (page === 'login' && admin) page = 'settings';
   const needsLogin = page === 'login' || (ADMIN_PAGES.has(page) && admin === false);
 
-  useSeo(page, lang);
+  useSeo(page, lang, hash);
   // /admin, once signed in, is the settings screen — keep the address honest.
   useEffect(() => { if (path === '/admin' && admin) go('/admin/settings'); }, [path, admin]);
   useEffect(() => { setMoreOpen(false); }, [path]);
@@ -136,7 +136,7 @@ export default function App() {
 
   const view = (stacked) => {
     switch (page) {
-      case 'resume': return <ResumeView t={t} lang={lang} onAsk={ask} onOpenChat={() => go('/')} stacked={stacked} />;
+      case 'resume': return <ResumeView t={t} lang={lang} onAsk={ask} onOpenChat={() => go('/')} stacked={stacked} hash={hash} />;
       case 'projects': return <ProjectsView t={t} lang={lang} onAsk={ask} onOpenChat={() => go('/')} stacked={stacked} hash={hash} />;
       case 'settings': return <AdminSettings t={t} lang={lang} onUnauthorized={onUnauthorized} onChanged={refreshStatus} stacked={stacked} />;
       case 'conversations': return <AdminConversations t={t} lang={lang} onUnauthorized={onUnauthorized} stacked={stacked} />;

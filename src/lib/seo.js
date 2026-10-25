@@ -104,6 +104,7 @@ function personNode() {
       '@type': 'EducationalOccupationalCredential',
       name,
       description: details || undefined,
+      url: e.id ? `${ORIGIN}/resume#${e.id}` : undefined,
       recognizedBy: org ? { '@type': 'EducationalOrganization', name: org } : undefined,
     };
   }).filter(Boolean);
@@ -177,12 +178,14 @@ function experienceList() {
       '@type': 'ListItem',
       position: i + 1,
       name: company ? `${role}, ${company}` : role,
+      url: job.id ? `${ORIGIN}/resume#${job.id}` : undefined,
       item: {
         '@type': 'OrganizationRole',
         roleName: role,
         startDate: job.start || undefined,
         endDate: job.end || undefined,
         description: jobDescription(job),
+        url: job.id ? `${ORIGIN}/resume#${job.id}` : undefined,
       },
     };
   }).filter(Boolean);
@@ -271,26 +274,38 @@ export function pageTitle(page) {
   return label ? `${label} · ${name}` : name;
 }
 
-/** The tab stays in English. A project address names that project. */
+/** The tab stays in English. A project or a role address names that one. */
 export function titleFor(page, hash) {
+  const person = tx(profile.name, 'en');
   if (page === 'projects' && hash) {
     const project = (projects || []).find((p) => p.id === hash);
     const name = project && tx(project.name, 'en');
-    if (name) return `${name} · ${tx(profile.name, 'en')}`;
+    if (name) return `${name} · ${person}`;
+  }
+  if (page === 'resume' && hash) {
+    const job = (resume.experience || []).find((item) => item.id === hash);
+    const role = job && tx(job.role, 'en');
+    const company = job && tx(job.company, 'en');
+    if (role) return `${company ? `${role}, ${company}` : role} · ${person}`;
+    const school = (resume.education || []).find((item) => item.id === hash);
+    const degree = school && tx(school.degree, 'en');
+    if (degree) return `${degree} · ${person}`;
   }
   return pageTitle(page);
 }
 
 /** Keeps the tab, share cards, canonical URL, and structured data in step with the route. */
-export function useSeo(page, lang) {
+export function useSeo(page, lang, hash) {
   useEffect(() => {
     const path = PATHS[page] || '/';
     const copy = DESC[lang === 'he' ? 'he' : 'en'];
     const desc = copy[page] || copy.home;
     // The address bar is the source of truth: opening a card updates the
     // hash without a navigation, and the tab should follow it.
-    const hash = page === 'projects' ? window.location.hash.replace(/^#/, '') : '';
-    const title = titleFor(page, hash);
+    const liveHash = page === 'projects' || page === 'resume'
+      ? window.location.hash.replace(/^#/, '')
+      : '';
+    const title = titleFor(page, liveHash);
     const admin = page === 'login' || page === 'settings' || page === 'conversations';
     const missing = page === 'missing' || !knownPath();
     const here = missing ? (window.location.pathname.replace(/\/+$/, '') || '/') : path;
@@ -327,5 +342,5 @@ export function useSeo(page, lang) {
           }
         : jsonLd(admin ? 'chat' : page));
     }
-  }, [page, lang]);
+  }, [page, lang, hash]);
 }

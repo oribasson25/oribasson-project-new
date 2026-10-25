@@ -681,8 +681,14 @@ a { color: inherit; }
    A window that still shows the sidebar can be too narrow for 320px beside the jobs. */
 .resume-wrap { container-type: inline-size; }
 /* A job is something you can ask about. The row warms, the way a project card lifts. */
-.resume-job { transition: background-color 0.18s var(--ease); }
+.resume-job { transition: background-color 0.18s var(--ease), box-shadow 0.22s var(--ease); }
+.resume-job, .resume-edu { scroll-margin-top: 18px; }
 .resume-job:focus-within { background: var(--bg-panel); }
+/* A shared link named this entry. The same hairline a linked project card uses. */
+.resume-job.is-linked,
+.resume-edu.is-linked { box-shadow: inset 3px 0 0 var(--text); }
+[dir="rtl"] .resume-job.is-linked,
+[dir="rtl"] .resume-edu.is-linked { box-shadow: inset -3px 0 0 var(--text); }
 .resume-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

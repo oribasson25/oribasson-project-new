@@ -44,12 +44,12 @@ function isEmpty() {
     && !(resume.skills || []).length;
 }
 
-function Job({ job, t, lang, onAsk }) {
+function Job({ job, t, lang, onAsk, hash }) {
   const role = tx(job.role, lang);
   const company = tx(job.company, lang);
   const highlights = tl(job.highlights, lang);
   return (
-    <li className="resume-job" style={{ padding: '18px 22px 20px', borderTop: '1px solid var(--border)' }}>
+    <li id={job.id || undefined} className={`resume-job${job.id && hash === job.id ? ' is-linked' : ''}`} style={{ padding: '18px 22px 20px', borderTop: '1px solid var(--border)' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap' }}>
         <div style={{ flex: 1, minWidth: 200 }}>
           <h3 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 16, letterSpacing: '-0.02em', lineHeight: 1.3 }}>{role}</h3>
@@ -79,7 +79,7 @@ function Job({ job, t, lang, onAsk }) {
   );
 }
 
-export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
+export function ResumeView({ t, lang, onAsk, onOpenChat, stacked, hash }) {
   const dir = lang === 'he' ? 'rtl' : 'ltr';
   const name = tx(profile.name, lang);
   const sub = [tx(profile.headline, lang), tx(profile.location, lang)].filter(Boolean).join(' · ');
@@ -127,7 +127,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
           {(resume.experience || []).length > 0 && (
             <Section id="experience" title={t.experience} pad="0">
               <ul className="plain-list" style={{ marginTop: -1 }}>
-                {resume.experience.map((job, i) => <Job key={i} job={job} t={t} lang={lang} onAsk={onAsk} />)}
+                {resume.experience.map((job, i) => <Job key={job.id || i} job={job} t={t} lang={lang} onAsk={onAsk} hash={hash} />)}
               </ul>
             </Section>
           )}
@@ -135,7 +135,7 @@ export function ResumeView({ t, lang, onAsk, onOpenChat, stacked }) {
             <Section title={t.education} pad="0">
               <ul className="plain-list" style={{ marginTop: -1 }}>
                 {education.map((e, i) => (
-                  <li key={i} className="resume-edu" style={{ padding: '16px 22px', borderTop: '1px solid var(--border)', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+                  <li key={i} id={e.id || undefined} className={`resume-edu${e.id && hash === e.id ? ' is-linked' : ''}`} style={{ padding: '16px 22px', borderTop: '1px solid var(--border)', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
                     <div style={{ flex: 1, minWidth: 200 }}>
                       <h3 dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 15, letterSpacing: '-0.02em', lineHeight: 1.3 }}>{tx(e.degree, lang)}</h3>
                       <div dir="auto" style={{ fontSize: 12.5, color: 'var(--text-2)', marginTop: 3, fontWeight: 600 }}>
