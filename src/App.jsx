@@ -16,6 +16,17 @@ import { PetWatermark } from './components/Pet.jsx';
 import { MobileTopBar, MobileBottomNav, MobileMore, NAV_SPACE } from './components/Mobile.jsx';
 import { NotFound } from './components/NotFound.jsx';
 
+/** Said once, after a change. The first paint already has a language. */
+function LangLive({ lang }) {
+  const ready = useRef(false);
+  const [msg, setMsg] = useState('');
+  useEffect(() => {
+    if (!ready.current) { ready.current = true; return; }
+    setMsg(lang === 'he' ? 'עברית' : 'English');
+  }, [lang]);
+  return <div className="sr-only" aria-live="polite" lang={lang === 'he' ? 'he' : 'en'}>{msg}</div>;
+}
+
 const PAGES = {
   '/': 'chat',
   '/resume': 'resume',
@@ -113,9 +124,12 @@ export default function App() {
   if (needsLogin) {
     if (admin === null) return null;   // a moment while the session is checked
     return (
-      <AdminLogin t={t} lang={lang} setLang={setLang} mobile={mobile}
-        onSignedIn={() => { setAdmin(true); go(ADMIN_PAGES.has(page) ? path : '/admin/settings'); }}
-        onBack={() => go('/')} />
+      <>
+        <LangLive lang={lang} />
+        <AdminLogin t={t} lang={lang} setLang={setLang} mobile={mobile}
+          onSignedIn={() => { setAdmin(true); go(ADMIN_PAGES.has(page) ? path : '/admin/settings'); }}
+          onBack={() => go('/')} />
+      </>
     );
   }
   if (ADMIN_PAGES.has(page) && admin === null) return null;
@@ -141,6 +155,7 @@ export default function App() {
     const navSpace = typing ? '0px' : NAV_SPACE;
     return (
       <div className="m-root m-app" style={{ position: 'relative', display: 'flex', flexDirection: 'column', background: 'var(--bg-app)', overflow: 'hidden' }}>
+        <LangLive lang={lang} />
         <a href="#main" className="skip-link">{t.skip}</a>
         <MobileTopBar t={t} lang={lang} setLang={setLang} go={go} home={page === 'chat'} />
         {page === 'chat' ? (
@@ -164,6 +179,7 @@ export default function App() {
   const crumb = page === 'missing' ? t.notFoundTitle : t.nav[page];
   return (
     <div style={{ display: 'flex', height: 'calc(100vh / var(--ui-zoom))', overflow: 'hidden', position: 'relative' }}>
+      <LangLive lang={lang} />
       <a href="#main" className="skip-link">{t.skip}</a>
       <Sidebar t={t} lang={lang} page={page} go={go} recents={recents}
         activeChatId={chat.messages.length ? chat.chatId : null}
