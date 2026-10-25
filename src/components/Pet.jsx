@@ -172,6 +172,7 @@ export function Pet({ mode = 'idle', pulse, follow = false, crop = 'full', size 
 
   return (
     <div ref={ref} role={decorative ? undefined : interactive ? 'button' : 'img'} tabIndex={interactive ? 0 : undefined}
+      className={interactive && crop !== 'head' ? 'pet-hit' : undefined}
       aria-hidden={decorative ? true : undefined}
       aria-label={decorative ? undefined : interactive ? (label || title || 'Ori') : (title || 'Ori')}
       title={decorative ? undefined : (title || undefined)}

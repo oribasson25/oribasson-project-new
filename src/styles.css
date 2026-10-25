@@ -514,6 +514,21 @@ button:active { transform: scale(0.985); }
 }
 ::selection { background: var(--primary-glow); color: var(--text); }
 :focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+/* The cell is wider than the resting figure. The ring sits on him.
+   A jump reaches a little past it for a moment, then comes back. */
+.pet-hit:focus-visible { outline: none; }
+.pet-hit:focus-visible::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 20%;
+  right: 20%;
+  border-radius: 18px;
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+  pointer-events: none;
+}
 .skip-link {
   position: absolute;
   z-index: 80;
