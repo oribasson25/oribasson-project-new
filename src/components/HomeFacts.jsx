@@ -116,6 +116,12 @@ import { useReducedMotion } from '../lib/hooks.js';
  *     OCR and filing are already said.
  * 78. resume.summary: a feature is owned from the requirement through go-live.
  *     The pilot, the metrics, and the HITL line are already said.
+ * 79. projects hr-recruitment tech: Next.js, Prisma, Neon PostgreSQL.
+ * 80. projects hr-recruitment tech: Tailwind CSS and Vercel Blob.
+ *     Next.js, Prisma, and Neon are already said.
+ * 81. projects 8legs tech: React, Node.js, Vercel Serverless.
+ * 82. projects 8legs tech: Playwright and WhatsApp Cloud API.
+ *     React, Node, and Vercel Serverless are already said.
  */
 const FACTS = [
   { en: 'Live LLM agents at Libra Insurance.', he: 'סוכני LLM בפרודקשן, בליברה ביטוח.' },
@@ -196,6 +202,10 @@ const FACTS = [
   { en: 'The IDF post opened user accounts and set their permissions.', he: 'בצה״ל נפתחו משתמשים ונקבעו ההרשאות שלהם.' },
   { en: 'The back office reads the mail with a multi-modal model.', he: 'הבק-אופיס קורא את המייל במודל מולטי-מודאלי.' },
   { en: 'A feature is owned from the requirement through go-live.', he: 'פיצ׳ר מובל מהדרישה ועד העלייה לאוויר.' },
+  { en: 'The hiring system is Next.js, Prisma, and Neon.', he: 'מערכת הגיוס: Next.js, \u200fPrisma ו-Neon.' },
+  { en: 'Tailwind and Vercel Blob are part of that hiring system.', he: 'במערכת הגיוס גם Tailwind ו-Vercel Blob.' },
+  { en: '8Legs also runs on React, Node, and Vercel Serverless.', he: '8Legs רץ גם על React, \u200fNode ו-Vercel Serverless.' },
+  { en: 'Playwright and the WhatsApp Cloud API are part of 8Legs.', he: 'ב-8Legs גם Playwright ו-WhatsApp Cloud API.' },
 ];
 
 /* A Latin name inside a Hebrew line. The span is the language change;
