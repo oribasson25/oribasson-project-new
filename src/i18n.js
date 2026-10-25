@@ -61,6 +61,7 @@ const STRINGS = {
       error: 'Something went wrong. Please try again.',
     },
     retry: 'Try again',
+    latest: 'Latest',
 
     resumeTitle: 'Resume',
     projectsTitle: 'Projects',
@@ -219,6 +220,7 @@ const STRINGS = {
       error: 'משהו השתבש. נסו שוב.',
     },
     retry: 'נסו שוב',
+    latest: 'לסוף השיחה',
 
     resumeTitle: 'קורות חיים',
     projectsTitle: 'פרויקטים',

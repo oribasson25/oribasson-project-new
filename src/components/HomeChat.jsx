@@ -8,7 +8,7 @@ import { HomeFacts } from './HomeFacts.jsx';
 import { Answer, Steps } from './Answer.jsx';
 import { architectures } from './architectures.js';
 import { diagramProjectId } from '../lib/projectDiagram.js';
-import { useShortScreen } from '../lib/hooks.js';
+import { useReducedMotion, useShortScreen } from '../lib/hooks.js';
 import { useIntroVoice } from '../lib/useIntroVoice.js';
 import { loadMarkdown } from '../lib/loadMarkdown.js';
 
@@ -116,12 +116,14 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
   const [input, setInput] = useState('');
   const [revealing, setRevealing] = useState(null);
   const [figureHot, setFigureHot] = useState(false);
+  const [stuck, setStuck] = useState(true);
   const listRef = useRef(null);
   const threadRef = useRef(null);
   const stick = useRef(true);
   const fieldRef = useRef(null);
   const dir = lang === 'he' ? 'rtl' : 'ltr';
   const short = useShortScreen();
+  const reduced = useReducedMotion();
   const first = firstName(lang);
   const firstPerson = profile.voice === 'first-person';
   const offline = status.chat === 'unavailable';
@@ -176,7 +178,11 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
     const list = listRef.current;
     const thread = threadRef.current;
     if (!list || !thread || typeof ResizeObserver === 'undefined') return undefined;
-    const onScroll = () => { stick.current = list.scrollHeight - list.scrollTop - list.clientHeight < 140; };
+    const onScroll = () => {
+      const next = list.scrollHeight - list.scrollTop - list.clientHeight < 140;
+      stick.current = next;
+      setStuck((prev) => (prev === next ? prev : next));
+    };
     const grew = new ResizeObserver(() => { if (stick.current) list.scrollTop = list.scrollHeight; });
     list.addEventListener('scroll', onScroll, { passive: true });
     grew.observe(thread);
@@ -267,8 +273,9 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
           }}>{t.newChat}</button>
       </div>
 
+      <div style={{ flex: 1, minHeight: 0, position: 'relative' }}>
       <div ref={listRef} style={{
-        flex: 1, minHeight: 0, overflowY: 'auto',
+        height: '100%', minHeight: 0, overflowY: 'auto',
         padding: stacked ? '4px 16px 8px' : '6px 30px 10px',
       }}>
         <div ref={threadRef} role="log" aria-relevant="additions" aria-label={t.threadTitle(first)}
@@ -308,6 +315,16 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
               style={{ justifyContent: 'flex-start', marginTop: 2 }} />
           )}
         </div>
+      </div>
+      {started && !stuck && (
+        <button type="button" className="thread-latest" onClick={() => {
+          const el = listRef.current;
+          if (!el) return;
+          el.scrollTo({ top: el.scrollHeight, behavior: reduced ? 'auto' : 'smooth' });
+          stick.current = true;
+          setStuck(true);
+        }}>{t.latest}</button>
+      )}
       </div>
 
       <div className="screen-only" style={{ flexShrink: 0, padding: stacked ? '6px 16px 14px' : '6px 30px 20px' }}>
