@@ -151,7 +151,9 @@ function readTime(text) {
  * typed. Reduced motion swaps the words in place, with no slide, and leaves
  * each line up a little longer.
  *
- * `hold` freezes the cycle while the recorded hello is playing. `avoidRight`
+ * `hold` freezes the cycle while the recorded hello is playing, and while
+ * the pointer rests on the figure, so a line is not swapped out from under
+ * that look. `avoidRight`
  * keeps every line on the left while the hello bubble occupies that side.
  * The line already on screen does not jump across when the bubble goes away.
  * A new line is already on its side in the first paint, including when motion

@@ -114,6 +114,7 @@ function Notice({ children, dir }) {
 export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
   const [input, setInput] = useState('');
   const [revealing, setRevealing] = useState(null);
+  const [figureHot, setFigureHot] = useState(false);
   const listRef = useRef(null);
   const threadRef = useRef(null);
   const stick = useRef(true);
@@ -198,14 +199,14 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         alignItems: 'center', justifyContent: 'safe center', overflowY: 'auto',
       }}>
         <div className="home-stage hero-rise" style={{ animationDelay: '0.04s' }}>
-          <PetStage size={stacked ? 148 : 230} mode={pending ? 'working' : 'idle'} pulse={chat.pulse} busy={pending} voice={voice} label={t.petJump}>
+          <PetStage size={stacked ? 148 : 230} mode={pending ? 'working' : 'idle'} pulse={chat.pulse} busy={pending} voice={voice} label={t.petJump} onHover={setFigureHot}>
             {!stacked && <IntroBubble t={t} voice={voice} transcript={introText} />}
             {stacked && voice.heard && voice.state !== 'playing' && <IntroBubble t={t} voice={voice} stacked />}
           </PetStage>
           {stacked && !(voice.heard && voice.state !== 'playing') && (
             <IntroBubble t={t} voice={voice} transcript={introText} stacked />
           )}
-          <HomeFacts lang={lang} t={t} hold={voice.state === 'playing'}
+          <HomeFacts lang={lang} t={t} hold={voice.state === 'playing' || figureHot}
             avoidRight={voice.available && (!voice.heard || voice.state === 'playing')} />
         </div>
         <h1 className="hero-title hero-rise" dir={dir} style={{ animationDelay: '0.14s' }}>{t.hello(first)}</h1>

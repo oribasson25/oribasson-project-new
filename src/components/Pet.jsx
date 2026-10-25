@@ -324,7 +324,7 @@ function useVoiceGlitch(voice, reduced) {
  * soft light halo, standing on a faint shadow. Clicking it makes it jump.
  * `voice` (from useIntroVoice) makes it speak along with the recording.
  */
-export function PetStage({ size = 220, mode, pulse, busy, voice, label, children }) {
+export function PetStage({ size = 220, mode, pulse, busy, voice, label, onHover, children }) {
   const reduced = useReducedMotion();
   const { fx, playing } = useVoiceGlitch(voice, reduced);
   // The parent's reactions and the click share one counter, so the latest wins.
@@ -386,7 +386,10 @@ export function PetStage({ size = 220, mode, pulse, busy, voice, label, children
   }, [reduced]);
 
   return (
-    <div ref={stageRef} style={{
+    <div ref={stageRef}
+      onPointerEnter={(e) => { if (e.pointerType === 'mouse' && onHover) onHover(true); }}
+      onPointerLeave={() => { if (onHover) onHover(false); }}
+      style={{
       position: 'relative', width: size * 1.15, height: size * 1.04, flexShrink: 0,
       display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
     }}>
