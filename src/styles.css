@@ -544,6 +544,12 @@ a { color: inherit; }
 [data-ui-lang="he"] :is(div, p, span, li, label, button, a, h1, h2, h3, h4, td, th) {
   unicode-bidi: plaintext;
 }
+/* A side line is a full sentence in the page's language. The rule above would
+   call it English whenever it opens with 8Legs, OCR, API, or Claude, and the
+   Hebrew after that name would run backwards. The slot's direction wins. */
+[data-ui-lang="he"] .home-fact {
+  unicode-bidi: isolate;
+}
 
 /* ── chat answers (markdown) ── */
 .md { line-height: 1.65; word-break: break-word; }
