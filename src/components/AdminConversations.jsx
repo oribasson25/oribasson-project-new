@@ -73,14 +73,12 @@ function Thread({ id, t, lang, onBack, onDeleted, onUnauthorized }) {
           </div>
           <div style={{ maxWidth: 760, display: 'flex', flexDirection: 'column', gap: 12 }}>
             {(convo.messages || []).map((m, i) => (m.role === 'user' ? (
-              <div key={i} dir="auto" style={{
-                alignSelf: 'flex-end', maxWidth: '85%', background: 'var(--primary)', color: 'var(--primary-ink)',
-                padding: '10px 14px', borderRadius: '16px 16px 4px 16px', fontSize: 13.5, lineHeight: 1.6, whiteSpace: 'pre-wrap', wordBreak: 'break-word',
+              <div key={i} dir="auto" className="bubble-user" style={{
+                maxWidth: '85%', padding: '10px 14px', fontSize: 13.5,
               }}>{m.content}</div>
             ) : (
-              <div key={i} dir="auto" style={{
-                alignSelf: 'stretch', background: 'var(--bg-card)', border: '1px solid var(--border)',
-                padding: '12px 15px', borderRadius: '16px 16px 16px 4px', fontSize: 13.5,
+              <div key={i} dir="auto" className="bubble-assistant" style={{
+                padding: '12px 15px', fontSize: 13.5,
               }}>
                 <div className="md" dangerouslySetInnerHTML={{ __html: messageHtml(m.content, t.newTab, mdReady) }} />
               </div>
