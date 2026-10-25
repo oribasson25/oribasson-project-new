@@ -1,0 +1,318 @@
+import { useRef, useState } from 'react';
+import profile from '../../content/profile.js';
+
+/* The 8Legs.ai design primitives — eyebrow, page header, crumbs, two button
+   weights, chips, segmented tabs — redrawn in graphite. */
+
+const svg = (children, size = 18) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{children}</svg>
+);
+
+export const Icons = {
+  chat: svg(<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z" />),
+  resume: svg(<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="8" y1="13" x2="16" y2="13" /><line x1="8" y1="17" x2="13" y2="17" /></>),
+  projects: svg(<><rect x="3" y="3" width="7" height="7" rx="2" /><rect x="14" y="3" width="7" height="7" rx="2" /><rect x="3" y="14" width="7" height="7" rx="2" /><rect x="14" y="14" width="7" height="7" rx="2" /></>),
+  settings: svg(<><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></>),
+  inbox: svg(<><polyline points="22 12 16 12 14 15 10 15 8 12 2 12" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></>),
+  shield: svg(<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />, 16),
+  plusCircle: svg(<><circle cx="12" cy="12" r="9" /><line x1="12" y1="8" x2="12" y2="16" /><line x1="8" y1="12" x2="16" y2="12" /></>, 16),
+  logout: svg(<><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></>, 16),
+  mail: svg(<><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-10 6L2 7" /></>, 15),
+  phone: svg(<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />, 15),
+  globe: svg(<><circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></>, 15),
+  linkedin: (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" /></svg>
+  ),
+  github: (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0 0 12 .3" /></svg>
+  ),
+  download: svg(<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></>, 15),
+  external: svg(<><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></>, 14),
+  sparkle: svg(<><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" /><path d="M18 16l.9 2.1L21 19l-2.1.9L18 22l-.9-2.1L15 19l2.1-.9z" /></>, 14),
+  trash: svg(<><polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" /></>, 15),
+  menu: svg(<><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></>, 20),
+  clock: svg(<><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></>),
+  more: svg(<><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /></>),
+};
+
+export function isHebrew(s) {
+  return /[֐-׿]/.test(String(s || ''));
+}
+
+/* A Latin name inside a Hebrew line. The span does not become its own
+   direction, or the Hebrew after the name would run backwards. */
+const LATIN = /(?:[A-Za-z][A-Za-z0-9+.#&'’/-]*|\d+[A-Za-z][A-Za-z0-9+.#&'’/-]*)/g;
+
+/**
+ * Direction for a line in the page's language. Plaintext would call the line
+ * English whenever it opens with PDF, LLM, Kanban, or Claude.
+ */
+export function bidiProps(text, lang) {
+  if (lang === 'he' && isHebrew(text)) return { dir: 'rtl', style: { unicodeBidi: 'isolate' } };
+  if (lang === 'he' && text) return { dir: 'ltr', lang: 'en' };
+  return { dir: 'ltr' };
+}
+
+/**
+ * The page's direction. A block that opens with a Latin name would otherwise
+ * be read as English, and the Hebrew after that name runs the other way.
+ */
+export function flowDir(lang) {
+  if (lang === 'he') return { dir: 'rtl', style: { unicodeBidi: 'isolate' } };
+  return { dir: 'ltr' };
+}
+
+/** A message stays in its own language even when it opens with a Latin name. */
+export function messageBidi(text) {
+  const he = isHebrew(text);
+  return {
+    dir: he ? 'rtl' : 'ltr',
+    lang: he ? 'he' : 'en',
+    style: { unicodeBidi: 'isolate' },
+  };
+}
+
+/** The words of a Hebrew line, with each Latin name marked as English. */
+export function bidiParts(text, lang) {
+  if (lang !== 'he' || !text || !isHebrew(text)) return text;
+  const parts = [];
+  let last = 0;
+  let n = 0;
+  for (const match of text.matchAll(LATIN)) {
+    const at = match.index ?? 0;
+    if (at > last) parts.push(<span key={`t${n}`} style={{ unicodeBidi: 'normal' }}>{text.slice(last, at)}</span>);
+    parts.push(<span key={`l${n}`} lang="en" style={{ unicodeBidi: 'normal' }}>{match[0]}</span>);
+    n += 1;
+    last = at + match[0].length;
+  }
+  if (!parts.length) return text;
+  if (last < text.length) parts.push(<span key={`t${n}`} style={{ unicodeBidi: 'normal' }}>{text.slice(last)}</span>);
+  return parts;
+}
+
+/** The small label above a section: mono and letter-spaced in English, plain in Hebrew. */
+export function Eyebrow({ children, style }) {
+  const text = typeof children === 'string' ? children : '';
+  const he = !!text && isHebrew(text);
+  const bidi = bidiProps(text, he ? 'he' : 'en');
+  return (
+    <div dir={text ? bidi.dir : 'auto'} lang={bidi.lang} style={he
+      ? { fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', ...bidi.style, ...style }
+      : {
+          fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 600, letterSpacing: '0.14em',
+          textTransform: 'uppercase', color: 'var(--text-muted)', ...style,
+        }}>{text ? bidiParts(text, he ? 'he' : 'en') : children}</div>
+  );
+}
+
+/** Portfolio / Resume — where you are, across the top of the content column. */
+export function Crumbs({ trail, right }) {
+  return (
+    <div className="screen-only" style={{
+      minHeight: 56, height: 'auto', minWidth: 0, flexShrink: 0, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 10,
+      padding: '0 34px', borderBottom: '1px solid var(--border)',
+      background: 'var(--bg-app)', position: 'relative', zIndex: 2,
+    }}>
+      {trail.filter(Boolean).map((part, i, all) => (
+        <span key={i} style={{ display: 'contents' }}>
+          {i > 0 && <span style={{ color: 'var(--text-muted)', fontSize: 13, opacity: 0.6 }}>/</span>}
+          <span dir="auto" style={{
+            fontSize: 13.5, fontWeight: i === all.length - 1 ? 650 : 500,
+            letterSpacing: i === all.length - 1 ? '-0.01em' : '0',
+            color: i === all.length - 1 ? 'var(--text)' : 'var(--text-2)',
+            maxWidth: 260, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+          }}>{part}</span>
+        </span>
+      ))}
+      <div style={{ marginInlineStart: 'auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'flex-end', gap: 10, minWidth: 0 }}>{right}</div>
+    </div>
+  );
+}
+
+/** A heading in the page's language, even when it opens with AI, LLM, or a name. */
+function headingBidi(text) {
+  if (typeof text !== 'string' || !isHebrew(text)) return null;
+  return bidiProps(text, 'he');
+}
+
+export function PageHeader({ eyebrow, title, subtitle, actions, size = 36 }) {
+  const titleBidi = headingBidi(title);
+  const subBidi = headingBidi(subtitle);
+  return (
+    <div style={{ marginBottom: 28 }}>
+      {eyebrow && <Eyebrow style={{ marginBottom: 12 }}>{eyebrow}</Eyebrow>}
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
+        <h1 dir={titleBidi ? titleBidi.dir : 'auto'} lang={titleBidi ? 'he' : undefined} style={{ margin: 0, fontSize: size, fontWeight: 750, letterSpacing: '-0.04em', lineHeight: 1.04, color: 'var(--text)', ...(titleBidi ? titleBidi.style : null) }}>{titleBidi ? bidiParts(title, 'he') : title}</h1>
+        {actions && <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', paddingBottom: 2 }}>{actions}</div>}
+      </div>
+      {subtitle && (
+        <div dir={subBidi ? subBidi.dir : 'auto'} lang={subBidi ? 'he' : undefined} style={{ color: 'var(--text-2)', fontSize: 14.5, marginTop: 8, fontWeight: 500, lineHeight: 1.45, ...(subBidi ? subBidi.style : null) }}>
+          {subBidi ? bidiParts(subtitle, 'he') : subtitle}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * On paper the sidebar is gone, so a page carries its own contact line.
+ * `name` leads a page whose heading is the section, not the person.
+ * Both are hidden on screen.
+ */
+export function PrintContact({ name }) {
+  const c = profile.contact || {};
+  const linkedin = c.linkedin ? c.linkedin.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : '';
+  const bits = [c.email, c.phone, linkedin].filter(Boolean);
+  if (!name && !bits.length) return null;
+  return (
+    <>
+      {name ? <p className="print-name">{name}</p> : null}
+      {bits.length ? <p className="print-line">{bits.join(' · ')}</p> : null}
+    </>
+  );
+}
+
+/** Two weights, one shape: `primary` (graphite, at most one per screen) and `ghost`. */
+export function Btn({ variant = 'ghost', icon, children, onClick, title, disabled, danger, style, size = 'md', href, type, download, sameTab, note, name }) {
+  const pad = size === 'sm' ? '7px 12px' : '10px 17px';
+  const font = size === 'sm' ? 12.5 : 13;
+  const primary = variant === 'primary';
+  const Tag = href ? 'a' : 'button';
+  const cls = ['btn', primary ? 'is-primary' : '', danger ? 'is-danger' : '', size === 'sm' ? 'btn-sm' : ''].filter(Boolean).join(' ');
+  // A name replaces the visible words for a reader. The new-tab note has to
+  // travel with it, or the shorter label drops that warning.
+  const spoken = name ? (note ? `${name}. ${note}` : name) : undefined;
+  return (
+    <Tag href={href} target={href && !download && !sameTab ? '_blank' : undefined} rel={href ? 'noopener noreferrer' : undefined}
+      download={download} type={href ? undefined : type || 'button'}
+      onClick={onClick} title={title} disabled={disabled} aria-label={spoken}
+      className={cls}
+      style={{
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 7,
+        position: 'relative',
+        padding: pad, borderRadius: 'var(--r-md)', fontSize: font, fontWeight: 600,
+        whiteSpace: 'nowrap', cursor: disabled ? 'default' : 'pointer', textDecoration: 'none',
+        opacity: disabled ? 0.45 : 1,
+        ...style,
+      }}>
+      {icon && <span style={{ display: 'flex', alignItems: 'center' }}>{icon}</span>}
+      {children}
+      {note && <span className="sr-only">{note}</span>}
+    </Tag>
+  );
+}
+
+export function IconBtn({ onClick, title, children, danger, style, disabled }) {
+  const [hot, setHot] = useState(false);
+  return (
+    <button type="button" onClick={onClick} title={title} aria-label={title} disabled={disabled}
+      onMouseEnter={() => setHot(true)} onMouseLeave={() => setHot(false)}
+      style={{
+        width: 30, height: 30, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: hot ? 'var(--bg-hover)' : 'transparent',
+        color: hot ? (danger ? 'var(--danger)' : 'var(--text)') : 'var(--text-muted)',
+        ...style,
+      }}>{children}</button>
+  );
+}
+
+export function Chip({ children, mono, style, title }) {
+  // Skill and tool names are the resume's English labels in both languages.
+  const latin = typeof children === 'string' && children.trim() && !isHebrew(children);
+  return (
+    <span lang={latin ? 'en' : undefined} title={title} style={{
+      display: 'inline-flex', alignItems: 'center', gap: 6, padding: '3px 10px',
+      borderRadius: 999, fontSize: 12, fontWeight: 600, lineHeight: 1.5,
+      background: 'var(--bg-app)', color: 'var(--text-2)', border: '1px solid var(--border)',
+      fontFamily: mono ? 'var(--mono)' : 'inherit', whiteSpace: 'nowrap', ...style,
+    }}>{children}</span>
+  );
+}
+
+export function SegTabs({ items, value, onChange, style, small, label }) {
+  const refs = useRef([]);
+  // One tab stop for the pair. Arrow keys move within it, the way a
+  // two-choice control does, and the chosen language is the one that stays
+  // in the tab order. A held key must not keep flipping: two choices would
+  // land on whichever one the repeat happened to release.
+  function move(from, dir) {
+    const next = (from + dir + items.length) % items.length;
+    onChange(items[next].id);
+    refs.current[next]?.focus();
+  }
+  return (
+    <div role="radiogroup" aria-label={label} style={{
+      display: 'inline-flex', gap: 3, padding: 3, borderRadius: 'var(--r-md)',
+      background: 'var(--bg-panel)', border: '1px solid var(--border)', ...style,
+    }}>
+      {items.map((it, i) => {
+        const on = value === it.id;
+        return (
+          <button key={it.id} ref={(el) => { refs.current[i] = el; }} type="button" role="radio" aria-checked={on}
+            tabIndex={on ? 0 : -1}
+            onClick={() => onChange(it.id)} title={it.title} lang={it.lang}
+            aria-label={it.title || it.label}
+            onKeyDown={(e) => {
+              if (e.altKey || e.metaKey || e.ctrlKey || e.shiftKey || e.repeat) return;
+              const forward = e.key === 'ArrowRight' || e.key === 'ArrowDown';
+              const back = e.key === 'ArrowLeft' || e.key === 'ArrowUp';
+              if (!forward && !back) return;
+              e.preventDefault();
+              move(i, forward ? 1 : -1);
+            }}
+            className={on ? 'seg-tab is-on' : 'seg-tab'}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              padding: small ? '4px 10px' : '6px 14px', borderRadius: 8, fontSize: small ? 12 : 12.5,
+              fontWeight: on ? 700 : 600,
+              border: '1px solid transparent',
+            }}>{it.label}</button>
+        );
+      })}
+    </div>
+  );
+}
+
+export function EmptyState({ icon, title, subtitle, action }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, padding: '40px 48px' }}>
+      <div style={{
+        width: 48, height: 48, borderRadius: 14,
+        background: 'var(--bg-hover)', border: '1px solid var(--border)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)',
+      }}>{icon}</div>
+      <div>
+        <div dir="auto" style={{ color: 'var(--text)', fontWeight: 700, textAlign: 'center', marginBottom: 4 }}>{title}</div>
+        {subtitle && <div dir="auto" style={{ color: 'var(--text-muted)', fontSize: 13, textAlign: 'center' }}>{subtitle}</div>}
+      </div>
+      {action}
+    </div>
+  );
+}
+
+export function StatusDot({ on, size = 7 }) {
+  return <span style={{
+    width: size, height: size, borderRadius: '50%', flexShrink: 0, display: 'inline-block',
+    background: on ? 'var(--success)' : 'var(--text-muted)',
+    boxShadow: on ? '0 0 8px rgba(34,197,94,0.6)' : 'none',
+  }} />;
+}
+
+/** A section card: the shape 8Legs' Settings is built from. */
+export function Section({ id, title, children, right, pad = '16px 22px' }) {
+  const titleBidi = headingBidi(title);
+  return (
+    <div id={id} style={{ background: 'var(--bg-card)', borderRadius: 'var(--r-lg)', border: '1px solid var(--border)', overflow: 'hidden' }}>
+      {title && (
+        <div style={{
+          padding: '18px 22px 15px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 10,
+          fontSize: 15, fontWeight: 700, letterSpacing: '-0.01em', color: 'var(--text)',
+        }}>
+          <h2 tabIndex={id ? -1 : undefined} dir={titleBidi ? titleBidi.dir : 'auto'} lang={titleBidi ? 'he' : undefined} style={{ flex: 1, minWidth: 0, margin: 0, fontSize: 15, fontWeight: 700, letterSpacing: '-0.01em', lineHeight: 'inherit', ...(titleBidi ? titleBidi.style : null) }}>{titleBidi ? bidiParts(title, 'he') : title}</h2>
+          {right}
+        </div>
+      )}
+      <div style={{ padding: pad }}>{children}</div>
+    </div>
+  );
+}
