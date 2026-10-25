@@ -128,15 +128,27 @@ export function Crumbs({ trail, right }) {
   );
 }
 
+/** A heading in the page's language, even when it opens with AI, LLM, or a name. */
+function headingBidi(text) {
+  if (typeof text !== 'string' || !isHebrew(text)) return null;
+  return bidiProps(text, 'he');
+}
+
 export function PageHeader({ eyebrow, title, subtitle, actions, size = 36 }) {
+  const titleBidi = headingBidi(title);
+  const subBidi = headingBidi(subtitle);
   return (
     <div style={{ marginBottom: 28 }}>
       {eyebrow && <Eyebrow style={{ marginBottom: 12 }}>{eyebrow}</Eyebrow>}
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
-        <h1 dir="auto" style={{ margin: 0, fontSize: size, fontWeight: 750, letterSpacing: '-0.04em', lineHeight: 1.04, color: 'var(--text)' }}>{title}</h1>
+        <h1 dir={titleBidi ? titleBidi.dir : 'auto'} lang={titleBidi ? 'he' : undefined} style={{ margin: 0, fontSize: size, fontWeight: 750, letterSpacing: '-0.04em', lineHeight: 1.04, color: 'var(--text)', ...(titleBidi ? titleBidi.style : null) }}>{titleBidi ? bidiParts(title, 'he') : title}</h1>
         {actions && <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', paddingBottom: 2 }}>{actions}</div>}
       </div>
-      {subtitle && <div dir="auto" style={{ color: 'var(--text-2)', fontSize: 14.5, marginTop: 8, fontWeight: 500, lineHeight: 1.45 }}>{subtitle}</div>}
+      {subtitle && (
+        <div dir={subBidi ? subBidi.dir : 'auto'} lang={subBidi ? 'he' : undefined} style={{ color: 'var(--text-2)', fontSize: 14.5, marginTop: 8, fontWeight: 500, lineHeight: 1.45, ...(subBidi ? subBidi.style : null) }}>
+          {subBidi ? bidiParts(subtitle, 'he') : subtitle}
+        </div>
+      )}
     </div>
   );
 }
@@ -269,6 +281,7 @@ export function StatusDot({ on, size = 7 }) {
 
 /** A section card: the shape 8Legs' Settings is built from. */
 export function Section({ id, title, children, right, pad = '16px 22px' }) {
+  const titleBidi = headingBidi(title);
   return (
     <div id={id} style={{ background: 'var(--bg-card)', borderRadius: 'var(--r-lg)', border: '1px solid var(--border)', overflow: 'hidden' }}>
       {title && (
@@ -276,7 +289,7 @@ export function Section({ id, title, children, right, pad = '16px 22px' }) {
           padding: '18px 22px 15px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 10,
           fontSize: 15, fontWeight: 700, letterSpacing: '-0.01em', color: 'var(--text)',
         }}>
-          <h2 tabIndex={id ? -1 : undefined} dir="auto" style={{ flex: 1, minWidth: 0, margin: 0, fontSize: 15, fontWeight: 700, letterSpacing: '-0.01em', lineHeight: 'inherit' }}>{title}</h2>
+          <h2 tabIndex={id ? -1 : undefined} dir={titleBidi ? titleBidi.dir : 'auto'} lang={titleBidi ? 'he' : undefined} style={{ flex: 1, minWidth: 0, margin: 0, fontSize: 15, fontWeight: 700, letterSpacing: '-0.01em', lineHeight: 'inherit', ...(titleBidi ? titleBidi.style : null) }}>{titleBidi ? bidiParts(title, 'he') : title}</h2>
           {right}
         </div>
       )}
