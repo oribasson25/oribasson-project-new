@@ -181,10 +181,8 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
           className="read-more"
           style={{
             alignSelf: 'flex-start', display: 'inline-flex', alignItems: 'center', gap: 5,
-            background: 'transparent', padding: '6px 2px', fontSize: 12, fontWeight: 650, color: 'var(--text-2)',
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-2)'; }}>
+            background: 'transparent', padding: '6px 2px', fontSize: 12, fontWeight: 650,
+          }}>
           {expanded ? t.showLess : t.readMore}
             <span style={{ display: 'inline-block', transform: expanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.22s var(--ease)' }}>▾</span>
         </button>

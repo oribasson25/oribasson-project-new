@@ -398,9 +398,96 @@ button {
 }
 button:active { transform: scale(0.985); }
 .seg-tab { background: transparent; color: var(--text-2); }
-.seg-tab:hover { background: var(--bg-hover); color: var(--text); }
+.seg-tab:hover,
+.seg-tab:focus-visible { background: var(--bg-hover); color: var(--text); }
 .seg-tab.is-on,
-.seg-tab.is-on:hover { background: var(--sel); color: var(--sel-ink); }
+.seg-tab.is-on:hover,
+.seg-tab.is-on:focus-visible { background: var(--sel); color: var(--sel-ink); }
+
+/* The same ink a pointer draws, for the keyboard too. A phone has no hover
+   to get stuck after a tap, so the wash only exists where a pointer can leave. */
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 42px;
+  padding: 0 12px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  width: 100%;
+  background: transparent;
+  color: var(--text-2);
+  font-weight: 500;
+  font-size: 14px;
+  text-align: start;
+  letter-spacing: -0.011em;
+  border: 1px solid transparent;
+}
+.nav-btn[data-on="true"] {
+  background: var(--primary-dim);
+  color: var(--text);
+  font-weight: 650;
+  border-color: var(--primary-soft);
+}
+.nav-ico { display: flex; align-items: center; opacity: 0.75; }
+.nav-btn[data-on="true"] .nav-ico { opacity: 1; }
+.nav-btn:focus-visible { background: var(--bg-hover); color: var(--text); }
+.nav-btn[data-on="true"]:focus-visible { background: var(--primary-dim); color: var(--text); }
+
+.btn {
+  background: var(--bg-card);
+  color: var(--text-2);
+  border: 1px solid var(--border);
+  transition: background 0.18s var(--ease), color 0.18s var(--ease), border-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+.btn.is-danger { color: var(--danger); }
+.btn.is-primary {
+  background: var(--primary);
+  color: var(--primary-ink);
+  border-color: transparent;
+  box-shadow: 0 2px 10px var(--primary-glow);
+}
+.btn:focus-visible { background: var(--bg-hover); color: var(--text); border-color: var(--primary-soft); }
+.btn.is-danger:focus-visible { color: var(--danger); border-color: var(--border); }
+.btn.is-primary:focus-visible {
+  background: var(--primary-hover);
+  color: var(--primary-ink);
+  border-color: transparent;
+  box-shadow: 0 4px 18px var(--primary-glow);
+}
+
+.recent-row { background: transparent; color: var(--text-2); }
+.recent-row[data-on="true"] { background: var(--bg-hover); color: var(--text); font-weight: 650; }
+.recent-row:focus-visible { background: var(--bg-hover); }
+.contact-row { color: var(--text-2); }
+.contact-row:focus-visible { color: var(--text); }
+.read-more { color: var(--text-2); }
+.read-more:focus-visible { color: var(--text); }
+.convo-row { background: transparent; }
+.convo-row:focus-visible { background: var(--bg-panel); }
+.quiet { color: var(--text-muted); }
+.quiet:focus-visible { color: var(--text); }
+.quiet.is-armed { color: var(--danger); }
+.quiet.is-armed:focus-visible { color: var(--danger); }
+.quiet.is-danger:focus-visible { color: var(--danger); }
+@media (hover: hover) {
+  .nav-btn[data-on="false"]:hover { background: var(--bg-hover); color: var(--text); }
+  .btn:hover:not(:disabled) { background: var(--bg-hover); color: var(--text); border-color: var(--primary-soft); }
+  .btn.is-danger:hover:not(:disabled) { color: var(--danger); border-color: var(--border); }
+  .btn.is-primary:hover:not(:disabled) {
+    background: var(--primary-hover);
+    color: var(--primary-ink);
+    border-color: transparent;
+    box-shadow: 0 4px 18px var(--primary-glow);
+  }
+  .recent-row[data-on="false"]:hover { background: var(--bg-hover); }
+  .contact-row:hover,
+  .read-more:hover,
+  .quiet:hover { color: var(--text); }
+  .quiet.is-armed:hover,
+  .quiet.is-danger:hover { color: var(--danger); }
+  .convo-row:hover { background: var(--bg-panel); }
+}
 :focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
 .skip-link {
   position: absolute;

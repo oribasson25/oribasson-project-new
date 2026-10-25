@@ -141,12 +141,11 @@ export function AdminConversations({ t, lang, onUnauthorized, stacked }) {
         <div style={{ background: 'var(--bg-card)', borderRadius: 'var(--r-lg)', border: '1px solid var(--border)', overflow: 'hidden' }}>
           {list.map((c, i) => (
             <button key={c.id} type="button" onClick={() => setOpen(c.id)}
+              className="convo-row"
               style={{
                 width: '100%', display: 'flex', alignItems: 'center', gap: 14, padding: '13px 18px', textAlign: 'start',
-                background: 'transparent', borderTop: i ? '1px solid var(--border)' : 'none',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-panel)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}>
+                borderTop: i ? '1px solid var(--border)' : 'none',
+              }}>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div dir="auto" style={{ fontSize: 13.5, fontWeight: 650, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.title || '…'}</div>
                 <div style={{ display: 'flex', gap: 8, marginTop: 4, fontSize: 11.5, color: 'var(--text-muted)', flexWrap: 'wrap' }}>

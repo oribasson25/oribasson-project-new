@@ -33,20 +33,8 @@ export function BrandMark({ lang, mark = 34, text = 19, onClick, style }) {
 function NavButton({ active, icon, label, onClick }) {
   return (
     <button type="button" onClick={onClick} aria-current={active ? 'page' : undefined}
-      style={{
-        display: 'flex', alignItems: 'center', gap: 10, height: 42, padding: '0 12px',
-        borderRadius: 12, flexShrink: 0, width: '100%',
-        background: active ? 'var(--primary-dim)' : 'transparent',
-        color: active ? 'var(--text)' : 'var(--text-2)',
-        fontWeight: active ? 650 : 500,
-        fontSize: 14, textAlign: 'start', letterSpacing: '-0.011em',
-        transition: 'background 0.18s var(--ease), color 0.18s var(--ease), border-color 0.18s var(--ease)',
-        border: `1px solid ${active ? 'var(--primary-soft)' : 'transparent'}`,
-      }}
-      onMouseEnter={(e) => { if (!active) { e.currentTarget.style.background = 'var(--bg-hover)'; e.currentTarget.style.color = 'var(--text)'; } }}
-      onMouseLeave={(e) => { if (!active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-2)'; } }}
-    >
-      <span style={{ display: 'flex', alignItems: 'center', opacity: active ? 1 : 0.75 }}>{icon}</span>
+      className="nav-btn" data-on={active ? 'true' : 'false'}>
+      <span className="nav-ico">{icon}</span>
       {label}
     </button>
   );
@@ -81,9 +69,7 @@ export function ContactCard({ t }) {
         {rows.map((r) => (
           <a key={r.key} href={r.href(c[r.key])} target={r.key === 'email' || r.key === 'phone' ? undefined : '_blank'} rel="noopener noreferrer"
             className="contact-row"
-            style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, fontWeight: 600, color: 'var(--text-2)', textDecoration: 'none', minWidth: 0 }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-2)'; }}>
+            style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, fontWeight: 600, textDecoration: 'none', minWidth: 0 }}>
             <span style={{ display: 'flex', flexShrink: 0, color: 'var(--text-muted)' }}>{r.icon}</span>
             <span dir="ltr" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.label(c[r.key])}</span>
             {r.key !== 'email' && r.key !== 'phone' && <span className="sr-only">{t.newTab}</span>}
@@ -181,9 +167,8 @@ export function ClearHistoryButton({ t, onClear, style }) {
       setArmed(false);
       onClear();
     }}
-      style={{ ...style, color: armed ? 'var(--danger)' : 'var(--text-muted)' }}
-      onMouseEnter={(e) => { if (!armed) e.currentTarget.style.color = 'var(--text)'; }}
-      onMouseLeave={(e) => { if (!armed) e.currentTarget.style.color = 'var(--text-muted)'; }}
+      className={armed ? 'quiet is-armed' : 'quiet'}
+      style={style}
     >
       <span aria-live="polite">{armed ? t.clearHistoryConfirm : t.clearHistory}</span>
     </button>
@@ -200,14 +185,11 @@ export function RecentList({ t, recents, activeChatId, onPickRecent }) {
     return (
       <button key={c.id} type="button" onClick={() => onPickRecent(c)} title={title} aria-current={on ? 'true' : undefined}
         className="recent-row"
+        data-on={on ? 'true' : 'false'}
         style={{
           display: 'flex', alignItems: 'center', flexShrink: 0, width: '100%', textAlign: 'start', padding: '7px 13px', borderRadius: 9,
-          background: on ? 'var(--bg-hover)' : 'transparent',
-          color: on ? 'var(--text)' : 'var(--text-2)', fontSize: 12.5, lineHeight: 1.45,
-          fontWeight: on ? 650 : 500,
+          fontSize: 12.5, lineHeight: 1.45, fontWeight: on ? 650 : 500,
         }}
-        onMouseEnter={(e) => { if (!on) e.currentTarget.style.background = 'var(--bg-hover)'; }}
-        onMouseLeave={(e) => { if (!on) e.currentTarget.style.background = 'transparent'; }}
       >
         <span dir="auto" style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, overflow: 'hidden', wordBreak: 'break-word', minWidth: 0 }}>{title}</span>
       </button>
@@ -263,9 +245,8 @@ export function Sidebar({ t, lang, page, go, recents, activeChatId, onPickRecent
         <div style={{ padding: '0 20px 8px', display: 'flex', alignItems: 'center', gap: 8 }}>
           <Eyebrow style={{ flex: 1 }}>{t.recent}</Eyebrow>
           <button type="button" onClick={onNewChat} title={t.newChat} aria-label={t.newChat}
-            style={{ display: 'flex', alignItems: 'center', background: 'transparent', color: 'var(--text-muted)', padding: 2, borderRadius: 7 }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; }}
+            className="quiet"
+            style={{ display: 'flex', alignItems: 'center', background: 'transparent', padding: 2, borderRadius: 7 }}
           >{Icons.plusCircle}</button>
         </div>
         <div style={{ flex: '0 1 auto', minHeight: 0, overflowY: 'auto', padding: '0 12px 4px', display: 'flex', flexDirection: 'column', gap: 1 }}>
@@ -294,16 +275,14 @@ export function Sidebar({ t, lang, page, go, recents, activeChatId, onPickRecent
               <div style={{ fontSize: 10.5, color: 'var(--text-muted)', marginTop: 1 }}>{t.administrator}</div>
             </div>
             <button type="button" onClick={onSignOut} title={t.signOut} aria-label={t.signOut}
-              style={{ display: 'flex', alignItems: 'center', color: 'var(--text-muted)', background: 'transparent', padding: 5, borderRadius: 8 }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--danger)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; }}
+              className="quiet is-danger"
+              style={{ display: 'flex', alignItems: 'center', background: 'transparent', padding: 5, borderRadius: 8 }}
             >{Icons.logout}</button>
           </div>
         ) : (
           <button type="button" onClick={() => go('/admin')}
-            style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '6px 9px', background: 'transparent', color: 'var(--text-muted)', fontSize: 11.5, fontWeight: 600, borderRadius: 8 }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--text)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-muted)'; }}
+            className="quiet"
+            style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '6px 9px', background: 'transparent', fontSize: 11.5, fontWeight: 600, borderRadius: 8 }}
           >{Icons.shield}{t.adminSignIn}</button>
         )}
       </div>

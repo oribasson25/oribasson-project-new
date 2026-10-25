@@ -90,27 +90,23 @@ export function PageHeader({ eyebrow, title, subtitle, actions, size = 36 }) {
 
 /** Two weights, one shape: `primary` (graphite, at most one per screen) and `ghost`. */
 export function Btn({ variant = 'ghost', icon, children, onClick, title, disabled, danger, style, size = 'md', href, type, download, sameTab, note }) {
-  const [hot, setHot] = useState(false);
   const pad = size === 'sm' ? '7px 12px' : '10px 17px';
   const font = size === 'sm' ? 12.5 : 13;
   const primary = variant === 'primary';
-  const look = primary
-    ? { background: hot ? 'var(--primary-hover)' : 'var(--primary)', color: 'var(--primary-ink)', border: '1px solid transparent', boxShadow: hot ? '0 4px 18px var(--primary-glow)' : '0 2px 10px var(--primary-glow)' }
-    : { background: hot ? 'var(--bg-hover)' : 'var(--bg-card)', color: danger ? 'var(--danger)' : (hot ? 'var(--text)' : 'var(--text-2)'), border: `1px solid ${hot && !danger ? 'var(--primary-soft)' : 'var(--border)'}` };
   const Tag = href ? 'a' : 'button';
+  const cls = ['btn', primary ? 'is-primary' : '', danger ? 'is-danger' : '', size === 'sm' ? 'btn-sm' : ''].filter(Boolean).join(' ');
   return (
     <Tag href={href} target={href && !download && !sameTab ? '_blank' : undefined} rel={href ? 'noopener noreferrer' : undefined}
       download={download} type={href ? undefined : type || 'button'}
       onClick={onClick} title={title} disabled={disabled}
-      className={size === 'sm' ? 'btn-sm' : undefined}
-      onMouseEnter={() => !disabled && setHot(true)} onMouseLeave={() => setHot(false)}
+      className={cls}
       style={{
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 7,
         position: 'relative',
         padding: pad, borderRadius: 'var(--r-md)', fontSize: font, fontWeight: 600,
         whiteSpace: 'nowrap', cursor: disabled ? 'default' : 'pointer', textDecoration: 'none',
-        opacity: disabled ? 0.45 : 1, transition: 'background 0.18s var(--ease), color 0.18s var(--ease), border-color 0.18s var(--ease), box-shadow 0.18s var(--ease)',
-        ...look, ...style,
+        opacity: disabled ? 0.45 : 1,
+        ...style,
       }}>
       {icon && <span style={{ display: 'flex', alignItems: 'center' }}>{icon}</span>}
       {children}
