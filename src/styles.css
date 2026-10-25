@@ -349,8 +349,9 @@ body {
     margin-top: 10px;
     transform: none;
     text-align: center;
-    /* Two lines, centered, so a short line and a long one leave the name where it is. */
-    min-height: 44px;
+    /* The longest line wraps to three. The slot holds that, so a short line
+       does not pull the name up and a long one does not push it down. */
+    min-height: 64px;
     display: flex;
     align-items: center;
     justify-content: center;
