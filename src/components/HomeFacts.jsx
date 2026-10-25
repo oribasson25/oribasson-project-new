@@ -143,6 +143,18 @@ import { useReducedMotion } from '../lib/hooks.js';
  *     the integrations. The wire and Postman are already said.
  * 96. projects hr-recruitment and 8legs year: 2026.
  * 97. projects 8legs tech: Python on the platform. The custom tools are already said.
+ * 98. projects 8legs highlight "Autopilot": the wizard also sets up email.
+ *     The prompt, the knowledge, the channel, and the tables are already said.
+ * 99. projects hr-recruitment description: an internal system for the HR team.
+ * 100. projects hr-recruitment description: the strongest candidates for a role
+ *     surface first. The score and the one-line reason are already said.
+ * 101. projects live-call-intelligence tagline: event-driven. The mid-call
+ *     work is already said.
+ * 102. projects back-office-agent description: the agent is autonomous.
+ * 103. resume.education[0] details: Active Directory security policy.
+ *     Group Policy is already said.
+ * 104. resume.summary: critical decision points, from supervising the desk.
+ * 105. projects hr-recruitment description: jobs and candidates, beside the board.
  */
 const FACTS = [
   { en: 'Live LLM agents at Libra Insurance.', he: 'סוכני LLM בפרודקשן, בליברה ביטוח.' },
@@ -242,6 +254,14 @@ const FACTS = [
   { en: 'Those Postman collections are what unblocked the CRM integrations.', he: 'אוספי ה-Postman הם מה שפתח את האינטגרציה ל-CRM.' },
   { en: 'The hiring system and 8Legs both date from 2026.', he: 'גם מערכת הגיוס וגם 8Legs מ-2026.' },
   { en: 'Python is part of the 8Legs platform, not only its tools.', he: 'Python הוא חלק מפלטפורמת 8Legs, לא רק מהכלים.' },
+  { en: 'The 8Legs wizard also sets up the email.', he: 'האשף של 8Legs מגדיר גם את המייל.' },
+  { en: 'The hiring system is internal, for Libra\'s HR team.', he: 'מערכת הגיוס פנימית, לצוות משאבי האנוש בליברה.' },
+  { en: 'The strongest candidates for each role come up first.', he: 'המועמדים החזקים לכל תפקיד עולים ראשונים.' },
+  { en: 'The live-call agent is event-driven.', he: 'סוכן השיחה מונחה אירועים.' },
+  { en: 'The back-office agent runs on its own.', he: 'הבק-אופיס רץ בעצמו.' },
+  { en: 'The certificate covered Active Directory security policy.', he: 'ההסמכה כללה מדיניות אבטחה ב-Active Directory.' },
+  { en: 'Critical decision points in a claim, from the work on the desk.', he: 'נקודות ההחלטה הקריטיות בתביעה, מהעבודה במוקד.' },
+  { en: 'The hiring system keeps the jobs and the candidates.', he: 'מערכת הגיוס שומרת את המשרות ואת המועמדים.' },
 ];
 
 /* A Latin name inside a Hebrew line. The span is the language change;
