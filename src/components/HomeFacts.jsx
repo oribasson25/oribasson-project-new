@@ -100,6 +100,22 @@ import { useReducedMotion } from '../lib/hooks.js';
  *     are already said.
  * 69. resume.skills Infrastructure & Networking: Windows Server, beside the
  *     rest of that list. Active Directory and Cisco are already said.
+ * 70. projects hr-recruitment description: a resume library, beside the board.
+ * 71. projects 8legs highlight "Privacy": masked before the conversation
+ *     history. The model is already said.
+ * 72. projects 8legs highlight "Autopilot": the wizard writes the prompt,
+ *     the knowledge, and the channel. Asking about the business is already said.
+ * 73. projects hr-recruitment highlight "Recruitment pipeline": hired,
+ *     rejected, ghosted, or withdrew. The path to an offer is already said.
+ * 74. projects 8legs highlight "Chatbots as code": a private GitHub repo.
+ *     The repo, the branches, the CLI, and the A/B tests are already said.
+ * 75. projects hr-recruitment role: designed and built full-stack, at Libra.
+ * 76. resume.experience[2] first highlight: user accounts and their
+ *     permissions. Active Directory and Cisco are already said.
+ * 77. projects back-office-agent tagline: a multi-modal model reads the mail.
+ *     OCR and filing are already said.
+ * 78. resume.summary: a feature is owned from the requirement through go-live.
+ *     The pilot, the metrics, and the HITL line are already said.
  */
 const FACTS = [
   { en: 'Live LLM agents at Libra Insurance.', he: 'סוכני LLM בפרודקשן, בליברה ביטוח.' },
@@ -171,6 +187,15 @@ const FACTS = [
   { en: 'Each 8Legs chatbot keeps its own branches.', he: 'לכל צ׳טבוט ב-8Legs יש ענפים משלו.' },
   { en: 'The certificate covered network security and how traffic is filtered.', he: 'ההסמכה כללה אבטחת רשת ואיך מסננים תעבורה.' },
   { en: 'Windows Server sits with the rest of the networking.', he: 'Windows Server יושב עם שאר עבודת הרשת.' },
+  { en: 'The hiring system keeps a resume library.', he: 'מערכת הגיוס שומרת מאגר קורות חיים.' },
+  { en: 'On 8Legs, card and ID numbers stay out of the chat history.', he: 'ב-8Legs, כרטיס ותעודת זהות לא נכנסים להיסטוריית השיחה.' },
+  { en: 'The 8Legs wizard writes the prompt, the knowledge, and the channel.', he: 'האשף של 8Legs כותב פרומפט, ידע וערוץ.' },
+  { en: 'The board\'s last stages: hired, rejected, ghosted, or withdrew.', he: 'בלוח, השלבים האחרונים הם גיוס, דחייה, היעלמות או חזרה.' },
+  { en: 'Each 8Legs chatbot gets a private GitHub repo.', he: 'לכל צ׳טבוט ב-8Legs יש ריפו GitHub פרטי.' },
+  { en: 'The hiring system was designed and built full-stack at Libra.', he: 'מערכת הגיוס עוצבה ונבנתה ב-full-stack, בליברה.' },
+  { en: 'The IDF post opened user accounts and set their permissions.', he: 'בצה״ל נפתחו משתמשים ונקבעו ההרשאות שלהם.' },
+  { en: 'The back office reads the mail with a multi-modal model.', he: 'הבק-אופיס קורא את המייל במודל מולטי-מודאלי.' },
+  { en: 'A feature is owned from the requirement through go-live.', he: 'פיצ׳ר מובל מהדרישה ועד העלייה לאוויר.' },
 ];
 
 /* A Latin name inside a Hebrew line. The span is the language change;
