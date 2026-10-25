@@ -69,6 +69,7 @@ export function ContactCard({ t }) {
         {rows.map((r) => (
           <a key={r.key} href={r.href(c[r.key])} target={r.key === 'email' || r.key === 'phone' ? undefined : '_blank'} rel="noopener noreferrer"
             className="contact-row"
+            title={r.key === 'email' || r.key === 'phone' ? r.label(c[r.key]) : c[r.key]}
             style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, fontWeight: 600, textDecoration: 'none', minWidth: 0 }}>
             <span style={{ display: 'flex', flexShrink: 0, color: 'var(--text-muted)' }}>{r.icon}</span>
             <span dir="ltr" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.label(c[r.key])}</span>
