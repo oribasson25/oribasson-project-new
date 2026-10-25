@@ -226,8 +226,8 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
       )}
 
       <div dir={flow.dir} style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', borderTop: '1px solid var(--border)', paddingTop: 14, marginTop: 2, ...flow.style }}>
-        {links.live && <Btn size="sm" icon={Icons.external} href={links.live} note={t.newTab} name={t.openLive(name)}>{t.live}</Btn>}
-        {links.repo && <Btn size="sm" icon={Icons.github} href={links.repo} note={t.newTab} name={t.openCode(name)}>{t.code}</Btn>}
+        {links.live && <Btn size="sm" icon={Icons.external} href={links.live} title={links.live} note={t.newTab} name={t.openLive(name)}>{t.live}</Btn>}
+        {links.repo && <Btn size="sm" icon={Icons.github} href={links.repo} title={links.repo} note={t.newTab} name={t.openCode(name)}>{t.code}</Btn>}
         <span className="print-hide" style={{ display: 'contents' }}>
           <Btn size="sm" icon={Icons.sparkle} name={t.askAboutNamed(name)} onClick={() => onAsk(t.askProjectQuestion(name))} style={{ marginInlineStart: 'auto' }}>
             {t.askAboutProject}
