@@ -38,16 +38,50 @@ export function isHebrew(s) {
   return /[֐-׿]/.test(String(s || ''));
 }
 
+/* A Latin name inside a Hebrew line. The span does not become its own
+   direction, or the Hebrew after the name would run backwards. */
+const LATIN = /(?:[A-Za-z][A-Za-z0-9+.#&'’/-]*|\d+[A-Za-z][A-Za-z0-9+.#&'’/-]*)/g;
+
+/**
+ * Direction for a line in the page's language. Plaintext would call the line
+ * English whenever it opens with PDF, LLM, Kanban, or Claude.
+ */
+export function bidiProps(text, lang) {
+  if (lang === 'he' && isHebrew(text)) return { dir: 'rtl', style: { unicodeBidi: 'isolate' } };
+  if (lang === 'he' && text) return { dir: 'ltr', lang: 'en' };
+  return { dir: 'ltr' };
+}
+
+/** The words of a Hebrew line, with each Latin name marked as English. */
+export function bidiParts(text, lang) {
+  if (lang !== 'he' || !text || !isHebrew(text)) return text;
+  const parts = [];
+  let last = 0;
+  let n = 0;
+  for (const match of text.matchAll(LATIN)) {
+    const at = match.index ?? 0;
+    if (at > last) parts.push(<span key={`t${n}`} style={{ unicodeBidi: 'normal' }}>{text.slice(last, at)}</span>);
+    parts.push(<span key={`l${n}`} lang="en" style={{ unicodeBidi: 'normal' }}>{match[0]}</span>);
+    n += 1;
+    last = at + match[0].length;
+  }
+  if (!parts.length) return text;
+  if (last < text.length) parts.push(<span key={`t${n}`} style={{ unicodeBidi: 'normal' }}>{text.slice(last)}</span>);
+  return parts;
+}
+
 /** The small label above a section: mono and letter-spaced in English, plain in Hebrew. */
 export function Eyebrow({ children, style }) {
-  const he = typeof children === 'string' && isHebrew(children);
+  const text = typeof children === 'string' ? children : '';
+  const he = !!text && isHebrew(text);
+  const bidi = bidiProps(text, he ? 'he' : 'en');
   return (
-    <div dir="auto" style={he
-      ? { fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', ...style }
+    <div dir={text ? bidi.dir : 'auto'} lang={bidi.lang} style={he
+      ? { fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', ...bidi.style, ...style }
       : {
           fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 600, letterSpacing: '0.14em',
           textTransform: 'uppercase', color: 'var(--text-muted)', ...style,
-        }}>{children}</div>
+        }}>{text ? bidiParts(text, he ? 'he' : 'en') : children}</div>
   );
 }
 

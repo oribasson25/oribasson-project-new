@@ -3,7 +3,7 @@ import projects from '../../content/projects.js';
 import { tx, tl, bullet } from '../../shared/text.js';
 import { useReducedMotion } from '../lib/hooks.js';
 import { titleFor } from '../lib/seo.js';
-import { Icons, PageHeader, Btn, Chip, EmptyState, Section } from './ui.jsx';
+import { Icons, PageHeader, Btn, Chip, EmptyState, Section, bidiParts, bidiProps } from './ui.jsx';
 import { Architecture } from './Architecture.jsx';
 import { architectures } from './architectures.js';
 
@@ -42,6 +42,8 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
   const frame = useRef(0);
   const reduced = useReducedMotion();
   const name = tx(p.name, lang);
+  const tagline = tx(p.tagline, lang);
+  const taglineBidi = bidiProps(tagline, lang);
   const highlights = tl(p.highlights, lang);
   const links = p.links || {};
   const role = tx(p.role, lang);
@@ -124,7 +126,11 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
   const head = (
     <div>
       <h2 tabIndex={-1} dir="auto" style={{ margin: 0, fontWeight: 700, fontSize: 16, letterSpacing: '-0.02em', lineHeight: 1.3 }}>{name}</h2>
-      {tx(p.tagline, lang) && <div dir="auto" style={{ fontSize: 13, color: 'var(--text-2)', marginTop: 6, fontWeight: 500, lineHeight: 1.45 }}>{tx(p.tagline, lang)}</div>}
+      {tagline && (
+        <div dir={taglineBidi.dir} lang={taglineBidi.lang} style={{ fontSize: 13, color: 'var(--text-2)', marginTop: 6, fontWeight: 500, lineHeight: 1.45, ...taglineBidi.style }}>
+          {bidiParts(tagline, lang)}
+        </div>
+      )}
       {(p.year || role) && (
         <div dir="auto" style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--text-muted)', marginTop: 8 }}>
           {year}{p.year && role ? ' · ' : ''}{role}

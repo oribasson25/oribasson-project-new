@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { tx } from '../../shared/text.js';
 import { useReducedMotion } from '../lib/hooks.js';
+import { bidiParts, bidiProps } from './ui.jsx';
 
 /*
  * A small architecture figure. Nodes are HTML so Hebrew and English follow
@@ -52,12 +53,6 @@ function Rail({ delay }) {
   );
 }
 
-/** A Hebrew page would read "WhatsApp" and "Gmail" in a Hebrew voice. */
-function latinLang(text, pageLang) {
-  if (pageLang !== 'he' || !text) return undefined;
-  return /[֐-׿]/.test(text) ? undefined : 'en';
-}
-
 /** Two short parts sit side by side. A long label or note needs the card's width. */
 function needsRoom(nodes, lang) {
   if (nodes.length < 2) return false;
@@ -68,13 +63,20 @@ function needsRoom(nodes, lang) {
   });
 }
 
+function Line({ text, lang, className }) {
+  const bidi = bidiProps(text, lang);
+  return (
+    <span className={className} dir={bidi.dir} lang={bidi.lang} style={bidi.style}>{bidiParts(text, lang)}</span>
+  );
+}
+
 function Node({ node, lang, delay }) {
   const label = tx(node.label, lang);
   const sub = node.sub ? tx(node.sub, lang) : '';
   return (
-    <div className="arch-node" dir="auto" style={{ animationDelay: `${delay}ms` }}>
-      <span className="arch-label" lang={latinLang(label, lang)}>{label}</span>
-      {sub && <span className="arch-sub" dir="auto" lang={latinLang(sub, lang)}>{sub}</span>}
+    <div className="arch-node" style={{ animationDelay: `${delay}ms` }}>
+      <Line text={label} lang={lang} className="arch-label" />
+      {sub && <Line text={sub} lang={lang} className="arch-sub" />}
     </div>
   );
 }
@@ -91,28 +93,36 @@ export function Architecture({ spec, lang, label, name }) {
       {/* The caption stays the one word. The project's name is for a reader,
           so six diagrams on one page are not six copies of the same word. */}
       <figcaption className="arch-cap" dir="auto" aria-hidden={name ? 'true' : undefined}>{label}</figcaption>
-      {groups.map((group, gi) => (
-        <div key={gi} className="arch-group">
-          {group.title && <div className="arch-group-title" dir="auto" lang={latinLang(tx(group.title, lang), lang)}>{tx(group.title, lang)}</div>}
-          {(group.steps || []).map((step, si) => {
-            const at = delay;
-            delay += 80;
-            const nodes = step.nodes || [];
-            const linked = si > 0 && step.join !== false;
-            return (
-              <div key={si} className={`arch-step${step.join === false ? ' arch-step-gap' : ''}`}>
-                {linked && <Stem delay={at} />}
-                {linked && nodes.length === 2 && <Rail delay={at} />}
-                <div className={`arch-row${nodes.length > 2 || needsRoom(nodes, lang) ? ' arch-row-stack' : ''}`}>
-                  {nodes.map((node, ni) => (
-                    <Node key={ni} node={node} lang={lang} delay={at + (linked ? 50 : 0) + ni * 40} />
-                  ))}
-                </div>
+      {groups.map((group, gi) => {
+        const title = group.title ? tx(group.title, lang) : '';
+        const titleBidi = title ? bidiProps(title, lang) : null;
+        return (
+          <div key={gi} className="arch-group">
+            {title && (
+              <div className="arch-group-title" dir={titleBidi.dir} lang={titleBidi.lang} style={titleBidi.style}>
+                {bidiParts(title, lang)}
               </div>
-            );
-          })}
-        </div>
-      ))}
+            )}
+            {(group.steps || []).map((step, si) => {
+              const at = delay;
+              delay += 80;
+              const nodes = step.nodes || [];
+              const linked = si > 0 && step.join !== false;
+              return (
+                <div key={si} className={`arch-step${step.join === false ? ' arch-step-gap' : ''}`}>
+                  {linked && <Stem delay={at} />}
+                  {linked && nodes.length === 2 && <Rail delay={at} />}
+                  <div className={`arch-row${nodes.length > 2 || needsRoom(nodes, lang) ? ' arch-row-stack' : ''}`}>
+                    {nodes.map((node, ni) => (
+                      <Node key={ni} node={node} lang={lang} delay={at + (linked ? 50 : 0) + ni * 40} />
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        );
+      })}
     </figure>
   );
 }
