@@ -75,10 +75,10 @@ export function Composer({ value, onChange, onSend, onStop, busy, disabled, plac
         onBlur={() => setFocus(false)}
         onKeyDown={(e) => {
           if (e.key !== 'Enter' || e.shiftKey || e.nativeEvent.isComposing) return;
-          // While an answer is still arriving the button stops it. Enter must
-          // not send the line being written, and must not throw that line away.
-          if (busy || disabled) return;
+          // Enter sends. While an answer is still arriving, it must not send
+          // the line being written, and it must not turn that key into a new line.
           e.preventDefault();
+          if (busy || disabled) return;
           onSend();
         }}
         dir="auto"
