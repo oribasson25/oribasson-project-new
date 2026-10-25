@@ -155,6 +155,27 @@ const FACTS = [
   { en: 'The agent tools speak MCP, beside the CRM.', he: 'הכלים לסוכן מדברים גם MCP, לצד ה-CRM.' },
 ];
 
+/* A Latin name inside a Hebrew line. The span is the language change;
+   the sentence keeps its own direction. */
+const LATIN = /(?:[A-Za-z][A-Za-z0-9+.#&'’/-]*|\d+[A-Za-z][A-Za-z0-9+.#&'’/-]*)/g;
+
+function FactWords({ text, lang }) {
+  if (lang !== 'he' || !text) return text;
+  const parts = [];
+  let last = 0;
+  let key = 0;
+  for (const match of text.matchAll(LATIN)) {
+    const at = match.index ?? 0;
+    if (at > last) parts.push(text.slice(last, at));
+    parts.push(<span key={key} lang="en">{match[0]}</span>);
+    key += 1;
+    last = at + match[0].length;
+  }
+  if (!parts.length) return text;
+  if (last < text.length) parts.push(text.slice(last));
+  return parts;
+}
+
 const EXIT = 420;
 const ENTER = 420;
 
@@ -389,7 +410,7 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
           onFocus={() => { if (fromKeyboard.current) { setKeyFocus(true); setKeyHold(true); } }}
           onBlur={() => { setKeyFocus(false); setKeyHold(true); }}
         >
-          <span ref={lineRef} className={`home-fact is-${phase} from-${motion}`}>{text}</span>
+          <span ref={lineRef} className={`home-fact is-${phase} from-${motion}`}><FactWords text={text} lang={lang} /></span>
         </button>
       </div>
       <span id="home-fact-hint" className="sr-only">{pinned ? t.factsResume : t.factsPause}</span>

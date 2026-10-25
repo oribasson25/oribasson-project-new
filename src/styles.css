@@ -585,6 +585,12 @@ a { color: inherit; }
 [data-ui-lang="he"] .home-fact {
   unicode-bidi: isolate;
 }
+/* An English name inside that sentence is its own language for a reader,
+   and stays in the sentence's direction. Plaintext on the span would
+   reverse the Hebrew that follows it. */
+[data-ui-lang="he"] .home-fact [lang="en"] {
+  unicode-bidi: normal;
+}
 
 /* ── chat answers (markdown) ── */
 .md { line-height: 1.65; word-break: break-word; }
