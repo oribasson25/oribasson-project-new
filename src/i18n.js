@@ -327,10 +327,14 @@ const STRINGS = {
 
     convos: {
       title: 'שיחות',
-      sub: (total, visitors) => `${total} שיחות מ-${visitors} מבקרים`,
+      sub: (total, visitors) => {
+        const talks = total === 1 ? 'שיחה אחת' : `${total} שיחות`;
+        const people = visitors === 1 ? 'ממבקר אחד' : `מ-${visitors} מבקרים`;
+        return `${talks} ${people}`;
+      },
       empty: 'עדיין אין שיחות',
       emptySub: 'כשמבקרים ישתמשו בצ׳אט, כל שיחה תופיע כאן.',
-      messages: (n) => `${n} הודעות`,
+      messages: (n) => (n === 1 ? 'הודעה אחת' : `${n} הודעות`),
       back: '→ כל השיחות',
       del: 'מחיקה',
       confirmDel: 'למחוק את השיחה?',
@@ -340,7 +344,7 @@ const STRINGS = {
       from: 'מיקום',
       device: 'מכשיר',
     },
-    ago: { now: 'עכשיו', m: (n) => `לפני ${n} ד׳`, h: (n) => `לפני ${n} ש׳`, d: (n) => `לפני ${n} ימים` },
+    ago: { now: 'עכשיו', m: (n) => `לפני ${n} ד׳`, h: (n) => `לפני ${n} ש׳`, d: (n) => (n === 1 ? 'לפני יום' : `לפני ${n} ימים`) },
     langName: 'EN',
   },
 };
