@@ -27,6 +27,10 @@ function loadSheet() {
       const img = new Image();
       img.onload = () => { sheetDecoded = true; resolve(true); };
       img.onerror = () => resolve(false);
+      /* The small portrait is already preloaded. The sheet is the motion,
+         about half a megabyte, so it waits behind that first paint. */
+      img.fetchPriority = 'low';
+      img.decoding = 'async';
       img.src = SHEET;
     });
   }
