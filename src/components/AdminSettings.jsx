@@ -25,7 +25,7 @@ function EyeIcon({ off }) {
 
 function Toggle({ on, onChange, label }) {
   return (
-    <button type="button" role="switch" aria-checked={on} aria-label={label} onClick={() => onChange(!on)}
+    <button type="button" role="switch" aria-checked={on} aria-label={label} className="switch-hit" onClick={() => onChange(!on)}
       style={{
         width: 42, height: 24, borderRadius: 999, padding: 2, flexShrink: 0,
         background: on ? 'var(--primary)' : 'var(--bg-hover)', border: '1px solid var(--border)',
@@ -138,7 +138,7 @@ export function AdminSettings({ t, lang, onUnauthorized, onChanged, stacked }) {
                     onChange={(e) => { setApiKey(e.target.value); setMessage(null); }}
                     placeholder={settings && settings.hasKey ? S.replaceKey : S.keyPlaceholder}
                     autoComplete="off" spellCheck={false} style={{ flex: 1, fontFamily: apiKey ? 'var(--mono)' : 'inherit' }} />
-                  <button type="button" onClick={() => setShowKey((v) => !v)}
+                  <button type="button" className="key-eye" onClick={() => setShowKey((v) => !v)}
                     title={showKey ? S.hideKey : S.showKey} aria-label={showKey ? S.hideKey : S.showKey}
                     aria-pressed={showKey}
                     style={{ background: 'var(--bg-input)', color: 'var(--text-2)', padding: '8px 12px', borderRadius: 'var(--r-md)', border: '1px solid var(--border)', display: 'flex' }}>

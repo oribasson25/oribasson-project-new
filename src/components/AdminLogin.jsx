@@ -76,14 +76,14 @@ export function AdminLogin({ t, lang, setLang, onSignedIn, onBack, mobile }) {
             <div style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 500, lineHeight: 1.6 }}>{L.sub}</div>
           </div>
           <form onSubmit={(e) => { e.preventDefault(); submit(); }}>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+            <input className="login-field" type="password" value={password} onChange={(e) => setPassword(e.target.value)}
               placeholder={L.password} aria-label={L.password} autoFocus autoComplete="current-password" dir="ltr" />
             {error && (
               <div role="alert" style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--danger-ink)', fontSize: 13, marginTop: 12, padding: '10px 12px', background: 'var(--danger-dim)', borderRadius: 'var(--r-sm)', border: '1px solid rgba(220,38,38,0.2)', lineHeight: 1.5 }}>
                 {error}
               </div>
             )}
-            <button type="submit" disabled={busy || !password}
+            <button className="login-submit" type="submit" disabled={busy || !password}
               style={{ width: '100%', background: 'var(--primary)', color: 'var(--primary-ink)', padding: '12px 16px', borderRadius: 'var(--r-md)', fontWeight: 700, fontSize: 14, marginTop: 16, boxShadow: '0 2px 12px var(--primary-glow)' }}>
               {busy ? L.busy : L.submit}
             </button>

@@ -50,7 +50,7 @@ function Thread({ id, t, lang, onBack, onDeleted, onUnauthorized }) {
 
   return (
     <div>
-      <button type="button" onClick={onBack}
+      <button type="button" onClick={onBack} className="login-back"
         style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-muted)', background: 'none', padding: 0, marginBottom: 16 }}>{C.back}</button>
       {failed && <Section><EmptyState icon={Icons.inbox} title={t.errors.error} /></Section>}
       {convo && (
