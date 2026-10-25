@@ -91,7 +91,7 @@ const FACTS = [
   { en: 'Notes, reminders, and an Excel export sit beside the board.', he: 'הערות, תזכורות וייצוא לאקסל יושבים ליד הלוח.' },
   { en: '8Legs asks about the business, then builds the chatbot.', he: '8Legs שואל על העסק, ואז בונה את הצ׳טבוט.' },
   { en: 'The mail leaves from a real Gmail inbox.', he: 'המייל יוצא מתיבת Gmail אמיתית.' },
-  { en: 'The running model can be Claude, GPT, or Ollama.', he: 'המודל שרץ יכול להיות Claude, ‏GPT או Ollama.' },
+  { en: 'Claude or GPT, or a local model through Ollama.', he: 'Claude או GPT, או מודל מקומי דרך Ollama.' },
   { en: 'A whole site is crawled, and Hebrew search finds the English.', he: 'אתר שלם נסרק, וחיפוש בעברית מוצא את האנגלית.' },
   { en: 'Each 8Legs chatbot has its own repo, and a live A/B test.', he: 'לכל צ׳טבוט ב-8Legs יש ריפו משלו, וניסוי A/B חי.' },
   { en: 'The certificate covered segmentation, hardening, and reading logs.', he: 'ההסמכה כללה סגמנטציה, הקשחת עמדות וניתוח לוגים.' },
