@@ -153,7 +153,7 @@ export function IntroBubble({ t, voice, transcript, stacked, dense, below }) {
         <>
           <button type="button" onClick={play}
             style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'transparent', padding: 0, textAlign: 'start', minWidth: 0, flex: '1 1 auto', minHeight: tap ? 44 : undefined }}>
-            <span style={{ width: 30, height: 30, borderRadius: '50%', flexShrink: 0, background: 'var(--primary)', color: 'var(--primary-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11 }}>▶</span>
+            <span aria-hidden="true" style={{ width: 30, height: 30, borderRadius: '50%', flexShrink: 0, background: 'var(--primary)', color: 'var(--primary-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11 }}>▶</span>
             <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', lineHeight: 1.35, minWidth: 0 }}>{t.introOffer}</span>
             {duration > 0 && <span style={{ fontSize: 11.5, color: 'var(--text-muted)', fontFamily: 'var(--mono)', flexShrink: 0 }}>{fmt(duration)}</span>}
           </button>
