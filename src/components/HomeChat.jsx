@@ -8,7 +8,7 @@ import { HomeFacts } from './HomeFacts.jsx';
 import { Answer, Steps } from './Answer.jsx';
 import { architectures } from './architectures.js';
 import { diagramProjectId } from '../lib/projectDiagram.js';
-import { useReducedMotion, useShortScreen } from '../lib/hooks.js';
+import { useReducedMotion, useShortScreen, useTightScreen } from '../lib/hooks.js';
 import { useIntroVoice } from '../lib/useIntroVoice.js';
 import { loadMarkdown } from '../lib/loadMarkdown.js';
 
@@ -123,6 +123,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
   const fieldRef = useRef(null);
   const dir = lang === 'he' ? 'rtl' : 'ltr';
   const short = useShortScreen();
+  const tight = useTightScreen();
   const reduced = useReducedMotion();
   const first = firstName(lang);
   const firstPerson = profile.voice === 'first-person';
@@ -207,7 +208,7 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
         alignItems: 'center', justifyContent: 'safe center', overflowY: 'auto',
       }}>
         <div className="home-stage hero-rise" style={{ animationDelay: '0.04s' }}>
-          <PetStage size={stacked ? (short ? 112 : 148) : 230} mode={pending ? 'working' : 'idle'} pulse={chat.pulse} busy={pending} voice={voice} label={t.petJump} onHover={setFigureHot}>
+          <PetStage size={stacked ? (tight ? 96 : short ? 112 : 148) : 230} mode={pending ? 'working' : 'idle'} pulse={chat.pulse} busy={pending} voice={voice} label={t.petJump} onHover={setFigureHot}>
             {!stacked && <IntroBubble t={t} voice={voice} transcript={introText} />}
             {stacked && voice.heard && voice.state !== 'playing' && <IntroBubble t={t} voice={voice} stacked />}
           </PetStage>

@@ -35,8 +35,10 @@ const PHONE = '(max-width: 768px)';
 /* The taller figure and the looser gaps need roughly 780px of shell before
    the last question clears the bar. 844 is the common height of a 390-wide
    phone, and 932 a large one — both still cut that row off. The shorter
-   home covers them. */
+   home covers them. At 760 and under, that shorter home is still too tall,
+   so the figure and the gaps come in a little more. */
 const SHORT = '(max-height: 960px)';
+const TIGHT = '(max-height: 760px)';
 
 export function useIsMobile() {
   const [mobile, setMobile] = useState(() => window.matchMedia(PHONE).matches);
@@ -49,15 +51,24 @@ export function useIsMobile() {
   return mobile;
 }
 
-export function useShortScreen() {
-  const [short, setShort] = useState(() => window.matchMedia(SHORT).matches);
+function watchMedia(query) {
+  const [on, setOn] = useState(() => window.matchMedia(query).matches);
   useEffect(() => {
-    const mq = window.matchMedia(SHORT);
-    const on = () => setShort(mq.matches);
-    mq.addEventListener('change', on);
-    return () => mq.removeEventListener('change', on);
-  }, []);
-  return short;
+    const mq = window.matchMedia(query);
+    const apply = () => setOn(mq.matches);
+    mq.addEventListener('change', apply);
+    return () => mq.removeEventListener('change', apply);
+  }, [query]);
+  return on;
+}
+
+export function useShortScreen() {
+  return watchMedia(SHORT);
+}
+
+/** True when the shorter home is still too tall for this phone. */
+export function useTightScreen() {
+  return watchMedia(TIGHT);
 }
 
 export function useReducedMotion() {

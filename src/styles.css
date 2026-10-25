@@ -931,6 +931,16 @@ a { color: inherit; }
       margin-top: 4px;
     }
   }
+  /* At 760 and under the shorter home still meets the bar. Same layout,
+     pulled in. The figure size lives in HomeChat. */
+  @media (max-height: 760px) {
+    .home-welcome.is-phone .hero-title { margin-top: 1px; }
+    .home-welcome.is-phone .hero-rule { margin-top: 2px; }
+    .home-welcome.is-phone .hero-sub { margin-top: 2px; }
+    .home-welcome.is-phone .home-ask { margin-top: 2px; }
+    .home-welcome.is-phone .home-chips { margin-top: 2px; }
+    .home-welcome.is-phone .hero-foot { margin-top: 4px; }
+  }
   .seg-tab { min-height: 44px; }
   .key-eye { min-width: 44px; min-height: 44px; }
   .thread-action { min-height: 44px; }
