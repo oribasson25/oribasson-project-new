@@ -116,10 +116,12 @@ function readTime(text) {
  * Enter, keeps it there. Arrow keys, while the line is focused, show the
  * next or the previous one. A finger does the same with a sideways swipe,
  * and the page still scrolls up and down. Reaching the line while it is
- * leaving brings that same line back. Keyboard focus holds it too, and so
- * does scrolling it off the screen. A text field holds it as well, so the
- * words stay put while a question is typed. Reduced motion swaps the words
- * in place, with no slide, and leaves each line up a little longer.
+ * leaving brings that same line back. Keyboard focus holds it too, until
+ * Enter or Escape asks the lines to move again — focus alone would have
+ * kept a line the key had just released. Scrolling it off the screen holds
+ * it, and so does a text field, so the words stay put while a question is
+ * typed. Reduced motion swaps the words in place, with no slide, and leaves
+ * each line up a little longer.
  *
  * `hold` freezes the cycle while the recorded hello is playing. `avoidRight`
  * keeps every line on the left while the hello bubble occupies that side.
@@ -134,6 +136,9 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   const [hover, setHover] = useState(false);
   const [pinned, setPinned] = useState(false);
   const [keyFocus, setKeyFocus] = useState(false);
+  // Focus holds the line so it is not swapped out from under a reader.
+  // Releasing it on purpose (Enter, or Escape) wins over that hold.
+  const [keyHold, setKeyHold] = useState(true);
   const [hidden, setHidden] = useState(() => document.hidden);
   const [seen, setSeen] = useState(true);
   const [composing, setComposing] = useState(false);
@@ -150,7 +155,7 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   avoidRef.current = avoidRight;
   const fact = FACTS[index];
   const text = fact[lang] || fact.en;
-  const paused = hover || pinned || keyFocus || hidden || hold || !seen || composing;
+  const paused = hover || pinned || (keyFocus && keyHold) || hidden || hold || !seen || composing;
 
   // While the hello bubble is on the right, the line already up moves to the
   // left before paint. Clearing the bubble does not send it back — the next
@@ -239,7 +244,13 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
       suppressClick.current = false;
       return;
     }
+    setKeyHold(!pinned);
     setPinned((v) => !v);
+  }
+
+  function release() {
+    setKeyHold(false);
+    setPinned(false);
   }
 
   // A sideways swipe moves one line. A vertical drag is the page scrolling,
@@ -294,6 +305,13 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
           onClick={togglePin}
           onPointerDown={onPointerDown}
           onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              if (!pinned) return;
+              e.preventDefault();
+              e.stopPropagation();
+              release();
+              return;
+            }
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               togglePin();
@@ -308,8 +326,8 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
           }}
           onMouseEnter={() => { if (fineHover) setHover(true); }}
           onMouseLeave={() => setHover(false)}
-          onFocus={() => { if (fromKeyboard.current) setKeyFocus(true); }}
-          onBlur={() => setKeyFocus(false)}
+          onFocus={() => { if (fromKeyboard.current) { setKeyFocus(true); setKeyHold(true); } }}
+          onBlur={() => { setKeyFocus(false); setKeyHold(true); }}
         >
           <span ref={lineRef} className={`home-fact is-${phase} from-${motion}`}>{text}</span>
         </button>
