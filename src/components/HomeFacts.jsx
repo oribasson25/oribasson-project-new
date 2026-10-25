@@ -326,6 +326,7 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   useEffect(() => () => { if (swipe.current) swipe.current.drop(); }, []);
   const avoidRef = useRef(avoidRight);
   avoidRef.current = avoidRight;
+  const langSeen = useRef(lang);
   const fact = FACTS[index];
   const text = fact[lang] || fact.en;
   const paused = hover || pinned || (keyFocus && keyHold) || hidden || hold || !seen || composing || covered;
@@ -410,11 +411,18 @@ export function HomeFacts({ lang, t, hold = false, avoidRight = false }) {
   // starts it over, and the text only changes when the line does.
   useLayoutEffect(() => {
     const el = lineRef.current;
+    // A language switch is a new entrance. Leaving would finish on the other language.
+    const langChanged = langSeen.current !== lang;
+    if (langChanged) langSeen.current = lang;
+    if (langChanged && phase === 'out') {
+      setPhase('in');
+      return;
+    }
     if (!el || reduced) return;
     el.style.animation = 'none';
     void el.offsetWidth;
     el.style.animation = '';
-  }, [index, phase, side, reduced]);
+  }, [index, phase, side, reduced, lang]);
 
   function step(dir) {
     const next = (indexRef.current + dir + FACTS.length) % FACTS.length;
