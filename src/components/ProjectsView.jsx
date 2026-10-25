@@ -36,6 +36,7 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
   const [overflows, setOverflows] = useState(false);
   const clipRef = useRef(null);
   const bodyRef = useRef(null);
+  const moreRef = useRef(null);
   const frame = useRef(0);
   const reduced = useReducedMotion();
   const name = tx(p.name, lang);
@@ -68,6 +69,15 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
     });
   }
 
+  // After the fold opens, the new lines may sit below the screen. Bring the
+  // control back, and the writing just above it comes with it. Reduced
+  // motion has no fold, so it moves at once.
+  function bringIntoView() {
+    const btn = moreRef.current;
+    if (!btn) return;
+    btn.scrollIntoView({ block: 'nearest', behavior: reduced ? 'auto' : 'smooth' });
+  }
+
   // The fold eases open and shut. Reduced motion just switches.
   function toggle() {
     const next = !expanded;
@@ -76,6 +86,7 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
     if (!clip || reduced) {
       setHeld(null);
       setExpanded(next);
+      if (next) later(bringIntoView);
       return;
     }
     const from = clip.offsetHeight;
@@ -153,7 +164,9 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
       <div ref={clipRef} className={`project-clip${held != null ? ' is-easing' : ''}`}
         onTransitionEnd={(e) => {
           if (e.propertyName !== 'max-height' || e.target !== e.currentTarget) return;
+          const opened = expanded;
           setHeld(null);
+          if (opened) bringIntoView();
         }}
         style={(() => {
           const moving = held != null;
@@ -180,7 +193,7 @@ function ProjectCard({ p, t, lang, onAsk, linked, index = 0 }) {
       </div>
 
       {(overflows || expanded || held != null) && (
-        <button type="button" onClick={toggle} aria-expanded={expanded}
+        <button ref={moreRef} type="button" onClick={toggle} aria-expanded={expanded}
           aria-label={expanded ? t.showLessAbout(name) : t.readMoreAbout(name)}
           className="read-more"
           style={{
