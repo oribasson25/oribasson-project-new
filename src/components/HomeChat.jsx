@@ -215,8 +215,9 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
           {stacked && !(voice.heard && voice.state !== 'playing') && (
             <IntroBubble t={t} voice={voice} transcript={introText} stacked dense={short} />
           )}
+          {/* On a phone the hello sits above the line, so either side is free. */}
           <HomeFacts lang={lang} t={t} hold={voice.state === 'playing' || figureHot}
-            avoidRight={voice.available && (!voice.heard || voice.state === 'playing')} />
+            avoidRight={!stacked && voice.available && (!voice.heard || voice.state === 'playing')} />
         </div>
         <h1 className="hero-title hero-rise" dir={dir} style={{ animationDelay: '0.14s' }}>{t.hello(first)}</h1>
         <svg className="hero-rule hero-rise" viewBox="0 0 72 8" width="72" height="8" aria-hidden="true" style={{ animationDelay: '0.22s' }}>
