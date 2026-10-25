@@ -252,9 +252,9 @@ export function HomeChat({ t, lang, chat, status, stacked, seed, onSeedUsed }) {
           <Pet crop="head" size={34} decorative />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div dir="auto" style={{ fontWeight: 800, fontSize: 15, letterSpacing: '-0.02em', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <h1 dir="auto" style={{ margin: 0, fontWeight: 800, fontSize: 15, letterSpacing: '-0.02em', lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {t.threadTitle(first)}
-          </div>
+          </h1>
           <div dir="ltr" style={{ fontSize: 11.5, color: 'var(--text-muted)', marginTop: 2, textAlign: dir === 'rtl' ? 'right' : 'left' }}>
             {t.poweredBy(status.model)}
           </div>
