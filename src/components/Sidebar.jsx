@@ -139,6 +139,16 @@ export function LangSwitch({ lang, setLang }) {
   const name = other === 'he' ? 'עברית' : 'English';
   return (
     <button type="button" onClick={() => setLang(other)} title={name} aria-label={name} lang={other}
+      aria-keyshortcuts="ArrowLeft ArrowRight"
+      onKeyDown={(e) => {
+        // The wide screen's pair moves with the arrows. This is the same
+        // control on a phone, where there is only room for one of the two.
+        // A repeat would flip it twice and land back where it started.
+        if (e.altKey || e.metaKey || e.ctrlKey || e.shiftKey || e.repeat) return;
+        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+        e.preventDefault();
+        setLang(other);
+      }}
       style={{
         height: 44, minWidth: 44, padding: '0 11px', borderRadius: 10, flexShrink: 0,
         background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-2)',
