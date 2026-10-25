@@ -164,7 +164,7 @@ export function AdminSettings({ t, lang, onUnauthorized, onChanged, stacked }) {
                   <Btn danger disabled={busy} onClick={() => save({ removeKey: true })}>{S.removeKey}</Btn>
                 )}
                 {message && (
-                  <span role="status" style={{ fontSize: 12.5, fontWeight: 600, color: message.ok ? 'var(--success)' : 'var(--danger)' }}>{message.text}</span>
+                  <span role="status" style={{ fontSize: 12.5, fontWeight: 600, color: message.ok ? 'var(--success-ink)' : 'var(--danger-ink)' }}>{message.text}</span>
                 )}
               </div>
             </div>

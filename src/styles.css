@@ -18,6 +18,8 @@
   --primary-glow: rgba(13, 15, 20, 0.16);
 
   --success: #16a34a;
+  /* The same green, darker, so a short status line can be read. */
+  --success-ink: #166534;
   --danger: #dc2626;
   --danger-dim: rgba(220, 38, 38, 0.08);
   /* The same red, darker, so it stays readable on the tinted panel. */
